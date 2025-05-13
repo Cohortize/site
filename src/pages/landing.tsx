@@ -1,6 +1,6 @@
 const Landing = () => {
 return(
-    <>Hewlo</>
+    <div>Hewlo</div>
 );
 }
 
