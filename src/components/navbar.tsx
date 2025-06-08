@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 const Navbar = () => {
   const navElements = [
-    { name: "Home", slug: "/" },
     { name: "Ships", slug: "/ships" },
     { name: "Leaderboard", slug: "/leaderboard" },
     { name: "Discussions", slug: "/discussions" },
@@ -9,18 +10,21 @@ const Navbar = () => {
   return (
     <nav className="bg-black h-16 flex items-center justify-between px-6">
       <p className="text-white text-[1.7rem] font-semibold">
+        <Link to={'/'}>
         Cohortize
+        </Link>
       </p>
-      <div className="flex gap-6">
+      <div className="flex gap-8">
         {navElements.map((item) => (
-          <a
+          <Link
             key={item.slug}
-            href={item.slug}
+            to={item.slug}
             className="text-white text-[1.2rem] hover:underline"
           >
             {item.name}
-          </a>
+          </Link>
         ))}
+        <Button>Hey</Button>
       </div>
     </nav>
   );
