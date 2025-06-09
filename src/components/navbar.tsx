@@ -35,20 +35,19 @@ style={{
 
         <div className="flex items-center gap-8">
           {navElements.map((item) => (
-            <Link
-              key={item.slug}
-              to={item.slug}
-              className="text-[#545454] text-[1.1rem] font-medium relative transition-colors duration-200 hover:text-white group"
-              style={{
-            fontFamily: 'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-            fontWeight: 400,
-            fontSize: '1rem',
-            color: 'white',
-        }}
-            >
-              {item.name}
-              <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full" />
-            </Link>
+<Link
+  key={item.slug}
+  to={item.slug}
+  className="font-normal text-[#505050] hover:text-white relative transition-colors duration-200 group"
+  style={{
+    fontFamily: 'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+    fontSize: '1rem',
+  }}
+>
+  {item.name}
+  <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full" />
+</Link>
+
           ))}
         </div>
           <Button className="bg-white text-black hover:bg-[#181818] hover:text-white transition-all duration-300 ease-in-out">Login</Button>
