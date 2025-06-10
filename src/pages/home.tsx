@@ -13,7 +13,7 @@ const Home = () => {
     >
       <Navbar />
 
-      <div className="relative h-screen w-full flex flex-col-reverse gap-16 justify-center items-center overflow-hidden bg-black">
+      <div className="relative h-screen w-full flex flex-col-reverse gap-8 md:gap-16 justify-center items-center overflow-hidden bg-black px-4 md:px-6" style={{ paddingBottom: '80px' }}>
         
 
         <div 
@@ -138,62 +138,45 @@ const Home = () => {
 
 
 
-        <div className="relative w-[180px] h-[180px] z-10">
-          <div
-            className="w-full h-full rounded-full bg-black/60 backdrop-blur-sm"
-            style={{
-              border: "2px dotted rgba(255,255,255,0.4)",
-              animation: "rotate 12s linear infinite, breathe 4s ease-in-out infinite",
-              boxShadow: '0 0 30px rgba(255,255,255,0.1)'
-            }}
-          />
-          <div
-            className="absolute inset-0 rounded-full pointer-events-none"
-            style={{
-              border: "1px solid rgba(255,255,255,0.1)",
-              filter: "blur(8px)",
-              animation: "rotate 15s linear infinite reverse",
-            }}
-          />
-        </div>
+
         
-        <div className="flex flex-col gap-8">
-          <p className="text-[3.3rem] text-white text-center px-6 z-20 relative font-medium">
+        <div className="flex flex-col gap-6 md:gap-8 max-w-4xl mx-auto">
+          <p className="text-6xl sm:text-6xl md:text-6xl lg:text-6xl text-white text-center px-2 sm:px-4 md:px-6 z-20 relative font-medium leading-tight">
             Your one-stop platform for ideas.
           </p>
-          <div className="flex justify-center items-center">
-          <p className="text-[#b8b6b6] text-[1.3rem]">
+          <div className="flex justify-center items-center px-2 sm:px-4">
+          <p className="text-[#b8b6b6] text-[1.4rem] sm:text-[1.4rem] md:text-[1.5rem] lg:text-[1.5rem] text-center max-w-2xl">
             Cohortize is a one-stop platform for collaboration, finding ideas and people to execute them with.
           </p>
           </div>
-          <div className="flex flex-row justify-center gap-6">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 px-4 sm:px-0">
             <Button
-              className="group relative bg-white text-black hover:bg-[#d2d2d1] transition-all duration-300 font-medium text-sm px-6 py-3 rounded-lg cursor-pointer overflow-hidden"
+              className="group relative bg-white text-black hover:bg-[#d2d2d1] transition-all duration-300 font-medium text-sm px-4 sm:px-6 py-3 rounded-lg cursor-pointer overflow-hidden w-full sm:w-auto"
               style={{
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
                 fontVariationSettings: "wght 480",
-                width: '140px',
+                minWidth: '140px',
                 height: '44px'
               }}>
-              <div className="flex items-center justify-center gap-2 text-[1rem] font-black">
-                <Ship size={20}/>
+              <div className="flex items-center justify-center gap-2 text-sm sm:text-[1rem] font-black">
+                <Ship size={18} className="sm:w-5 sm:h-5"/>
                 <span>Ship project</span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-500" />
             </Button>
             
             <Button
-              className="group relative bg-[#282828] backdrop-blur-sm text-white hover:bg-[#373737] transition-all duration-300 font-medium text-sm px-6 py-3 rounded-lg cursor-pointer overflow-hidden"
+              className="group relative bg-[#282828] backdrop-blur-sm text-white hover:bg-[#373737] transition-all duration-300 font-medium text-sm px-4 sm:px-6 py-3 rounded-lg cursor-pointer overflow-hidden w-full sm:w-auto"
               style={{
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
                 fontVariationSettings: "wght 480",
-                width: '140px',
+                minWidth: '140px',
                 height: '44px'
               }}>
-              <div className="flex items-center justify-center gap-2 text-[1rem] font-black">
-                <Users />
+              <div className="flex items-center justify-center gap-2 text-sm sm:text-[1rem] font-black">
+                <Users size={18} className="sm:w-5 sm:h-5"/>
                 <span>Explore</span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-500" />
