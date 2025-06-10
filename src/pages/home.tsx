@@ -1,6 +1,6 @@
 import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
-import { Ship, User, Users } from "lucide-react";
+import { Ship, Users } from "lucide-react";
 
 const Home = () => {
   return (
