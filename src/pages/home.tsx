@@ -176,8 +176,8 @@ const Home = () => {
                 width: '140px',
                 height: '44px'
               }}>
-              <div className="flex items-center justify-center gap-2">
-                <Ship size={16}/>
+              <div className="flex items-center justify-center gap-2 text-[1rem] font-black">
+                <Ship size={20}/>
                 <span>Ship project</span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-500" />
@@ -192,7 +192,7 @@ const Home = () => {
                 width: '140px',
                 height: '44px'
               }}>
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-center justify-center gap-2 text-[1rem] font-black">
                 <Users />
                 <span>Explore</span>
               </div>
