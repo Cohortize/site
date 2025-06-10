@@ -131,6 +131,10 @@ const Navbar = () => {
                 className="relative group"
                 onMouseEnter={() => handleMouseEnter(navItem.key)}
                 onMouseLeave={handleMouseLeave}
+                style={{
+                fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                fontVariationSettings: "wght 480",
+              }}
               >
                 <button className="flex items-center gap-1.5 px-3 py-1.5 text-gray-400 hover:text-white text-sm font-normal transition-colors duration-200 rounded-md hover:bg-gray-900/30">
                   {navItem.icon}
@@ -196,7 +200,9 @@ const Navbar = () => {
             <Button 
               className="bg-white text-black hover:bg-[#e3e2e1] cursor-pointer transition-all duration-200 font-normal text-sm px-3 py-1.5 h-8 rounded-md"
               style={{
-                border: '0.5px solid rgba(255, 255, 255, 0.1)'
+                border: '0.5px solid rgba(255, 255, 255, 0.1)',
+                fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                fontVariationSettings: "wght 480",
               }}
             >
               Log in
@@ -205,7 +211,9 @@ const Navbar = () => {
               variant="ghost" 
               className="cursor-pointer text-gray-300 hover:text-white hover:bg-white/[0.03] transition-all duration-200 font-normal text-sm px-3 py-1.5 h-8 rounded-md"
               style={{
-                border: '0.5px solid rgba(255, 255, 255, 0.08)'
+                border: '0.5px solid rgba(255, 255, 255, 0.08)',
+                fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                fontVariationSettings: "wght 480",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.border = '0.5px solid rgba(255, 255, 255, 0.15)';
