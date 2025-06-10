@@ -43,6 +43,97 @@ const Home = () => {
           }}
         />
 
+        <div 
+          className="absolute inset-0 opacity-70"
+          style={{
+            background: `
+              conic-gradient(from 0deg at 50% 60%, 
+                #ff0040 0deg,
+                #ff4000 30deg,
+                #ff8000 60deg,
+                #ffff00 90deg,
+                #80ff00 120deg,
+                #00ff40 150deg,
+                #00ff80 180deg,
+                #00ffff 210deg,
+                #0080ff 240deg,
+                #0040ff 270deg,
+                #4000ff 300deg,
+                #8000ff 330deg,
+                #ff0040 360deg
+              )
+            `,
+            maskImage: `
+              radial-gradient(circle 300px at 50% 60%, 
+                rgba(255,255,255,0.8) 0%, 
+                rgba(255,255,255,0.6) 30%, 
+                rgba(255,255,255,0.3) 60%,
+                rgba(255,255,255,0.1) 80%,
+                transparent 100%
+              )
+            `,
+            WebkitMaskImage: `
+              radial-gradient(circle 300px at 50% 60%, 
+                rgba(255,255,255,0.8) 0%, 
+                rgba(255,255,255,0.6) 30%, 
+                rgba(255,255,255,0.3) 60%,
+                rgba(255,255,255,0.1) 80%,
+                transparent 100%
+              )
+            `,
+          }}
+        />
+
+
+        <div 
+          className="absolute inset-0 opacity-50"
+          style={{
+            background: `
+              conic-gradient(from 45deg at 50% 60%, 
+                #ff006e 0deg,
+                #fb5607 45deg,
+                #ffbe0b 90deg,
+                #8ecae6 135deg,
+                #219ebc 180deg,
+                #023047 225deg,
+                #8b5cf6 270deg,
+                #c77dff 315deg,
+                #ff006e 360deg
+              )
+            `,
+            maskImage: `
+              radial-gradient(circle 200px at 50% 60%, 
+                rgba(255,255,255,0.9) 0%, 
+                rgba(255,255,255,0.5) 50%,
+                rgba(255,255,255,0.2) 80%,
+                transparent 100%
+              )
+            `,
+            WebkitMaskImage: `
+              radial-gradient(circle 200px at 50% 60%, 
+                rgba(255,255,255,0.9) 0%, 
+                rgba(255,255,255,0.5) 50%,
+                rgba(255,255,255,0.2) 80%,
+                transparent 100%
+              )
+            `,
+          }}
+        />
+
+  
+        <div 
+          className="absolute inset-0 opacity-40"
+          style={{
+            background: `
+              radial-gradient(circle 150px at 50% 60%, 
+                rgba(255, 255, 255, 0.15) 0%,
+                rgba(147, 51, 234, 0.2) 30%,
+                rgba(59, 130, 246, 0.15) 60%,
+                transparent 100%
+              )
+            `,
+          }}
+        />
 
         <div 
           className="absolute inset-0 opacity-30"
@@ -82,15 +173,13 @@ const Home = () => {
           
           <div className="flex flex-row justify-center gap-6">
             <Button
-              className="group relative bg-white text-black hover:bg-gray-100 active:bg-gray-200 transition-all duration-300 font-medium text-sm px-6 py-3 rounded-lg cursor-pointer overflow-hidden"
+              className="group relative bg-white text-black hover:bg-[#d2d2d1] transition-all duration-300 font-medium text-sm px-6 py-3 rounded-lg cursor-pointer overflow-hidden"
               style={{
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
                 fontVariationSettings: "wght 480",
                 width: '140px',
-                height: '44px',
-                boxShadow: '0 4px 16px rgba(255, 255, 255, 0.1), 0 2px 8px rgba(255, 255, 255, 0.05)',
-                background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                height: '44px'
               }}>
               <div className="flex items-center justify-center gap-2">
                 <Ship size={16}/>
@@ -100,15 +189,13 @@ const Home = () => {
             </Button>
             
             <Button
-              className="group relative bg-gray-800/80 backdrop-blur-sm text-white hover:bg-gray-700/90 active:bg-gray-600/90 transition-all duration-300 font-medium text-sm px-6 py-3 rounded-lg cursor-pointer overflow-hidden"
+              className="group relative bg-[#282828] backdrop-blur-sm text-white hover:bg-[#373737] transition-all duration-300 font-medium text-sm px-6 py-3 rounded-lg cursor-pointer overflow-hidden"
               style={{
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
                 fontVariationSettings: "wght 480",
                 width: '140px',
-                height: '44px',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(255, 255, 255, 0.05)',
-                background: 'linear-gradient(135deg, rgba(55, 65, 81, 0.9) 0%, rgba(31, 41, 55, 0.9) 100%)',
+                height: '44px'
               }}>
               <div className="flex items-center justify-center gap-2">
                 <Users />
