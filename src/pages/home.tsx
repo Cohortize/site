@@ -135,16 +135,7 @@ const Home = () => {
           }}
         />
 
-        <div 
-          className="absolute inset-0 opacity-30"
-          style={{
-            background: `
-              radial-gradient(circle at 30% 30%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
-              radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
-              radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.04) 0%, transparent 60%)
-            `,
-          }}
-        />
+
 
 
         <div className="relative w-[180px] h-[180px] z-10">
@@ -167,10 +158,14 @@ const Home = () => {
         </div>
         
         <div className="flex flex-col gap-8">
-          <p className="text-5xl text-white text-center px-6 z-20 relative font-medium">
-            Your one stop platform for sharing and building your ideas.
+          <p className="text-[3.3rem] text-white text-center px-6 z-20 relative font-medium">
+            Your one-stop platform for ideas.
           </p>
-          
+          <div className="flex justify-center items-center">
+          <p className="text-[#b8b6b6] text-[1.3rem]">
+            Cohortize is a one-stop platform for collaboration, finding ideas and people to execute them with.
+          </p>
+          </div>
           <div className="flex flex-row justify-center gap-6">
             <Button
               className="group relative bg-white text-black hover:bg-[#d2d2d1] transition-all duration-300 font-medium text-sm px-6 py-3 rounded-lg cursor-pointer overflow-hidden"
