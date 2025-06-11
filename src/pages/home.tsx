@@ -13,41 +13,15 @@ const Home = () => {
     >
       <Navbar />
 
-      <div className="relative h-screen w-full flex flex-col-reverse gap-8 md:gap-16 justify-center items-center overflow-hidden bg-black px-4 md:px-6" style={{ paddingBottom: '80px' }}>
+      <div className="relative flex flex-col-reverse gap-8 md:gap-16 justify-center items-center overflow-hidden bg-black px-4 md:px-6 xl:pt-20 2xl:pt-32" style={{ paddingBottom: '160px', height: 'calc(100vh - 64px)' }}>
         
 
-        <div 
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px',
-            maskImage: `
-              radial-gradient(ellipse 60% 80% at center, 
-                rgba(255,255,255,1) 0%, 
-                rgba(255,255,255,0.5) 40%, 
-                rgba(255,255,255,0.3) 70%, 
-                rgba(255,255,255,0.1) 100%
-              )
-            `,
-            WebkitMaskImage: `
-              radial-gradient(ellipse 60% 80% at center, 
-                rgba(255,255,255,0.4) 0%, 
-                rgba(255,255,255,0.2) 40%, 
-                rgba(255,255,255,0.2) 70%, 
-                rgba(255,255,255,0.02) 100%
-              )
-            `,
-          }}
-        />
-
+      
         <div 
           className="absolute inset-0 opacity-70"
           style={{
             background: `
-              conic-gradient(from 0deg at 50% 60%, 
+              conic-gradient(from 0deg at 50% 50%, 
                 #ff0040 0deg,
                 #ff4000 30deg,
                 #ff8000 60deg,
@@ -64,7 +38,7 @@ const Home = () => {
               )
             `,
             maskImage: `
-              radial-gradient(circle 300px at 50% 60%, 
+              radial-gradient(circle 300px at 50% 50%, 
                 rgba(255,255,255,0.8) 0%, 
                 rgba(255,255,255,0.6) 30%, 
                 rgba(255,255,255,0.3) 60%,
@@ -73,7 +47,7 @@ const Home = () => {
               )
             `,
             WebkitMaskImage: `
-              radial-gradient(circle 300px at 50% 60%, 
+              radial-gradient(circle 300px at 50% 50%, 
                 rgba(255,255,255,0.8) 0%, 
                 rgba(255,255,255,0.6) 30%, 
                 rgba(255,255,255,0.3) 60%,
@@ -89,7 +63,7 @@ const Home = () => {
           className="absolute inset-0 opacity-50"
           style={{
             background: `
-              conic-gradient(from 45deg at 50% 60%, 
+              conic-gradient(from 45deg at 50% 50%, 
                 #ff006e 0deg,
                 #fb5607 45deg,
                 #ffbe0b 90deg,
@@ -102,7 +76,7 @@ const Home = () => {
               )
             `,
             maskImage: `
-              radial-gradient(circle 200px at 50% 60%, 
+              radial-gradient(circle 200px at 50% 50%, 
                 rgba(255,255,255,0.9) 0%, 
                 rgba(255,255,255,0.5) 50%,
                 rgba(255,255,255,0.2) 80%,
@@ -110,7 +84,7 @@ const Home = () => {
               )
             `,
             WebkitMaskImage: `
-              radial-gradient(circle 200px at 50% 60%, 
+              radial-gradient(circle 200px at 50% 50%, 
                 rgba(255,255,255,0.9) 0%, 
                 rgba(255,255,255,0.5) 50%,
                 rgba(255,255,255,0.2) 80%,
@@ -125,7 +99,7 @@ const Home = () => {
           className="absolute inset-0 opacity-40"
           style={{
             background: `
-              radial-gradient(circle 150px at 50% 60%, 
+              radial-gradient(circle 150px at 50% 50%, 
                 rgba(255, 255, 255, 0.15) 0%,
                 rgba(147, 51, 234, 0.2) 30%,
                 rgba(59, 130, 246, 0.15) 60%,
@@ -140,18 +114,18 @@ const Home = () => {
 
 
         
-        <div className="flex flex-col gap-6 md:gap-8 max-w-4xl mx-auto">
-          <p className="text-6xl sm:text-6xl md:text-6xl lg:text-6xl text-white text-center px-2 sm:px-4 md:px-6 z-20 relative font-medium leading-tight">
+        <div className="flex flex-col gap-6 md:gap-8 xl:gap-10 2xl:gap-12 max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mx-auto">
+          <p className="text-6xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-6xl 2xl:text-7xl text-white text-center px-2 sm:px-4 md:px-6 z-20 relative font-medium leading-tight xl:leading-tight 2xl:leading-tight">
             Your one-stop platform for ideas.
           </p>
           <div className="flex justify-center items-center px-2 sm:px-4">
-          <p className="text-[#b8b6b6] text-[1.4rem] sm:text-[1.4rem] md:text-[1.5rem] lg:text-[1.5rem] text-center max-w-2xl">
+          <p className="text-[#b8b6b6] text-[1.4rem] sm:text-[1.4rem] md:text-[1.5rem] lg:text-[1.5rem] xl:text-[1.6rem] 2xl:text-[1.8rem] text-center max-w-2xl xl:max-w-3xl 2xl:max-w-4xl">
             Cohortize is a one-stop platform for collaboration, finding ideas and people to execute them with.
           </p>
           </div>
-          <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 px-4 sm:px-0">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 xl:gap-8 px-4 sm:px-0">
             <Button
-              className="group relative bg-white text-black hover:bg-[#d2d2d1] transition-all duration-300 font-medium text-sm px-4 sm:px-6 py-3 rounded-lg cursor-pointer overflow-hidden w-full sm:w-auto"
+              className="group relative bg-white text-black hover:bg-[#d2d2d1] transition-all duration-300 font-medium text-sm px-4 sm:px-6 xl:px-8 py-3 xl:py-4 rounded-lg cursor-pointer overflow-hidden w-full sm:w-auto"
               style={{
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
@@ -159,24 +133,24 @@ const Home = () => {
                 minWidth: '140px',
                 height: '44px'
               }}>
-              <div className="flex items-center justify-center gap-2 text-sm sm:text-[1rem] font-black">
-                <Ship size={18} className="sm:w-5 sm:h-5"/>
+              <div className="flex items-center justify-center gap-2 text-sm sm:text-[1rem] xl:text-[1.1rem] font-black">
+                <Ship size={18} className="sm:w-5 sm:h-5 xl:w-6 xl:h-6"/>
                 <span>Ship project</span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-500" />
             </Button>
             
             <Button
-              className="group relative bg-[#282828] backdrop-blur-sm text-white hover:bg-[#373737] transition-all duration-300 font-medium text-sm px-4 sm:px-6 py-3 rounded-lg cursor-pointer overflow-hidden w-full sm:w-auto"
+              className="group relative bg-[#282828] backdrop-blur-sm text-white hover:bg-[#373737] transition-all duration-300 font-medium text-sm px-4 sm:px-6 xl:px-8 py-3 xl:py-4 rounded-lg cursor-pointer overflow-hidden w-full sm:w-auto"
               style={{
                 border: '1px solid rgba(255, 255, 255, 0.15)',
-                fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
                 fontVariationSettings: "wght 480",
                 minWidth: '140px',
                 height: '44px'
               }}>
-              <div className="flex items-center justify-center gap-2 text-sm sm:text-[1rem] font-black">
-                <Users size={18} className="sm:w-5 sm:h-5"/>
+              <div className="flex items-center justify-center gap-2 text-sm sm:text-[1rem] xl:text-[1.1rem] font-black">
+                <Users size={18} className="sm:w-5 sm:h-5 xl:w-6 xl:h-6"/>
                 <span>Explore</span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-500" />
