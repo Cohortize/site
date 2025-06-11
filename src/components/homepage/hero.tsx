@@ -3,7 +3,7 @@ import { Ship, Users } from "lucide-react";
 
 const Hero = () => {
 return(<>
-<div className="relative flex flex-col-reverse gap-8 md:gap-16 justify-center items-center overflow-hidden bg-black px-4 md:px-6 xl:pt-20 2xl:pt-32" style={{ paddingBottom: '160px', height: 'calc(100vh - 64px)' }}>
+<div className="relative flex flex-col-reverse gap-8 md:gap-16 justify-center items-center overflow-hidden bg-black px-4 md:px-6 xl:pt-20 2xl:pt-32 h-screen">
         
 
       
@@ -11,7 +11,7 @@ return(<>
           className="absolute inset-0 opacity-70"
           style={{
             background: `
-              conic-gradient(from 0deg at 50% 50%, 
+              conic-gradient(from 0deg at 50% 60%, 
                 #ff0040 0deg,
                 #ff4000 30deg,
                 #ff8000 60deg,
@@ -28,7 +28,7 @@ return(<>
               )
             `,
             maskImage: `
-              radial-gradient(circle 300px at 50% 50%, 
+              radial-gradient(circle 300px at 50% 60%, 
                 rgba(255,255,255,0.8) 0%, 
                 rgba(255,255,255,0.6) 30%, 
                 rgba(255,255,255,0.3) 60%,
@@ -37,7 +37,7 @@ return(<>
               )
             `,
             WebkitMaskImage: `
-              radial-gradient(circle 300px at 50% 50%, 
+              radial-gradient(circle 300px at 50% 60%, 
                 rgba(255,255,255,0.8) 0%, 
                 rgba(255,255,255,0.6) 30%, 
                 rgba(255,255,255,0.3) 60%,
@@ -53,7 +53,7 @@ return(<>
           className="absolute inset-0 opacity-50"
           style={{
             background: `
-              conic-gradient(from 45deg at 50% 50%, 
+              conic-gradient(from 45deg at 50% 60%, 
                 #ff006e 0deg,
                 #fb5607 45deg,
                 #ffbe0b 90deg,
@@ -66,7 +66,7 @@ return(<>
               )
             `,
             maskImage: `
-              radial-gradient(circle 200px at 50% 50%, 
+              radial-gradient(circle 200px at 50% 60%, 
                 rgba(255,255,255,0.9) 0%, 
                 rgba(255,255,255,0.5) 50%,
                 rgba(255,255,255,0.2) 80%,
@@ -74,7 +74,7 @@ return(<>
               )
             `,
             WebkitMaskImage: `
-              radial-gradient(circle 200px at 50% 50%, 
+              radial-gradient(circle 200px at 50% 60%, 
                 rgba(255,255,255,0.9) 0%, 
                 rgba(255,255,255,0.5) 50%,
                 rgba(255,255,255,0.2) 80%,
@@ -89,7 +89,7 @@ return(<>
           className="absolute inset-0 opacity-40"
           style={{
             background: `
-              radial-gradient(circle 150px at 50% 50%, 
+              radial-gradient(circle 150px at 50% 60%, 
                 rgba(255, 255, 255, 0.15) 0%,
                 rgba(147, 51, 234, 0.2) 30%,
                 rgba(59, 130, 246, 0.15) 60%,
@@ -105,9 +105,14 @@ return(<>
 
         
         <div className="flex flex-col gap-6 md:gap-8 xl:gap-10 2xl:gap-12 max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mx-auto">
+          <div>
           <p className="text-6xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-6xl 2xl:text-7xl text-white text-center px-2 sm:px-4 md:px-6 z-20 relative font-medium leading-tight xl:leading-tight 2xl:leading-tight">
-            Your one-stop platform for ideas.
+            Your one-stop platform for
           </p>
+          <p className="text-6xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-6xl 2xl:text-7xl text-white text-center px-2 sm:px-4 md:px-6 z-20 relative font-medium leading-tight xl:leading-tight 2xl:leading-tight">
+            ideas.
+          </p>
+          </div>
           <div className="flex justify-center items-center px-2 sm:px-4">
           <p className="text-[#b8b6b6] text-[1.4rem] sm:text-[1.4rem] md:text-[1.5rem] lg:text-[1.5rem] xl:text-[1.6rem] 2xl:text-[1.8rem] text-center max-w-2xl xl:max-w-3xl 2xl:max-w-4xl">
             Cohortize is a one-stop platform for collaboration, finding ideas and people to execute them with.

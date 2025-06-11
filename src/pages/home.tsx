@@ -1,6 +1,6 @@
 import Navbar from "@/components/homepage/navbar";
-
 import Hero from "@/components/homepage/hero";
+import Ships from "@/components/homepage/ships";
 const Home = () => {
   return (
     <div
@@ -12,7 +12,7 @@ const Home = () => {
     >
       <Navbar />
       <Hero />
-      
+      <Ships />
     </div>
   );
 };
