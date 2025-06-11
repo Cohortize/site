@@ -1,6 +1,6 @@
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/homepage/navbar";
 
-import Hero from "@/components/hero";
+import Hero from "@/components/homepage/hero";
 const Home = () => {
   return (
     <div

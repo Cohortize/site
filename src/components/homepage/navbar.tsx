@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { JSX, useState } from "react";
 import { ChevronDown, Ship, Trophy, MessageCircle, Users, Star, MessageSquare } from "lucide-react";
 import {
