@@ -13,12 +13,21 @@ const Ships = () => {
             There are millions of developers who make thousands of projects everyday, so there is a high chance that your project goes unnoticed even after having the potential. Don't let it happen.  
             </p>
             </div>
-            <div className="h-[25rem] w-[25rem] text-[#000000]" style={{backgroundImage: `
+            <div className="h-[25rem] w-[25rem] text-[#ff00ea]" style={{backgroundImage: `
             conic-gradient(from 0deg at 50% 60%, 
-                #ff00 0deg,
-                #ff0040 360deg
+                #d3b2d1 0deg,
+                #c64dbc 30deg,
+                #cf8dca 60deg,
+                #ca75c3 90deg,
+                #f43fe5 120deg,
+                #c813b9 150deg,
+                #c83dbc 180deg,
+                #ff00ea 210deg,
+                #dc46d5 240deg,
+                #d3a4cf 270deg,
+                #d3b2d1 360deg
             `,
-              borderRadius:"20px"}}>
+            borderRadius:"20px"}}>
             
             </div>
         </div>
@@ -27,3 +36,8 @@ const Ships = () => {
 }
 
 export default Ships
+
+
+{/*conic-gradient(from 0deg at 50% 60%, 
+#ff00 0deg,
+#ff0040 360deg */}
