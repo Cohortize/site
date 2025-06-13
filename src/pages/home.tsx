@@ -1,6 +1,7 @@
 import Navbar from "@/components/homepage/navbar";
 import Hero from "@/components/homepage/hero";
 import Ships from "@/components/homepage/ships";
+import Collaborate from "@/components/homepage/collaborate";
 const Home = () => {
   return (
     <div
