@@ -5,19 +5,15 @@ const Ships = () => {
 
                 <div className="flex flex-col gap-6 lg:gap-8 flex-1">
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl text-white font-medium leading-tight tracking-tight">
-                        Ship your <span className="text-[
-#fbcaca]">projects</span>.
+                        Ship your <span className="text-[#fbcaca]">projects</span>.
                     </h1>
 
                     <p className="text-gray-300 text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-3xl leading-relaxed">
-                        Ship your <span className="text-[
-#fbcaca]">projects</span>, show them to the whole world.
+                        Ship your <span className="text-[#fbcaca]">projects</span>, show them to the whole world.
                     </p>
 
                     <p className="text-gray-400 text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl">
-                        There are millions of developers who make thousands of <span className="text-[
-#fbcaca]">projects</span> everyday, so there is a high chance that your <span className="text-[
-#fbcaca]">project</span> goes unnoticed even after having the potential. Don't let it happen.
+                        There are millions of developers who make thousands of <span className="text-[#fbcaca]">projects</span> everyday, so there is a high chance that your <span className="text-[#fbcaca]">project</span> goes unnoticed even after having the potential. Don't let it happen.
                     </p>
                 </div>
 
