@@ -14,6 +14,7 @@ const Home = () => {
       <Navbar />
       <Hero />
       <Ships />
+      <Collaborate />
     </div>
   );
 };
