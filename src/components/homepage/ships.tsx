@@ -2,7 +2,6 @@ const Ships = () => {
     return (
         <div className="min-h-screen w-full bg-black flex items-center px-8 lg:px-16 xl:px-20 py-16">
             <div className="max-w-7xl w-full mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-32 xl:gap-40">
-
                 <div className="flex flex-col gap-6 lg:gap-8 flex-1">
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl text-white font-medium leading-tight tracking-tight">
                         Ship your <span className="text-[#fbcaca]">projects</span>.
