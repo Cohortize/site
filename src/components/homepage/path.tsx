@@ -14,10 +14,15 @@ const Path = () => {
         const secondSection = document.getElementById('second-section');
         const firstSection = document.getElementById('first-section')
         const box = document.getElementById('first-box')
-        if(secondSection && firstSection && box){
+        const firstPath = document.getElementById('first-path')
+        if(secondSection && firstSection && box && firstPath){
             secondSection.style.border = '1px white solid';
             firstSection.style.border = "1px #3a3a3a solid";
             box.style.visibility = 'hidden'
+            const pathElement = firstPath.querySelector('path');
+            if (pathElement) {
+                pathElement.style.stroke = "rgba(255, 255, 255, 0.3)";
+            }
             setFirstDone(true)
         }
     }
@@ -26,10 +31,37 @@ const Path = () => {
         const thirdSection = document.getElementById('third-section')
         const secondSection = document.getElementById('second-section')
         const box = document.getElementById('second-box')
-        if (thirdSection && secondSection && box){
+        const secondPath = document.getElementById('second-path')
+        if (thirdSection && secondSection && box && secondPath){
             thirdSection.style.border = "1px white solid"
             secondSection.style.border = "1px #3a3a3a solid"
             box.style.visibility = "hidden"
+            const pathElement = secondPath.querySelector('path');
+            if (pathElement) {
+                pathElement.style.stroke = "rgba(255, 255, 255, 0.3)";
+            }
+        }
+    }
+    
+    function firstPathLit(){
+        const firstSection = document.getElementById('first-section')
+        const firstPath = document.getElementById('first-path')
+        if(firstSection && firstPath){
+            firstSection.style.border = '1px white solid'
+            const pathElement = firstPath.querySelector('path');
+            if (pathElement) {
+                pathElement.style.stroke = "rgba(255, 255, 255, 0.9)";
+            }
+        }
+    }
+    
+    function secondPathLit(){
+        const secondPath = document.getElementById('second-path')
+        if(secondPath){
+            const pathElement = secondPath.querySelector('path');
+            if (pathElement) {
+                pathElement.style.stroke = "rgba(255, 255, 255, 0.9)";
+            }
         }
     }
     
@@ -87,8 +119,8 @@ const Path = () => {
         const secondBox = document.getElementById('second-box') as HTMLElement | null;
         const thirdSection = document.getElementById('third-section') as HTMLElement | null;
         const secondSection = document.getElementById('second-section') as HTMLElement | null;
-        
-        if (!firstSection || !secondSection || !firstBox || !secondBox || !thirdSection) {
+        const firstPath = document.getElementById('first-path') as HTMLElement | null;
+        if (!firstSection || !secondSection || !firstBox || !secondBox || !thirdSection || !firstPath) {
             return;
         }
         
@@ -102,8 +134,10 @@ const Path = () => {
             const quarterDistance = distance / 4;
             return `M0,0 Q10,${quarterDistance} 0,${quarterDistance * 2} Q-10,${quarterDistance * 3} 0,${distance}`;
         };
+        
         gsap.to(firstSection, {
             border: '1px white solid',
+            onStart: firstPathLit,
             scrollTrigger: {
                 trigger: firstSection,
                 scrub: false,
@@ -188,6 +222,7 @@ const Path = () => {
             },
             duration: 2,
             backgroundColor: 'red',
+            onStart: secondPathLit,
             onComplete: thirdSectionLit,
             scrollTrigger: {
                 trigger: secondBox,
@@ -221,7 +256,7 @@ const Path = () => {
                     </div>
                 </div>
                 <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
-                    <svg 
+                    <svg id="first-path"
                         className="absolute pointer-events-none" 
                         style={{ 
                             left: '50%', 
@@ -241,6 +276,9 @@ const Path = () => {
                             strokeDasharray="4 2"
                             strokeLinecap="round"
                             transform="translate(20, 0)"
+                            style={{
+                                transition: 'stroke 0.3s ease'
+                            }}
                         />
                     </svg>
                     <div id="first-box" className="z-1 text-center bg-red-50 h-8 w-8 relative">
@@ -257,7 +295,7 @@ const Path = () => {
                     </div>
                 </div>
                 <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
-                    <svg 
+                    <svg id="second-path"
                         className="absolute pointer-events-none" 
                         style={{ 
                             left: '50%', 
@@ -277,6 +315,9 @@ const Path = () => {
                             strokeDasharray="4 2"
                             strokeLinecap="round"
                             transform="translate(20, 0)"
+                            style={{
+                                transition: 'stroke 0.3s ease'
+                            }}
                         />
                     </svg>
                     <div id="second-box" className="z-1 text-center h-8 w-8 bg-red-50 relative">
