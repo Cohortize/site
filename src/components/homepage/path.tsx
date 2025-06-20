@@ -1,33 +1,70 @@
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {useRef} from "react";
-import {useGSAP} from "@gsap/react"
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react"
 import gsap from 'gsap'
 import { MotionPathPlugin } from "gsap/src/all";
 gsap.registerPlugin(useGSAP, ScrollTrigger, MotionPathPlugin)
-const Path = () => {
-    const main = useRef(null);
 
-    useGSAP(() => {
-        const firstSection = document.getElementById('first-section');
+const Path = () => {
+    const main = useRef<HTMLDivElement>(null);
+    function secondSectionLit(){
         const secondSection = document.getElementById('second-section');
-        const firstBox = document.getElementById('first-box');
-        const secondBox = document.getElementById('second-box')
+        const firstSection = document.getElementById('first-section')
+        const box = document.getElementById('first-box')
+        if(secondSection && firstSection && box){
+        secondSection.style.border = '1px white solid';
+        firstSection.style.border = "1px #3a3a3a solid";
+        box.style.visibility = 'hidden'
+    }
+    }
+    function thirdSectionLit(){
         const thirdSection = document.getElementById('third-section')
-        gsap.to(firstSection,
-            {
-                border: '1px white solid',
-                scrollTrigger:{
-                    trigger: firstSection,
-                    scrub: false,
-                }
+        const secondSection = document.getElementById('second-section')
+        const box = document.getElementById('second-box')
+        if (thirdSection && secondSection && box){
+            thirdSection.style.border = "1px white solid"
+            secondSection.style.border = "1px #3a3a3a solid"
+            box.style.visibility = "hidden"
+        }
+    }
+    useGSAP(() => {
+        const firstSection = document.getElementById('first-section') as HTMLElement | null;
+        const firstBox = document.getElementById('first-box') as HTMLElement | null;
+        const secondBox = document.getElementById('second-box') as HTMLElement | null;
+        const thirdSection = document.getElementById('third-section') as HTMLElement | null;
+        const secondSection = document.getElementById('second-section') as HTMLElement | null;
+        if (!firstSection || !secondSection || !firstBox || !secondBox || !thirdSection) {
+            return;
+        }
+        const getBoxTravelDistance = (fromSection: HTMLElement, toSection: HTMLElement, box: HTMLElement): number => {
+            const fromRect = fromSection.getBoundingClientRect();
+            const toRect = toSection.getBoundingClientRect();
+            const boxHeight = box.offsetHeight;
+            return (toRect.top - fromRect.bottom) - boxHeight - 2; 
+        };
+        const createResponsiveMotionPath = (distance: number): string => {
+            const quarterDistance = distance / 4;
+            return `M0,0 Q10,${quarterDistance} 0,${quarterDistance * 2} Q-10,${quarterDistance * 3} 0,${distance}`;
+        };
+        
+        gsap.to(firstSection, {
+            border: '1px white solid',
+            scrollTrigger: {
+                trigger: firstSection,
+                scrub: false,
             }
-        )
+        });
+        
+        const firstBoxDistance = getBoxTravelDistance(firstSection, secondSection, firstBox);
+        const firstMotionPath = createResponsiveMotionPath(firstBoxDistance);
+        
         gsap.to(firstBox, {
             motionPath: {
-                path: "M0,0 Q10,25 0,50 Q-10,75 0,100 Q10,125 0,200", 
+                path: firstMotionPath,
                 autoRotate: true,
             },
             duration: 2,
+            onComplete: secondSectionLit,
             backgroundColor: 'red',
             scrollTrigger: {
                 trigger: firstBox,
@@ -35,24 +72,26 @@ const Path = () => {
                 end: 'top 20%',
                 scrub: false,
             },
-        });
-        gsap.to(secondSection,
-            {
-                border:'1px white solid',
-                scrollTrigger:{
-                    trigger: secondSection,
-                    scrub: false,
-                }
-                
+        }); 
+        
+       /* gsap.to(secondSection, {
+            border:'1px white solid',
+            scrollTrigger: {
+                trigger: secondSection,
+                scrub: false,
             }
-        )
+        });*/
+        const secondBoxDistance = getBoxTravelDistance(secondSection, thirdSection, secondBox);
+        const secondMotionPath = createResponsiveMotionPath(secondBoxDistance);
+        
         gsap.to(secondBox, {
             motionPath: {
-                path: "M0,0 Q10,25 0,50 Q-10,75 0,100 Q10,125 0,200", 
+                path: secondMotionPath,
                 autoRotate: true,
             },
             duration: 2,
             backgroundColor: 'red',
+            onComplete: thirdSectionLit,
             scrollTrigger: {
                 trigger: secondBox,
                 start: 'bottom bottom',
@@ -60,15 +99,37 @@ const Path = () => {
                 scrub: false,
             },
         });
-
-        gsap.to(thirdSection,{
+/*
+        gsap.to(thirdSection, {
             border: '1px white solid',
-            scrollTrigger:{
+            scrollTrigger: {
                 trigger: thirdSection,
                 scrub: false,
             }
-        })
+        });*/
+
+        const handleResize = (): void => {
+            ScrollTrigger.refresh();
+            
+
+            const newFirstBoxDistance = getBoxTravelDistance(firstSection, secondSection, firstBox);
+            const newFirstMotionPath = createResponsiveMotionPath(newFirstBoxDistance);
+            
+            const newSecondBoxDistance = getBoxTravelDistance(secondSection, thirdSection, secondBox);
+            const newSecondMotionPath = createResponsiveMotionPath(newSecondBoxDistance);
+  
+            gsap.set(firstBox, { motionPath: { path: newFirstMotionPath } });
+            gsap.set(secondBox, { motionPath: { path: newSecondMotionPath } });
+        };
+        
+        window.addEventListener('resize', handleResize);
+        
+        return (): void => {
+            window.removeEventListener('resize', handleResize);
+        };
+        
     }, { scope: main });
+    
     return (
         <div className="min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
             <div className="max-w-7xl w-full mx-auto flex flex-col lg:flex-col gap-0 sm:gap-0 lg:gap-0 xl:gap-0 justify-center items-center">
