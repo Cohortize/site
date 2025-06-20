@@ -1,47 +1,135 @@
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react"
 import gsap from 'gsap'
 import { MotionPathPlugin } from "gsap/src/all";
 gsap.registerPlugin(useGSAP, ScrollTrigger, MotionPathPlugin)
 
 const Path = () => {
+    const [firstDone, setFirstDone] = useState(false)
+    const [pathDimensions, setPathDimensions] = useState({ firstPath: '', secondPath: '' });
     const main = useRef<HTMLDivElement>(null);
+    
     function secondSectionLit(){
         const secondSection = document.getElementById('second-section');
         const firstSection = document.getElementById('first-section')
         const box = document.getElementById('first-box')
-        if(secondSection && firstSection && box){
-        secondSection.style.border = '1px white solid';
-        firstSection.style.border = "1px #3a3a3a solid";
-        box.style.visibility = 'hidden'
+        const firstPath = document.getElementById('first-path')
+        if(secondSection && firstSection && box && firstPath){
+            secondSection.style.border = '1px white solid';
+            firstSection.style.border = "1px #3a3a3a solid";
+            box.style.visibility = 'hidden'
+            const pathElement = firstPath.querySelector('path');
+            if (pathElement) {
+                pathElement.style.stroke = "rgba(255, 255, 255, 0.3)";
+            }
+            setFirstDone(true)
+        }
     }
-    }
+    
     function thirdSectionLit(){
         const thirdSection = document.getElementById('third-section')
         const secondSection = document.getElementById('second-section')
         const box = document.getElementById('second-box')
-        if (thirdSection && secondSection && box){
+        const secondPath = document.getElementById('second-path')
+        if (thirdSection && secondSection && box && secondPath){
             thirdSection.style.border = "1px white solid"
             secondSection.style.border = "1px #3a3a3a solid"
             box.style.visibility = "hidden"
+            const pathElement = secondPath.querySelector('path');
+            if (pathElement) {
+                pathElement.style.stroke = "rgba(255, 255, 255, 0.3)";
+            }
         }
     }
+    
+    function firstPathLit(){
+        const firstSection = document.getElementById('first-section')
+        const firstPath = document.getElementById('first-path')
+        if(firstSection && firstPath){
+            firstSection.style.border = '1px white solid'
+            const pathElement = firstPath.querySelector('path');
+            if (pathElement) {
+                pathElement.style.stroke = "rgba(255, 255, 255, 0.9)";
+            }
+        }
+    }
+    
+    function secondPathLit(){
+        const secondPath = document.getElementById('second-path')
+        if(secondPath){
+            const pathElement = secondPath.querySelector('path');
+            if (pathElement) {
+                pathElement.style.stroke = "rgba(255, 255, 255, 0.9)";
+            }
+        }
+    }
+    
+    const updatePathDimensions = () => {
+        const firstSection = document.getElementById('first-section') as HTMLElement | null;
+        const secondSection = document.getElementById('second-section') as HTMLElement | null;
+        const thirdSection = document.getElementById('third-section') as HTMLElement | null;
+        const firstBox = document.getElementById('first-box') as HTMLElement | null;
+        const secondBox = document.getElementById('second-box') as HTMLElement | null;
+        
+        if (!firstSection || !secondSection || !thirdSection || !firstBox || !secondBox) {
+            return;
+        }
+        
+        const getBoxTravelDistance = (fromSection: HTMLElement, toSection: HTMLElement): number => {
+            const fromRect = fromSection.getBoundingClientRect();
+            const toRect = toSection.getBoundingClientRect();
+            return toRect.top - fromRect.bottom;
+        };
+        
+        const createResponsiveMotionPath = (distance: number): string => {
+            const quarterDistance = distance / 4;
+            return `M0,0 Q10,${quarterDistance} 0,${quarterDistance * 2} Q-10,${quarterDistance * 3} 0,${distance}`;
+        };
+        
+        const firstBoxDistance = getBoxTravelDistance(firstSection, secondSection);
+        const secondBoxDistance = getBoxTravelDistance(secondSection, thirdSection);
+        
+        const firstMotionPath = createResponsiveMotionPath(firstBoxDistance);
+        const secondMotionPath = createResponsiveMotionPath(secondBoxDistance);
+        
+        setPathDimensions({
+            firstPath: firstMotionPath,
+            secondPath: secondMotionPath
+        });
+    };
+    
+    useEffect(() => {
+        const timer = setTimeout(updatePathDimensions, 500);
+        const handleResize = () => {
+            setTimeout(updatePathDimensions, 100);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+    
     useGSAP(() => {
         const firstSection = document.getElementById('first-section') as HTMLElement | null;
         const firstBox = document.getElementById('first-box') as HTMLElement | null;
         const secondBox = document.getElementById('second-box') as HTMLElement | null;
         const thirdSection = document.getElementById('third-section') as HTMLElement | null;
         const secondSection = document.getElementById('second-section') as HTMLElement | null;
-        if (!firstSection || !secondSection || !firstBox || !secondBox || !thirdSection) {
+        const firstPath = document.getElementById('first-path') as HTMLElement | null;
+        if (!firstSection || !secondSection || !firstBox || !secondBox || !thirdSection || !firstPath) {
             return;
         }
-        const getBoxTravelDistance = (fromSection: HTMLElement, toSection: HTMLElement, box: HTMLElement): number => {
+        
+        const getBoxTravelDistance = (fromSection: HTMLElement, toSection: HTMLElement): number => {
             const fromRect = fromSection.getBoundingClientRect();
             const toRect = toSection.getBoundingClientRect();
-            const boxHeight = box.offsetHeight;
-            return (toRect.top - fromRect.bottom) - boxHeight - 2; 
+            return toRect.top - fromRect.bottom;
         };
+        
         const createResponsiveMotionPath = (distance: number): string => {
             const quarterDistance = distance / 4;
             return `M0,0 Q10,${quarterDistance} 0,${quarterDistance * 2} Q-10,${quarterDistance * 3} 0,${distance}`;
@@ -49,13 +137,14 @@ const Path = () => {
         
         gsap.to(firstSection, {
             border: '1px white solid',
+            onStart: firstPathLit,
             scrollTrigger: {
                 trigger: firstSection,
                 scrub: false,
             }
         });
-        
-        const firstBoxDistance = getBoxTravelDistance(firstSection, secondSection, firstBox);
+
+        const firstBoxDistance = getBoxTravelDistance(firstSection, secondSection);
         const firstMotionPath = createResponsiveMotionPath(firstBoxDistance);
         
         gsap.to(firstBox, {
@@ -68,58 +157,29 @@ const Path = () => {
             backgroundColor: 'red',
             scrollTrigger: {
                 trigger: firstBox,
-                start: 'bottom bottom',
-                end: 'top 20%',
+                start: 'top bottom-=100',
+                end: 'bottom top+=100',
                 scrub: false,
+                onEnter: () => {
+                }
             },
         }); 
         
-       /* gsap.to(secondSection, {
-            border:'1px white solid',
-            scrollTrigger: {
-                trigger: secondSection,
-                scrub: false,
-            }
-        });*/
-        const secondBoxDistance = getBoxTravelDistance(secondSection, thirdSection, secondBox);
-        const secondMotionPath = createResponsiveMotionPath(secondBoxDistance);
-        
-        gsap.to(secondBox, {
-            motionPath: {
-                path: secondMotionPath,
-                autoRotate: true,
-            },
-            duration: 2,
-            backgroundColor: 'red',
-            onComplete: thirdSectionLit,
-            scrollTrigger: {
-                trigger: secondBox,
-                start: 'bottom bottom',
-                end: 'top 20%',
-                scrub: false,
-            },
-        });
-/*
-        gsap.to(thirdSection, {
-            border: '1px white solid',
-            scrollTrigger: {
-                trigger: thirdSection,
-                scrub: false,
-            }
-        });*/
-
         const handleResize = (): void => {
             ScrollTrigger.refresh();
             
-
-            const newFirstBoxDistance = getBoxTravelDistance(firstSection, secondSection, firstBox);
+            const newFirstBoxDistance = getBoxTravelDistance(firstSection, secondSection);
             const newFirstMotionPath = createResponsiveMotionPath(newFirstBoxDistance);
             
-            const newSecondBoxDistance = getBoxTravelDistance(secondSection, thirdSection, secondBox);
+            const newSecondBoxDistance = getBoxTravelDistance(secondSection, thirdSection);
             const newSecondMotionPath = createResponsiveMotionPath(newSecondBoxDistance);
   
             gsap.set(firstBox, { motionPath: { path: newFirstMotionPath } });
             gsap.set(secondBox, { motionPath: { path: newSecondMotionPath } });
+            setPathDimensions({
+                firstPath: newFirstMotionPath,
+                secondPath: newSecondMotionPath
+            });
         };
         
         window.addEventListener('resize', handleResize);
@@ -130,8 +190,52 @@ const Path = () => {
         
     }, { scope: main });
     
+    useGSAP(() => {
+        if (!firstDone) return;
+        
+        const secondBox = document.getElementById('second-box') as HTMLElement | null;
+        const thirdSection = document.getElementById('third-section') as HTMLElement | null;
+        const secondSection = document.getElementById('second-section') as HTMLElement | null;
+        
+        if (!secondBox || !thirdSection || !secondSection) {
+            return;
+        }
+        
+        const getBoxTravelDistance = (fromSection: HTMLElement, toSection: HTMLElement): number => {
+            const fromRect = fromSection.getBoundingClientRect();
+            const toRect = toSection.getBoundingClientRect();
+            return toRect.top - fromRect.bottom;
+        };
+        
+        const createResponsiveMotionPath = (distance: number): string => {
+            const quarterDistance = distance / 4;
+            return `M0,0 Q10,${quarterDistance} 0,${quarterDistance * 2} Q-10,${quarterDistance * 3} 0,${distance}`;
+        };
+        
+        const secondBoxDistance = getBoxTravelDistance(secondSection, thirdSection);
+        const secondMotionPath = createResponsiveMotionPath(secondBoxDistance);
+        
+        gsap.to(secondBox, {
+            motionPath: {
+                path: secondMotionPath,
+                autoRotate: true,
+            },
+            duration: 2,
+            backgroundColor: 'red',
+            onStart: secondPathLit,
+            onComplete: thirdSectionLit,
+            scrollTrigger: {
+                trigger: secondBox,
+                start: 'top bottom-=100',
+                end: 'bottom top+=100',
+                scrub: false,
+            },
+        });
+        
+    }, { scope: main, dependencies: [firstDone] });
+    
     return (
-        <div className="min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
+        <div ref={main} className="min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
             <div className="max-w-7xl w-full mx-auto flex flex-col lg:flex-col gap-0 sm:gap-0 lg:gap-0 xl:gap-0 justify-center items-center">
                 <div id="first-section" className="w-full max-w-4xl flex flex-row border border-white/20">
                     <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-1/2 border-r border-white/20 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-start">
@@ -151,11 +255,36 @@ const Path = () => {
                         </p>
                     </div>
                 </div>
-                <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5">
-                    <div id="first-box" className="text-center bg-red-50 h-8 w-8">
+                <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
+                    <svg id="first-path"
+                        className="absolute pointer-events-none" 
+                        style={{ 
+                            left: '50%', 
+                            top: '0',
+                            transform: 'translateX(-50%)',
+                            zIndex: 0,
+                            overflow: 'visible'
+                        }}
+                        width="40"
+                        height="100%"
+                    >
+                        <path
+                            d={pathDimensions.firstPath}
+                            fill="none"
+                            stroke="rgba(255, 255, 255, 0.3)"
+                            strokeWidth="1"
+                            strokeDasharray="4 2"
+                            strokeLinecap="round"
+                            transform="translate(20, 0)"
+                            style={{
+                                transition: 'stroke 0.3s ease'
+                            }}
+                        />
+                    </svg>
+                    <div id="first-box" className="z-1 text-center bg-red-50 h-8 w-8 relative">
                     </div>
                 </div>
-                <div id="second-section" className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
+                <div id="second-section" className="z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black">
                     <div className="text-center">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Collaborate with others
@@ -165,11 +294,36 @@ const Path = () => {
                         </p>
                     </div>
                 </div>
-                <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5">
-                    <div id="second-box" className="text-center h-8 w-8 bg-red-50">
+                <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
+                    <svg id="second-path"
+                        className="absolute pointer-events-none" 
+                        style={{ 
+                            left: '50%', 
+                            top: '0',
+                            transform: 'translateX(-50%)',
+                            zIndex: 0,
+                            overflow: 'visible'
+                        }}
+                        width="40"
+                        height="100%"
+                    >
+                        <path
+                            d={pathDimensions.secondPath}
+                            fill="none"
+                            stroke="rgba(255, 255, 255, 0.3)"
+                            strokeWidth="1"
+                            strokeDasharray="4 2"
+                            strokeLinecap="round"
+                            transform="translate(20, 0)"
+                            style={{
+                                transition: 'stroke 0.3s ease'
+                            }}
+                        />
+                    </svg>
+                    <div id="second-box" className="z-1 text-center h-8 w-8 bg-red-50 relative">
                     </div>
                 </div>
-                <div id="third-section" className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
+                <div id="third-section" className="z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black">
                     <div className="text-center">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Make magic
