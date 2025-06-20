@@ -2,7 +2,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {useRef} from "react";
 import {useGSAP} from "@gsap/react"
 import gsap from 'gsap'
-gsap.registerPlugin(useGSAP, ScrollTrigger)
+import { MotionPathPlugin } from "gsap/src/all";
+gsap.registerPlugin(useGSAP, ScrollTrigger, MotionPathPlugin)
 const Path = () => {
     const main = useRef(null);
 
@@ -22,9 +23,12 @@ const Path = () => {
             }
         )
         gsap.to(firstBox, {
-            y: 200,
+            motionPath: {
+                path: "M0,0 Q10,25 0,50 Q-10,75 0,100 Q10,125 0,200", 
+                autoRotate: true,
+            },
             duration: 2,
-            backgroundColor:'red',
+            backgroundColor: 'red',
             scrollTrigger: {
                 trigger: firstBox,
                 start: 'bottom bottom',
