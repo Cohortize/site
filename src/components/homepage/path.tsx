@@ -9,6 +9,8 @@ const Path = () => {
     const [firstDone, setFirstDone] = useState(false)
     const [pathDimensions, setPathDimensions] = useState({ firstPath: '', secondPath: '' });
     const main = useRef<HTMLDivElement>(null);
+    const [firstScrolled, setFirstScrolled] = useState(false)
+    const firstScrollTriggerRef = useRef<ScrollTrigger | null>(null);
     
     function secondSectionLit(){
         const secondSection = document.getElementById('second-section');
@@ -188,14 +190,18 @@ const Path = () => {
             const quarterDistance = distance / 4;
             return `M0,0 Q10,${quarterDistance} 0,${quarterDistance * 2} Q-10,${quarterDistance * 3} 0,${distance}`;
         };
-        gsap.set(firstSection, { borderColor: 'rgba(255, 255, 255, 0.2)' });
         
-        ScrollTrigger.create({
-            trigger: firstSection,
-            onEnter: firstPathLit,
-            scrub: false,
-        });
-
+        if(!firstScrolled){
+            gsap.set(firstSection, { borderColor: 'rgba(255, 255, 255, 0.2)' });
+            setFirstScrolled(true)
+            
+            firstScrollTriggerRef.current = ScrollTrigger.create({
+                trigger: firstSection,
+                onEnter: firstPathLit,
+                scrub: false,
+            });
+        }
+        
         const firstBoxDistance = getBoxTravelDistance(firstSection, secondSection);
         const firstMotionPath = createResponsiveMotionPath(firstBoxDistance);
         
@@ -239,6 +245,10 @@ const Path = () => {
         
         return (): void => {
             window.removeEventListener('resize', handleResize);
+            if (firstScrollTriggerRef.current) {
+                firstScrollTriggerRef.current.kill();
+                firstScrollTriggerRef.current = null;
+            }
         };
         
     }, { scope: main });
