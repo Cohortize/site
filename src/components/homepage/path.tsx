@@ -7,14 +7,17 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, MotionPathPlugin)
 
 const Path = () => {
     const main = useRef<HTMLDivElement>(null);
-
+    function secondSectionLit(){
+        const secondSection = document.getElementById('second-section');
+        if(secondSection){
+        secondSection.style.border = '1px white solid';}
+    }
     useGSAP(() => {
         const firstSection = document.getElementById('first-section') as HTMLElement | null;
-        const secondSection = document.getElementById('second-section') as HTMLElement | null;
         const firstBox = document.getElementById('first-box') as HTMLElement | null;
         const secondBox = document.getElementById('second-box') as HTMLElement | null;
         const thirdSection = document.getElementById('third-section') as HTMLElement | null;
-        
+        const secondSection = document.getElementById('second-section') as HTMLElement | null;
         if (!firstSection || !secondSection || !firstBox || !secondBox || !thirdSection) {
             return;
         }
@@ -46,6 +49,7 @@ const Path = () => {
                 autoRotate: true,
             },
             duration: 2,
+            onComplete: secondSectionLit,
             backgroundColor: 'red',
             scrollTrigger: {
                 trigger: firstBox,
@@ -55,13 +59,13 @@ const Path = () => {
             },
         });
         
-        gsap.to(secondSection, {
+       /* gsap.to(secondSection, {
             border:'1px white solid',
             scrollTrigger: {
                 trigger: secondSection,
                 scrub: false,
             }
-        });
+        });*/
         const secondBoxDistance = getBoxTravelDistance(secondSection, thirdSection, secondBox);
         const secondMotionPath = createResponsiveMotionPath(secondBoxDistance);
         
@@ -72,6 +76,7 @@ const Path = () => {
             },
             duration: 2,
             backgroundColor: 'red',
+            onComplete: secondSectionLit,
             scrollTrigger: {
                 trigger: secondBox,
                 start: 'bottom bottom',
@@ -79,14 +84,14 @@ const Path = () => {
                 scrub: false,
             },
         });
-
+/*
         gsap.to(thirdSection, {
             border: '1px white solid',
             scrollTrigger: {
                 trigger: thirdSection,
                 scrub: false,
             }
-        });
+        });*/
 
         const handleResize = (): void => {
             ScrollTrigger.refresh();
