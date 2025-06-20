@@ -44,11 +44,10 @@ const Path = () => {
             return;
         }
         
-        const getBoxTravelDistance = (fromSection: HTMLElement, toSection: HTMLElement, box: HTMLElement): number => {
+        const getBoxTravelDistance = (fromSection: HTMLElement, toSection: HTMLElement): number => {
             const fromRect = fromSection.getBoundingClientRect();
             const toRect = toSection.getBoundingClientRect();
-            const boxHeight = box.offsetHeight;
-            return (toRect.top - fromRect.bottom) - boxHeight - 2; 
+            return toRect.top - fromRect.bottom;
         };
         
         const createResponsiveMotionPath = (distance: number): string => {
@@ -56,8 +55,8 @@ const Path = () => {
             return `M0,0 Q10,${quarterDistance} 0,${quarterDistance * 2} Q-10,${quarterDistance * 3} 0,${distance}`;
         };
         
-        const firstBoxDistance = getBoxTravelDistance(firstSection, secondSection, firstBox);
-        const secondBoxDistance = getBoxTravelDistance(secondSection, thirdSection, secondBox);
+        const firstBoxDistance = getBoxTravelDistance(firstSection, secondSection);
+        const secondBoxDistance = getBoxTravelDistance(secondSection, thirdSection);
         
         const firstMotionPath = createResponsiveMotionPath(firstBoxDistance);
         const secondMotionPath = createResponsiveMotionPath(secondBoxDistance);
@@ -93,11 +92,10 @@ const Path = () => {
             return;
         }
         
-        const getBoxTravelDistance = (fromSection: HTMLElement, toSection: HTMLElement, box: HTMLElement): number => {
+        const getBoxTravelDistance = (fromSection: HTMLElement, toSection: HTMLElement): number => {
             const fromRect = fromSection.getBoundingClientRect();
             const toRect = toSection.getBoundingClientRect();
-            const boxHeight = box.offsetHeight;
-            return (toRect.top - fromRect.bottom) - boxHeight - 2; 
+            return toRect.top - fromRect.bottom;
         };
         
         const createResponsiveMotionPath = (distance: number): string => {
@@ -112,7 +110,7 @@ const Path = () => {
             }
         });
 
-        const firstBoxDistance = getBoxTravelDistance(firstSection, secondSection, firstBox);
+        const firstBoxDistance = getBoxTravelDistance(firstSection, secondSection);
         const firstMotionPath = createResponsiveMotionPath(firstBoxDistance);
         
         gsap.to(firstBox, {
@@ -136,10 +134,10 @@ const Path = () => {
         const handleResize = (): void => {
             ScrollTrigger.refresh();
             
-            const newFirstBoxDistance = getBoxTravelDistance(firstSection, secondSection, firstBox);
+            const newFirstBoxDistance = getBoxTravelDistance(firstSection, secondSection);
             const newFirstMotionPath = createResponsiveMotionPath(newFirstBoxDistance);
             
-            const newSecondBoxDistance = getBoxTravelDistance(secondSection, thirdSection, secondBox);
+            const newSecondBoxDistance = getBoxTravelDistance(secondSection, thirdSection);
             const newSecondMotionPath = createResponsiveMotionPath(newSecondBoxDistance);
   
             gsap.set(firstBox, { motionPath: { path: newFirstMotionPath } });
@@ -169,11 +167,10 @@ const Path = () => {
             return;
         }
         
-        const getBoxTravelDistance = (fromSection: HTMLElement, toSection: HTMLElement, box: HTMLElement): number => {
+        const getBoxTravelDistance = (fromSection: HTMLElement, toSection: HTMLElement): number => {
             const fromRect = fromSection.getBoundingClientRect();
             const toRect = toSection.getBoundingClientRect();
-            const boxHeight = box.offsetHeight;
-            return (toRect.top - fromRect.bottom) - boxHeight - 2; 
+            return toRect.top - fromRect.bottom;
         };
         
         const createResponsiveMotionPath = (distance: number): string => {
@@ -181,7 +178,7 @@ const Path = () => {
             return `M0,0 Q10,${quarterDistance} 0,${quarterDistance * 2} Q-10,${quarterDistance * 3} 0,${distance}`;
         };
         
-        const secondBoxDistance = getBoxTravelDistance(secondSection, thirdSection, secondBox);
+        const secondBoxDistance = getBoxTravelDistance(secondSection, thirdSection);
         const secondMotionPath = createResponsiveMotionPath(secondBoxDistance);
         
         gsap.to(secondBox, {
