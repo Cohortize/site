@@ -9,19 +9,42 @@ const Path = () => {
     const [firstDone, setFirstDone] = useState(false)
     const [pathDimensions, setPathDimensions] = useState({ firstPath: '', secondPath: '' });
     const main = useRef<HTMLDivElement>(null);
+    const [firstScrolled, setFirstScrolled] = useState(false)
+    const [firstAnimationTriggered, setFirstAnimationTriggered] = useState(false)
+    const firstScrollTriggerRef = useRef<ScrollTrigger | null>(null);
     
     function secondSectionLit(){
         const secondSection = document.getElementById('second-section');
         const firstSection = document.getElementById('first-section')
         const box = document.getElementById('first-box')
         const firstPath = document.getElementById('first-path')
+        
         if(secondSection && firstSection && box && firstPath){
-            secondSection.style.border = '1px white solid';
-            firstSection.style.border = "1px #3a3a3a solid";
-            box.style.visibility = 'hidden'
+            gsap.to(secondSection, {
+                borderColor: 'rgba(255, 255, 255, 1)',
+                duration: 0.5,
+                ease: "power2.out"
+            });
+            
+            gsap.to(firstSection, {
+                borderColor: 'rgba(58, 58, 58, 1)',
+                duration: 0.5,
+                ease: "power2.out"
+            });
+            
+            gsap.to(box, {
+                opacity: 0,
+                duration: 0.3,
+                ease: "power2.out"
+            });
+            
             const pathElement = firstPath.querySelector('path');
             if (pathElement) {
-                pathElement.style.stroke = "rgba(255, 255, 255, 0.3)";
+                gsap.to(pathElement, {
+                    stroke: "rgba(255, 255, 255, 0.3)",
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
             }
             setFirstDone(true)
         }
@@ -32,25 +55,62 @@ const Path = () => {
         const secondSection = document.getElementById('second-section')
         const box = document.getElementById('second-box')
         const secondPath = document.getElementById('second-path')
+        
         if (thirdSection && secondSection && box && secondPath){
-            thirdSection.style.border = "1px white solid"
-            secondSection.style.border = "1px #3a3a3a solid"
-            box.style.visibility = "hidden"
+            gsap.to(thirdSection, {
+                borderColor: 'rgba(255, 255, 255, 1)',
+                duration: 0.5,
+                ease: "power2.out"
+            });
+            
+            gsap.to(secondSection, {
+                borderColor: 'rgba(58, 58, 58, 1)',
+                duration: 0.5,
+                ease: "power2.out"
+            });
+            
+            gsap.to(box, {
+                opacity: 0,
+                duration: 0.3,
+                ease: "power2.out"
+            });
+            
             const pathElement = secondPath.querySelector('path');
             if (pathElement) {
-                pathElement.style.stroke = "rgba(255, 255, 255, 0.3)";
+                gsap.to(pathElement, {
+                    stroke: "rgba(255, 255, 255, 0.3)",
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
             }
         }
     }
     
     function firstPathLit(){
+        if (firstAnimationTriggered) return;
+        
         const firstSection = document.getElementById('first-section')
         const firstPath = document.getElementById('first-path')
+        
         if(firstSection && firstPath){
-            firstSection.style.border = '1px white solid'
+            gsap.to(firstSection, {
+                borderColor: 'rgba(255, 255, 255, 1)',
+                duration: 0.5,
+                ease: "power2.out"
+            });
+            
             const pathElement = firstPath.querySelector('path');
             if (pathElement) {
-                pathElement.style.stroke = "rgba(255, 255, 255, 0.9)";
+                gsap.to(pathElement, {
+                    stroke: "rgba(255, 255, 255, 0.9)",
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            }
+            setFirstAnimationTriggered(true);
+            if (firstScrollTriggerRef.current) {
+                firstScrollTriggerRef.current.kill();
+                firstScrollTriggerRef.current = null;
             }
         }
     }
@@ -60,7 +120,11 @@ const Path = () => {
         if(secondPath){
             const pathElement = secondPath.querySelector('path');
             if (pathElement) {
-                pathElement.style.stroke = "rgba(255, 255, 255, 0.9)";
+                gsap.to(pathElement, {
+                    stroke: "rgba(255, 255, 255, 0.9)",
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
             }
         }
     }
@@ -135,15 +199,18 @@ const Path = () => {
             return `M0,0 Q10,${quarterDistance} 0,${quarterDistance * 2} Q-10,${quarterDistance * 3} 0,${distance}`;
         };
         
-        gsap.to(firstSection, {
-            border: '1px white solid',
-            onStart: firstPathLit,
-            scrollTrigger: {
-                trigger: firstSection,
-                scrub: false,
+        if(!firstScrolled){
+            gsap.set(firstSection, { borderColor: 'rgba(255, 255, 255, 0.2)' });
+            setFirstScrolled(true)
+            if (!firstAnimationTriggered) {
+                firstScrollTriggerRef.current = ScrollTrigger.create({
+                    trigger: firstSection,
+                    onEnter: firstPathLit,
+                    scrub: false,
+                });
             }
-        });
-
+        }
+        
         const firstBoxDistance = getBoxTravelDistance(firstSection, secondSection);
         const firstMotionPath = createResponsiveMotionPath(firstBoxDistance);
         
@@ -155,6 +222,7 @@ const Path = () => {
             duration: 2,
             onComplete: secondSectionLit,
             backgroundColor: 'red',
+            ease: "power2.inOut",
             scrollTrigger: {
                 trigger: firstBox,
                 start: 'top bottom-=100',
@@ -186,9 +254,13 @@ const Path = () => {
         
         return (): void => {
             window.removeEventListener('resize', handleResize);
+            if (firstScrollTriggerRef.current) {
+                firstScrollTriggerRef.current.kill();
+                firstScrollTriggerRef.current = null;
+            }
         };
         
-    }, { scope: main });
+    }, { scope: main, dependencies: [firstAnimationTriggered] });
     
     useGSAP(() => {
         if (!firstDone) return;
@@ -224,6 +296,7 @@ const Path = () => {
             backgroundColor: 'red',
             onStart: secondPathLit,
             onComplete: thirdSectionLit,
+            ease: "power2.inOut",
             scrollTrigger: {
                 trigger: secondBox,
                 start: 'top bottom-=100',
@@ -237,7 +310,7 @@ const Path = () => {
     return (
         <div ref={main} className="min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
             <div className="max-w-7xl w-full mx-auto flex flex-col lg:flex-col gap-0 sm:gap-0 lg:gap-0 xl:gap-0 justify-center items-center">
-                <div id="first-section" className="w-full max-w-4xl flex flex-row border border-white/20">
+                <div id="first-section" className="w-full max-w-4xl flex flex-row border border-white/20 transition-all duration-500 ease-out">
                     <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-1/2 border-r border-white/20 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-start">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Ship your <span className="text-[#fbcaca]">projects</span>
@@ -277,14 +350,14 @@ const Path = () => {
                             strokeLinecap="round"
                             transform="translate(20, 0)"
                             style={{
-                                transition: 'stroke 0.3s ease'
+                                transition: 'stroke 0.5s ease-out'
                             }}
                         />
                     </svg>
-                    <div id="first-box" className="z-1 text-center bg-red-50 h-8 w-8 relative">
+                    <div id="first-box" className="z-1 text-center bg-red-50 h-8 w-8 relative transition-opacity duration-300 ease-out">
                     </div>
                 </div>
-                <div id="second-section" className="z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black">
+                <div id="second-section" className="z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black transition-all duration-500 ease-out">
                     <div className="text-center">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Collaborate with others
@@ -316,14 +389,14 @@ const Path = () => {
                             strokeLinecap="round"
                             transform="translate(20, 0)"
                             style={{
-                                transition: 'stroke 0.3s ease'
+                                transition: 'stroke 0.5s ease-out'
                             }}
                         />
                     </svg>
-                    <div id="second-box" className="z-1 text-center h-8 w-8 bg-red-50 relative">
+                    <div id="second-box" className="z-1 text-center h-8 w-8 bg-red-50 relative transition-opacity duration-300 ease-out">
                     </div>
                 </div>
-                <div id="third-section" className="z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black">
+                <div id="third-section" className="z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black transition-all duration-500 ease-out">
                     <div className="text-center">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Make magic
