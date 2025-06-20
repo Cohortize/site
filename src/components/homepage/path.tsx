@@ -10,6 +10,7 @@ const Path = () => {
     const [pathDimensions, setPathDimensions] = useState({ firstPath: '', secondPath: '' });
     const main = useRef<HTMLDivElement>(null);
     const [firstScrolled, setFirstScrolled] = useState(false)
+    const [firstAnimationTriggered, setFirstAnimationTriggered] = useState(false)
     const firstScrollTriggerRef = useRef<ScrollTrigger | null>(null);
     
     function secondSectionLit(){
@@ -86,6 +87,8 @@ const Path = () => {
     }
     
     function firstPathLit(){
+        if (firstAnimationTriggered) return;
+        
         const firstSection = document.getElementById('first-section')
         const firstPath = document.getElementById('first-path')
         
@@ -103,6 +106,11 @@ const Path = () => {
                     duration: 0.5,
                     ease: "power2.out"
                 });
+            }
+            setFirstAnimationTriggered(true);
+            if (firstScrollTriggerRef.current) {
+                firstScrollTriggerRef.current.kill();
+                firstScrollTriggerRef.current = null;
             }
         }
     }
@@ -194,12 +202,13 @@ const Path = () => {
         if(!firstScrolled){
             gsap.set(firstSection, { borderColor: 'rgba(255, 255, 255, 0.2)' });
             setFirstScrolled(true)
-            
-            firstScrollTriggerRef.current = ScrollTrigger.create({
-                trigger: firstSection,
-                onEnter: firstPathLit,
-                scrub: false,
-            });
+            if (!firstAnimationTriggered) {
+                firstScrollTriggerRef.current = ScrollTrigger.create({
+                    trigger: firstSection,
+                    onEnter: firstPathLit,
+                    scrub: false,
+                });
+            }
         }
         
         const firstBoxDistance = getBoxTravelDistance(firstSection, secondSection);
@@ -251,7 +260,7 @@ const Path = () => {
             }
         };
         
-    }, { scope: main });
+    }, { scope: main, dependencies: [firstAnimationTriggered] });
     
     useGSAP(() => {
         if (!firstDone) return;
