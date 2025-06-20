@@ -46,17 +46,20 @@ const Path = () => {
                 
             }
         )
-        gsap.to(secondBox,{
-            y: 200,
+        gsap.to(secondBox, {
+            motionPath: {
+                path: "M0,0 Q10,25 0,50 Q-10,75 0,100 Q10,125 0,200", 
+                autoRotate: true,
+            },
             duration: 2,
-            backgroundColor:'red',
-            scrollTrigger:{
+            backgroundColor: 'red',
+            scrollTrigger: {
                 trigger: secondBox,
                 start: 'bottom bottom',
                 end: 'top 20%',
                 scrub: false,
-            }
-        })
+            },
+        });
 
         gsap.to(thirdSection,{
             border: '1px white solid',
