@@ -10,15 +10,21 @@ const Path = () => {
     function secondSectionLit(){
         const secondSection = document.getElementById('second-section');
         const firstSection = document.getElementById('first-section')
-        if(secondSection && firstSection){
+        const box = document.getElementById('first-box')
+        if(secondSection && firstSection && box){
         secondSection.style.border = '1px white solid';
         firstSection.style.border = "1px #3a3a3a solid";
+        box.style.visibility = 'hidden'
     }
     }
     function thirdSectionLit(){
         const thirdSection = document.getElementById('third-section')
-        if (thirdSection){
+        const secondSection = document.getElementById('second-section')
+        const box = document.getElementById('second-box')
+        if (thirdSection && secondSection && box){
             thirdSection.style.border = "1px white solid"
+            secondSection.style.border = "1px #3a3a3a solid"
+            box.style.visibility = "hidden"
         }
     }
     useGSAP(() => {
