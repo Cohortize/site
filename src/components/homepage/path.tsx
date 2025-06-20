@@ -243,10 +243,10 @@ const Path = () => {
                             transform="translate(20, 0)"
                         />
                     </svg>
-                    <div id="first-box" className="text-center bg-red-50 h-8 w-8 relative z-10">
+                    <div id="first-box" className="z-1 text-center bg-red-50 h-8 w-8 relative">
                     </div>
                 </div>
-                <div id="second-section" className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
+                <div id="second-section" className="z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black">
                     <div className="text-center">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Collaborate with others
@@ -279,10 +279,10 @@ const Path = () => {
                             transform="translate(20, 0)"
                         />
                     </svg>
-                    <div id="second-box" className="text-center h-8 w-8 bg-red-50 relative z-10">
+                    <div id="second-box" className="z-1 text-center h-8 w-8 bg-red-50 relative">
                     </div>
                 </div>
-                <div id="third-section" className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
+                <div id="third-section" className="z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black">
                     <div className="text-center">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Make magic
