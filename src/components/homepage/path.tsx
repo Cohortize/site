@@ -1,5 +1,5 @@
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef, useLayoutEffect } from "react";
+import {useRef} from "react";
 import {useGSAP} from "@gsap/react"
 import gsap from 'gsap'
 gsap.registerPlugin(useGSAP, ScrollTrigger)
@@ -7,8 +7,11 @@ const Path = () => {
     const main = useRef(null);
 
     useGSAP(() => {
-        const firstSection = document.getElementById('first-section')
-        const box = document.getElementById('box');
+        const firstSection = document.getElementById('first-section');
+        const secondSection = document.getElementById('second-section');
+        const firstBox = document.getElementById('first-box');
+        const secondBox = document.getElementById('second-box')
+        const thirdSection = document.getElementById('third-section')
         gsap.to(firstSection,
             {
                 border: '1px white solid',
@@ -18,16 +21,46 @@ const Path = () => {
                 }
             }
         )
-        gsap.to(box, {
+        gsap.to(firstBox, {
             y: 200,
+            duration: 2,
             backgroundColor:'red',
             scrollTrigger: {
-                trigger: box,
+                trigger: firstBox,
                 start: 'bottom bottom',
                 end: 'top 20%',
                 scrub: false,
             },
         });
+        gsap.to(secondSection,
+            {
+                border:'1px white solid',
+                scrollTrigger:{
+                    trigger: secondSection,
+                    scrub: false,
+                }
+                
+            }
+        )
+        gsap.to(secondBox,{
+            y: 200,
+            duration: 2,
+            backgroundColor:'red',
+            scrollTrigger:{
+                trigger: secondBox,
+                start: 'bottom bottom',
+                end: 'top 20%',
+                scrub: false,
+            }
+        })
+
+        gsap.to(thirdSection,{
+            border: '1px white solid',
+            scrollTrigger:{
+                trigger: thirdSection,
+                scrub: false,
+            }
+        })
     }, { scope: main });
     return (
         <div className="min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
@@ -50,11 +83,11 @@ const Path = () => {
                         </p>
                     </div>
                 </div>
-                <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5">
-                    <div id="box" className="text-center bg-red-50 h-8 w-8">
+                <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5">
+                    <div id="first-box" className="text-center bg-red-50 h-8 w-8">
                     </div>
                 </div>
-                <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
+                <div id="second-section" className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
                     <div className="text-center">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Collaborate with others
@@ -64,11 +97,11 @@ const Path = () => {
                         </p>
                     </div>
                 </div>
-                <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
-                    <div className="text-center">
+                <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5">
+                    <div id="second-box" className="text-center h-8 w-8 bg-red-50">
                     </div>
                 </div>
-                <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
+                <div id="third-section" className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8">
                     <div className="text-center">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Make magic
