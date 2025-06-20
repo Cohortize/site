@@ -12,6 +12,12 @@ const Path = () => {
         if(secondSection){
         secondSection.style.border = '1px white solid';}
     }
+    function thirdSectionLit(){
+        const thirdSection = document.getElementById('third-section')
+        if (thirdSection){
+            thirdSection.style.border = "1px white solid"
+        }
+    }
     useGSAP(() => {
         const firstSection = document.getElementById('first-section') as HTMLElement | null;
         const firstBox = document.getElementById('first-box') as HTMLElement | null;
@@ -57,7 +63,7 @@ const Path = () => {
                 end: 'top 20%',
                 scrub: false,
             },
-        });
+        }); 
         
        /* gsap.to(secondSection, {
             border:'1px white solid',
@@ -76,7 +82,7 @@ const Path = () => {
             },
             duration: 2,
             backgroundColor: 'red',
-            onComplete: secondSectionLit,
+            onComplete: thirdSectionLit,
             scrollTrigger: {
                 trigger: secondBox,
                 start: 'bottom bottom',
