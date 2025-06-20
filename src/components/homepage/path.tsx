@@ -9,8 +9,11 @@ const Path = () => {
     const main = useRef<HTMLDivElement>(null);
     function secondSectionLit(){
         const secondSection = document.getElementById('second-section');
-        if(secondSection){
-        secondSection.style.border = '1px white solid';}
+        const firstSection = document.getElementById('first-section')
+        if(secondSection && firstSection){
+        secondSection.style.border = '1px white solid';
+        firstSection.style.border = "1px #3a3a3a solid";
+    }
     }
     function thirdSectionLit(){
         const thirdSection = document.getElementById('third-section')
