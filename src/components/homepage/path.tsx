@@ -310,7 +310,7 @@ const Path = () => {
     return (
         <div ref={main} className="min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
             <div className="max-w-7xl w-full mx-auto flex flex-col lg:flex-col gap-0 sm:gap-0 lg:gap-0 xl:gap-0 justify-center items-center">
-                <div id="first-section" className="w-full max-w-4xl flex flex-row border border-white/20 transition-all duration-500 ease-out">
+                <div id="first-section" className="rounded-2xl w-full max-w-4xl flex flex-row border border-white/20 transition-all duration-500 ease-out">
                     <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-1/2 border-r border-white/20 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-start">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Ship your <span className="text-[#fbcaca]">projects</span>
@@ -357,7 +357,7 @@ const Path = () => {
                     <div id="first-box" className="z-1 text-center bg-red-50 h-8 w-8 relative transition-opacity duration-300 ease-out">
                     </div>
                 </div>
-                <div id="second-section" className="z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black transition-all duration-500 ease-out">
+                <div id="second-section" className="rounded-2xl z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black transition-all duration-500 ease-out">
                     <div className="text-center">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Collaborate with others
@@ -396,7 +396,7 @@ const Path = () => {
                     <div id="second-box" className="z-1 text-center h-8 w-8 bg-red-50 relative transition-opacity duration-300 ease-out">
                     </div>
                 </div>
-                <div id="third-section" className="z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black transition-all duration-500 ease-out">
+                <div id="third-section" className="rounded-2xl z-99 h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-full max-w-4xl border border-white/20 flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black transition-all duration-500 ease-out">
                     <div className="text-center">
                         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
                             Make magic
