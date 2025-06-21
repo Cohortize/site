@@ -1,11 +1,12 @@
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef, useState, useEffect } from "react";
+//import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react"
 import gsap from 'gsap'
 import { MotionPathPlugin } from "gsap/src/all";
 gsap.registerPlugin(useGSAP, ScrollTrigger, MotionPathPlugin)
 
 const Path = () => {
+    /*
     const [firstDone, setFirstDone] = useState(false)
     const [pathDimensions, setPathDimensions] = useState({ firstPath: '', secondPath: '' });
     const main = useRef<HTMLDivElement>(null);
@@ -306,9 +307,11 @@ const Path = () => {
         });
         
     }, { scope: main, dependencies: [firstDone] });
-    
+    */
     return (
-        <div ref={main} className="min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
+        <div 
+        //ref={main}
+        className="min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
             <div className="max-w-7xl w-full mx-auto flex flex-col lg:flex-col gap-0 sm:gap-0 lg:gap-0 xl:gap-0 justify-center items-center">
                 <div id="first-section" className="rounded-2xl w-full max-w-4xl flex flex-row border border-white/20 transition-all duration-500 ease-out">
                     <div className="h-auto min-h-32 sm:min-h-48 md:min-h-56 lg:min-h-60 w-1/2 border-r border-white/20 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-start">
@@ -342,7 +345,7 @@ const Path = () => {
                         height="100%"
                     >
                         <path
-                            d={pathDimensions.firstPath}
+                           //d={pathDimensions.firstPath}
                             fill="none"
                             stroke="rgba(255, 255, 255, 0.3)"
                             strokeWidth="1"
@@ -381,7 +384,7 @@ const Path = () => {
                         height="100%"
                     >
                         <path
-                            d={pathDimensions.secondPath}
+                            //d={pathDimensions.secondPath}
                             fill="none"
                             stroke="rgba(255, 255, 255, 0.3)"
                             strokeWidth="1"
@@ -412,3 +415,5 @@ const Path = () => {
 };
 
 export default Path;
+
+
