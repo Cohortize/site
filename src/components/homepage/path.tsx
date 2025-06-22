@@ -311,7 +311,7 @@ const Path = () => {
     return (
 <div 
     //ref={main}
-    className="min-h-screen w-full bg-yellow-900 flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
+    className="min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
         <div className="w-screen mx-auto flex flex-col lg:flex-col gap-0 sm:gap-0 lg:gap-0 xl:gap-0 justify-center items-center bg-red-800">
             <div id="first-section" className="bg-black flex flex-row transition-all duration-500 ease-out w-full h-32 sm:h-48 md:h-56 lg:h-60 p-0.5">
                 <div className="bg-black rounded-2xl w-1/4 border border-white/20 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-start">
@@ -344,6 +344,26 @@ const Path = () => {
                         </p>
                     </div>
             </div>
+            
+            <div id="third-section" className="bg-black h-32 sm:h-48 md:h-56 lg:h-60 w-full flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
+                <div className="border border-white/20 rounded-2xl w-1/4 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-start bg-black">
+                    <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
+                        Make magic
+                    </h3>
+                    <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-base leading-relaxed">
+                        Ship Magic
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    );
+};
+
+export default Path;
+
+
+{/*
             <div className="h-32 sm:h-48 md:h-56 lg:h-60 w-full max-w-4xl flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
                 <svg id="second-path"
                     className="absolute pointer-events-none" 
@@ -372,35 +392,7 @@ const Path = () => {
                 </svg>
                 <div id="second-box" className="z-1 text-center h-8 w-8 bg-red-50 relative transition-opacity duration-300 ease-out">
                 </div>
-            </div>
-            
-            <div id="third-section" className="rounded-2xl z-99 h-32 sm:h-48 md:h-56 lg:h-60 w-full max-w-4xl flex items-center justify-center p-3 sm:p-4 md:p-6 lg:p-8 bg-black transition-all duration-500 ease-out">
-                <div className="text-center">
-                    <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
-                        Make magic
-                    </h3>
-                    <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-base leading-relaxed">
-                        Ship Magic
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    );
-};
-
-export default Path;
-
-
-{/*
-<div className="text-center">
-                        <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
-                            Collaborate with others
-                        </h3>
-                        <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-base leading-relaxed">
-                            Collaborate with other makers
-                        </p>
-                    </div>*/ }
+            </div>*/ }
 
 {/*
                         <svg id="first-path"
