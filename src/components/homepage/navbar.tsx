@@ -109,7 +109,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-black h-16 flex items-center justify-between px-4 sm:px-6 border-b border-gray-800/50 z-50 fixed right-0 left-0 top-0">
+      <nav className="bg-black h-16 flex items-center justify-between px-4 sm:px-6 border-b border-gray-800/50 z-500 fixed right-0 left-0 top-0">
  
         <div className="hidden lg:flex items-center gap-8 w-full">
           <Link
