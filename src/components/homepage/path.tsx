@@ -344,7 +344,7 @@ const Path = () => {
       </div>
     </div>
     
-    <div id="third-section" className="bg-blue-300 h-48 sm:h-56 md:h-48 lg:h-60 w-full flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
+    <div id="third-section" className="bg-blue-300 h-48 sm:h-56 md:h-48 lg:h-60 w-full flex justify-end p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
       <div className="border border-white/20 rounded-2xl w-44 xs:w-48 sm:w-56 md:w-60 lg:w-1/4 xl:w-1/4 aspect-square lg:aspect-auto p-2 xs:p-3 sm:p-4 md:p-5 lg:p-8 flex flex-col justify-start bg-black">
         <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
           Make magic
