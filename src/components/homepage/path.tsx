@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react"
 import gsap from 'gsap'
 import { MotionPathPlugin } from "gsap/src/all";
 gsap.registerPlugin(useGSAP, ScrollTrigger, MotionPathPlugin)
-
+import Xarrow, { useXarrow, Xwrapper} from 'react-xarrows'
 const Path = () => {
     /*
     const [firstDone, setFirstDone] = useState(false)
@@ -309,116 +309,64 @@ const Path = () => {
     }, { scope: main, dependencies: [firstDone] });
     */
     return (
-   <div className="path-section min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
-      <div className="w-screen mx-auto flex flex-col lg:flex-col gap-8 sm:gap-12 md:gap-8 lg:gap-0 xl:gap-0 justify-center items-center">
-        <div id="first-section" className="flex flex-row transition-all duration-500 ease-out w-full h-48 sm:h-56 md:h-48 lg:h-60 p-0.5 justify-start">
-          <div className="bg-black rounded-2xl w-44 xs:w-48 sm:w-56 md:w-60 lg:w-1/4 xl:w-1/4 aspect-square lg:aspect-auto border border-white/20 p-2 xs:p-3 sm:p-4 md:p-5 lg:p-8 flex flex-col justify-start lg:mx-0">
-            <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
-              Ship your <span className="text-[#fbcaca]">projects</span>
-            </h3>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-[0.9rem] leading-relaxed">
-              Millions of developers make thousands of projects every day, so there is a high chance that your project gets ignored even after having the potential, <span className="text-red-400">don't</span> let it happen.
-            </p>    
-          </div>
-        </div>
-        
-        <div className="h-48 sm:h-56 md:h-52 lg:h-60 w-full flex justify-end lg:justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
-          <div className="border border-white/20 rounded-2xl w-44 xs:w-48 sm:w-56 md:w-60 lg:w-1/4 xl:w-1/4 aspect-square lg:aspect-auto p-2 xs:p-3 sm:p-4 md:p-5 lg:p-8 flex flex-col justify-start bg-black">
-            <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
-              Find other <span className="text-[#fbcaca]">makers</span>
-            </h3>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-[0.9] leading-relaxed">
-              There are tons of makers around the world who want to make things but refrain because of not having all the knowledge about it.
-            </p>
-          </div>
-        </div>
-        
-        <div id="second-section" className="h-48 sm:h-56 md:h-52 lg:h-60 w-full flex justify-start lg:justify-end md:justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
-          <div className="border border-white/20 rounded-2xl w-44 xs:w-48 sm:w-56 md:w-60 lg:w-1/4 xl:w-1/4 aspect-square lg:aspect-auto p-2 xs:p-3 sm:p-4 md:p-5 lg:p-8 flex flex-col justify-start bg-black lg:mx-0">
-            <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
-              Collaborate with others
-            </h3>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-[0.9] leading-relaxed">
-              Collaborate with other makers
-            </p>
-          </div>
-        </div>
-        
-        <div id="third-section" className="h-48 sm:h-56 md:h-52 lg:h-60 w-full flex justify-end md:justify-start lg:justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
-          <div className="border border-white/20 rounded-2xl w-44 xs:w-48 sm:w-56 md:w-60 lg:w-1/4 xl:w-1/4 aspect-square lg:aspect-auto p-2 xs:p-3 sm:p-4 md:p-5 lg:p-8 flex flex-col justify-start bg-black">
-            <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
-              Make magic
-            </h3>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-[0.9] leading-relaxed">
-              Ship Magic
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+<div className="path-section min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
+ <div className="w-screen mx-auto flex flex-col lg:flex-col gap-8 sm:gap-12 md:gap-8 lg:gap-0 xl:gap-0 justify-center items-center">
+   <div id="first-section" className="flex flex-row transition-all duration-500 ease-out w-full h-48 sm:h-56 md:h-48 lg:h-60 p-0.5 justify-start">
+     <div id = "ship"className="bg-black rounded-2xl w-44 xs:w-48 sm:w-56 md:w-60 lg:w-1/4 xl:w-1/4 aspect-square lg:aspect-auto border border-white/20 p-2 xs:p-3 sm:p-4 md:p-5 lg:p-8 flex flex-col justify-start lg:mx-0">
+       <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
+         Ship your <span className="text-[#fbcaca]">projects</span>
+       </h3>
+       <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-[0.9rem] leading-relaxed">
+         Millions of developers make thousands of projects every day, so there is a high chance that your project gets ignored even after having the potential, <span className="text-red-400">don't</span> let it happen.
+       </p>    
+     </div>
+   </div>
+   
+   <div className="h-48 sm:h-56 md:h-52 lg:h-60 w-full flex justify-end lg:justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
+     <div id="find" className="border border-white/20 rounded-2xl w-44 xs:w-48 sm:w-56 md:w-60 lg:w-1/4 xl:w-1/4 aspect-square lg:aspect-auto p-2 xs:p-3 sm:p-4 md:p-5 lg:p-8 flex flex-col justify-start bg-black">
+       <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
+         Find other <span className="text-[#fbcaca]">makers</span>
+       </h3>
+       <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-[0.9] leading-relaxed">
+         There are tons of makers around the world who want to make things but refrain because of not having all the knowledge about it.
+       </p>
+     </div>
+   </div>
+   
+   <div id="second-section" className="h-48 sm:h-56 md:h-52 lg:h-60 w-full flex justify-start lg:justify-end md:justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
+     <div id="collaborate" className="border border-white/20 rounded-2xl w-44 xs:w-48 sm:w-56 md:w-60 lg:w-1/4 xl:w-1/4 aspect-square lg:aspect-auto p-2 xs:p-3 sm:p-4 md:p-5 lg:p-8 flex flex-col justify-start bg-black lg:mx-0">
+       <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
+         Collaborate with others
+       </h3>
+       <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-[0.9] leading-relaxed">
+         Collaborate with other makers
+       </p>
+     </div>
+   </div>
+   
+   <div id="third-section" className="h-48 sm:h-56 md:h-52 lg:h-60 w-full flex justify-end md:justify-start lg:justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
+     <div id="magic" className="border border-white/20 rounded-2xl w-44 xs:w-48 sm:w-56 md:w-60 lg:w-1/4 xl:w-1/4 aspect-square lg:aspect-auto p-2 xs:p-3 sm:p-4 md:p-5 lg:p-8 flex flex-col justify-start bg-black">
+       <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-[1.3rem] font-medium mb-2 sm:mb-3 md:mb-4">
+         Make magic
+       </h3>
+       <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-[0.9] leading-relaxed">
+         Ship Magic
+       </p>
+     </div>
+   </div>
+ </div>
+ <Xwrapper>
+   <Xarrow start={'ship'} end={'collaborate'} color="rgba(255,255,255,0.3)" strokeWidth={2} showHead={false} startAnchor={"bottom"} path="smooth"/>
+   <Xarrow start={'find'} end={'collaborate'} color="rgba(255, 255,255, 0.3)" strokeWidth={2} showHead={false} endAnchor={"top"} path="smooth"/>
+   <Xarrow start={'collaborate'} end={'magic'} color="rgba(255,255,255,0.3)" strokeWidth={1.5} showHead={false} startAnchor={"bottom"} path="smooth"/>
+ </Xwrapper>
+</div>
     );
 };
 
 export default Path;
 
 
-{/*
-            <div className="h-32 sm:h-48 md:h-56 lg:h-60 w-full max-w-4xl flex justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
-                <svg id="second-path"
-                    className="absolute pointer-events-none" 
-                    style={{ 
-                        left: '50%', 
-                        top: '0',
-                        transform: 'translateX(-50%)',
-                        zIndex: 0,
-                        overflow: 'visible'
-                    }}
-                    width="40"
-                    height="100%"
-                >
-                    <path
-                        //d={pathDimensions.secondPath}
-                        fill="none"
-                        stroke="rgba(255, 255, 255, 0.3)"
-                        strokeWidth="1"
-                        strokeDasharray="4 2"
-                        strokeLinecap="round"
-                        transform="translate(20, 0)"
-                        style={{
-                            transition: 'stroke 0.5s ease-out'
-                        }}
-                    />
-                </svg>
-                <div id="second-box" className="z-1 text-center h-8 w-8 bg-red-50 relative transition-opacity duration-300 ease-out">
-                </div>
-            </div>*/ }
-
-{/*
-                        <svg id="first-path"
-                        className="absolute pointer-events-none" 
-                        style={{ 
-                            left: '50%', 
-                            top: '0',
-                            transform: 'translateX(-50%)',
-                            zIndex: 0,
-                            overflow: 'visible'
-                        }}
-                        width="40"
-                        height="100%"
-                    >
-                        <path
-                           //d={pathDimensions.firstPath}
-                            fill="none"
-                            stroke="rgba(255, 255, 255, 0.3)"
-                            strokeWidth="1"
-                            strokeDasharray="4 2"
-                            strokeLinecap="round"
-                            transform="translate(20, 0)"
-                            style={{
-                                transition: 'stroke 0.5s ease-out'
-                            }}
-                        />
-                    </svg>*/}
 
 
 

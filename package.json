@@ -49,6 +49,7 @@
     "react-hook-form": "^7.56.3",
     "react-scroll": "^1.9.3",
     "react-spring": "^10.0.1",
+    "react-xarrows": "^2.0.2",
     "recharts": "^2.15.3",
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.3.0",
