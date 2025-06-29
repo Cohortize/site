@@ -27,21 +27,27 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
       
       const lenis = lenisRef.current?.lenis;
       if (!lenis) return;
+
+
       setCanTriggerScroll(false);
       setLenisDisabled(true);
       lenis.stop();
+
       const pathSection = document.querySelector('.path-section');
       
       if (pathSection) {
+
         const rect = pathSection.getBoundingClientRect();
         const targetPosition = rect.top + window.scrollY;
+
         lenis.scrollTo(targetPosition, {
-          duration: 1.5,
-          easing: (t: number) => 1 - Math.pow(1 - t, 3),
+          duration: 2.5,
+          easing: (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
           force: true
         });
       }
     };
+
     const handleScrollEvents = (e: Event) => {
       if (lenisDisabled) {
         e.preventDefault();
@@ -62,6 +68,8 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
         }
       }
     };
+
+
     const events = ['wheel', 'touchmove', 'touchstart'];
     events.forEach(eventName => {
       document.addEventListener(eventName, handleScrollEvents, { 
@@ -78,30 +86,49 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
       document.removeEventListener('keydown', handleKeydown, { capture: true });
     };
   }, [canTriggerScroll, lenisDisabled]);
-
   useEffect(() => {
     if (!lenisDisabled) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.7) {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
             const lenis = lenisRef.current?.lenis;
             if (lenis) {
               setTimeout(() => {
-                lenis.start();
-                setLenisDisabled(false);
-                setCanTriggerScroll(true);
-              }, 200);
+                lenis.destroy();
+                setTimeout(() => {
+                  if (lenisRef.current) {
+                    lenisRef.current.lenis.start();
+                    setLenisDisabled(false);
+                    setCanTriggerScroll(true);
+                  }
+                }, 100);
+              }, 800); 
             }
           }
         });
       },
       {
-        threshold: [0.7],
-        rootMargin: '0px'
+        threshold: [0.3, 0.5, 0.7],
+        rootMargin: '-20px 0px -20px 0px'
       }
     );
+
+
+    const fallbackTimer = setTimeout(() => {
+      const lenis = lenisRef.current?.lenis;
+      if (lenis && lenisDisabled) {
+        lenis.destroy();
+        setTimeout(() => {
+          if (lenisRef.current) {
+            lenisRef.current.lenis.start();
+            setLenisDisabled(false);
+            setCanTriggerScroll(true);
+          }
+        }, 100);
+      }
+    }, 4000); 
 
     const pathSection = document.querySelector('.path-section');
     if (pathSection) {
@@ -110,6 +137,7 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
 
     return () => {
       observer.disconnect();
+      clearTimeout(fallbackTimer);
     };
   }, [lenisDisabled]);
 
