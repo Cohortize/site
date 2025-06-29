@@ -1,5 +1,6 @@
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef, useState, useEffect } from "react"; 
+import { useRef, //useState,
+     useEffect } from "react"; 
 import { useGSAP } from "@gsap/react";
 import gsap from 'gsap';
 import { MotionPathPlugin } from "gsap/src/all"; 
@@ -7,7 +8,7 @@ import { MotionPathPlugin } from "gsap/src/all";
 gsap.registerPlugin(useGSAP, ScrollTrigger, MotionPathPlugin);
 
 import Xarrow, { Xwrapper } from 'react-xarrows';
-
+/*
 interface PathColors {
     first: string;
     second: string;
@@ -20,14 +21,14 @@ interface AnimatedBoxesState {
     collaborate: boolean;
     magic: boolean;
 }
-
+*/
 const Path: React.FC = () => {
     const main = useRef<HTMLDivElement>(null); 
-    const [pathColors, setPathColors] = useState<PathColors>({ 
+    /*const [pathColors, setPathColors] = useState<PathColors>({ 
         first: "rgba(255,255,255,0.3)",
         second: "rgba(255,255,255,0.3)", 
         third: "rgba(255,255,255,0.3)"
-    });
+    });*/
     function fourthSectionLit(){
         const thirdBox = document.getElementById('collaborate')
         const fourthBox = document.getElementById('magic')
@@ -183,9 +184,15 @@ const Path: React.FC = () => {
             </div>
             
             <Xwrapper>
-                <Xarrow start={'ship'} end={'collaborate'} color={pathColors.first} strokeWidth={2} showHead={false} startAnchor={"bottom"} path="grid" SVGcanvasProps={{id:"first-path"}}/>
-                <Xarrow start={'find'} end={'collaborate'} color={pathColors.second} strokeWidth={2} showHead={false} endAnchor={"top"} path="grid" SVGcanvasProps={{id:"second-path"}}/>
-                <Xarrow start={'collaborate'} end={'magic'} color={pathColors.third} strokeWidth={1.5} showHead={false} startAnchor={"bottom"} path="grid" SVGcanvasProps={{id:"third-path"}}/>
+                <Xarrow start={'ship'} end={'collaborate'} 
+                //color={pathColors.first} 
+                strokeWidth={2} showHead={false} color="rgba(255,255,255,0.3)" startAnchor={"bottom"} path="grid" SVGcanvasProps={{id:"first-path"}}/>
+                <Xarrow start={'find'} end={'collaborate'} 
+                //color={pathColors.second} 
+                strokeWidth={2} color="rgba(255,255,255,0.3)" showHead={false} endAnchor={"top"} path="grid" SVGcanvasProps={{id:"second-path"}}/>
+                <Xarrow start={'collaborate'} end={'magic'} 
+                //color={pathColors.third} 
+                strokeWidth={1.5} color="rgba(255,255,255,0.3)" showHead={false} startAnchor={"bottom"} path="grid" SVGcanvasProps={{id:"third-path"}}/>
             </Xwrapper>
         </div>
     );
