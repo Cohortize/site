@@ -33,7 +33,6 @@ const Path = () => {
                 return
             }
 
-         
             gsap.to(firstBox, {
                 border: '1px solid rgba(255,255,255, 0.8)', 
                 scale: 1,
@@ -41,8 +40,7 @@ const Path = () => {
                 scrollTrigger: {
                     trigger: firstBox,
                     start: "top 80%",
-                    end: "bottom 20%",
-                    toggleActions: "play none none reverse",
+                    toggleActions: "play none none none", 
                     markers: false,
                     onEnter: () => console.log('Ship animation triggered'),
                 }
@@ -55,8 +53,7 @@ const Path = () => {
                 scrollTrigger: {
                     trigger: secondBox,
                     start: "top 80%",
-                    end: "bottom 20%",
-                    toggleActions: "play none none reverse",
+                    toggleActions: "play none none none", 
                     markers: false,
                     onEnter: () => console.log('Find animation triggered'),
                 }
@@ -69,8 +66,7 @@ const Path = () => {
                 scrollTrigger: {
                     trigger: thirdBox,
                     start: "top 80%",
-                    end: "bottom 20%",
-                    toggleActions: "play none none reverse",
+                    toggleActions: "play none none none", 
                     markers: false,
                     onEnter: () => console.log('Collaborate animation triggered'),
                 }
@@ -83,36 +79,32 @@ const Path = () => {
                 scrollTrigger: {
                     trigger: fourthBox,
                     start: "top 80%",
-                    end: "bottom 20%",
-                    toggleActions: "play none none reverse",
+                    toggleActions: "play none none none",
                     markers: false,
                     onEnter: () => console.log('Magic animation triggered'),
+                    scrub:false, 
                 }
             });
 
-       
+
             gsap.to({}, {
                 scrollTrigger: {
-                    trigger: thirdBox,
-                    start: "top 90%",
-                    toggleActions: "play none none reverse",
+                    trigger: thirdBox, 
+                    start: "top 70%", 
+                    end: "bottom 30%", 
+                    toggleActions: "play none none reverse", 
                     scrub: false,
+                    markers: false, 
                     onEnter: () => {
-                        console.log('Path animations triggered');
-                        
-             
-                        gsap.to({}, {
-                            duration: 1,
-                            onStart: () => {
-                                setPathColors({
-                                    first: "rgba(255,255,255,0.9)",
-                                    second: "rgba(255,255,255,0.9)",
-                                    third: "rgba(255,255,255,0.9)"
-                                });
-                            }
+                        console.log('Path colors highlight triggered');
+                        setPathColors({
+                            first: "rgba(255,255,255,0.9)",
+                            second: "rgba(255,255,255,0.9)",
+                            third: "rgba(255,255,255,0.9)"
                         });
                     },
-                    onLeave: () => {
+                    onLeaveBack: () => { 
+                        console.log('Path colors reset triggered (onLeaveBack)');
                         setPathColors({
                             first: "rgba(255,255,255,0.3)",
                             second: "rgba(255,255,255,0.3)",
@@ -126,8 +118,6 @@ const Path = () => {
         return () => clearTimeout(timer);
     }, { scope: main, dependencies: [] });
 
-
-
     return (
         <div ref={main} className="path-section min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
             <div className="w-screen mx-auto flex flex-col lg:flex-col gap-8 sm:gap-12 md:gap-8 lg:gap-0 xl:gap-0 justify-center items-center">
@@ -140,7 +130,6 @@ const Path = () => {
                             Millions of developers make thousands of projects every day, so there is a high chance that your project gets ignored even after having the potential, <span className="text-red-400">don't</span> let it happen.
                         </p>    
                     </div>
-                    <div id="first-box" className="w-4 h-4 bg-white rounded-full absolute opacity-100"></div>
                 </div>
                 
                 <div className="h-48 sm:h-56 md:h-52 lg:h-60 w-full flex justify-end lg:justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
@@ -163,7 +152,6 @@ const Path = () => {
                             Collaborate with other makers
                         </p>
                     </div>
-                    <div id="second-box" className="w-4 h-4 bg-white rounded-full absolute opacity-100"></div>
                 </div>
                 
                 <div id="third-section" className="h-48 sm:h-56 md:h-52 lg:h-60 w-full flex justify-end md:justify-start lg:justify-center p-0.5 sm:p-0.5 md:p-0.5 lg:p-0.5 relative">
@@ -179,9 +167,9 @@ const Path = () => {
             </div>
             
             <Xwrapper>
-                <Xarrow start={'ship'} end={'collaborate'} color={pathColors.first} strokeWidth={2} showHead={false} startAnchor={"bottom"} path="smooth" SVGcanvasProps={{id:"first-path"}}/>
-                <Xarrow start={'find'} end={'collaborate'} color={pathColors.second} strokeWidth={2} showHead={false} endAnchor={"top"} path="smooth" SVGcanvasProps={{id:"second-path"}}/>
-                <Xarrow start={'collaborate'} end={'magic'} color={pathColors.third} strokeWidth={1.5} showHead={false} startAnchor={"bottom"} path="smooth" SVGcanvasProps={{id:"third-path"}}/>
+                <Xarrow start={'ship'} end={'collaborate'} color={pathColors.first} strokeWidth={2} showHead={false} startAnchor={"bottom"} path="grid" SVGcanvasProps={{id:"first-path"}}/>
+                <Xarrow start={'find'} end={'collaborate'} color={pathColors.second} strokeWidth={2} showHead={false} endAnchor={"top"} path="grid" SVGcanvasProps={{id:"second-path"}}/>
+                <Xarrow start={'collaborate'} end={'magic'} color={pathColors.third} strokeWidth={1.5} showHead={false} startAnchor={"bottom"} path="grid" SVGcanvasProps={{id:"third-path"}}/>
             </Xwrapper>
         </div>
     );
