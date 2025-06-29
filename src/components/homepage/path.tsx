@@ -28,43 +28,62 @@ const Path: React.FC = () => {
         second: "rgba(255,255,255,0.3)", 
         third: "rgba(255,255,255,0.3)"
     });
+    function fourthSectionLit(){
+        const thirdBox = document.getElementById('collaborate')
+        const fourthBox = document.getElementById('magic')
+        if(thirdBox && fourthBox){
+            gsap.to(thirdBox,
+            {
+                borderColor: 'rgba(255,255,255,0.3)',
+                duration: 0.5,
+                ease: 'power2.out',
+            }
+            );
+            gsap.to(fourthBox,{
+                borderColor : 'rgba(255,255,255,1)',
+                duration: 0.5,
+                ease: 'power2.out',
+                scrollTrigger : {
+                    trigger: fourthBox,
+                    scrub: false,
+                    start: 'top bottom-=100',
+                    end: 'bottom top+=100',
 
-    const [animatedBoxes, setAnimatedBoxes] = useState<AnimatedBoxesState>({ 
-        ship: false,
-        find: false,
-        collaborate: false,
-        magic: false,
-    });
-    
+                }
+            });
+        }
+    }
     function secondSectionLit() {
-        const firstSection = document.getElementById('first-section')
-        const secondSection = document.getElementById('second-section')
-        if(secondSection && firstSection)
+        const firstBox = document.getElementById('ship')
+        const secondBox = document.getElementById('find')
+        if(secondBox && firstBox)
         {
-            gsap.to(secondSection,{
+            gsap.to(secondBox,{
                 borderColor: 'rgba(255,255,255,1)',
                 duration: 0.5,
-                ease: "power2.out"
+                ease: "power2.out",
+                onComplete: thirdSectionLit,
             });
-            gsap.to(firstSection, {
+            gsap.to(firstBox, {
                 borderColor: 'rgba(255,255,255, 0.3)',
                 duration: 0.5,
                 ease: "power2.out",
-            })
+            });
         }
     }
 
     function thirdSectionLit(){
-        const secondSection = document.getElementById('second-section')
-        const thirdSection = document.getElementById('third-section')
-        if(secondSection && thirdSection){
-            gsap.to(secondSection, {
+        const secondBox = document.getElementById('find')
+        const thirdBox = document.getElementById('collaborate')
+        if(secondBox && thirdBox){
+            gsap.to(secondBox, {
                 borderColor: 'rgba(255,255,255,0.3)',
                 duration: 0.5,
                 ease: "power2.out",
+                onComplete : fourthSectionLit,
             }
             );
-            gsap.to(thirdSection,{
+            gsap.to(thirdBox,{
                 borderColor: 'rgba(255,255,255,1)',
                 duration: 0.5,
                 ease: "power2.out",
@@ -92,9 +111,16 @@ const Path: React.FC = () => {
                 return; 
             }
             gsap.to(firstBox, {
-                borderColor: 'rgba(255,255,255,0.3)',
+                borderColor: 'rgba(255,255,255,1)',
                 duration: 0.5,
                 ease: 'power2.out',
+                onComplete: secondSectionLit,
+                scrollTrigger :{
+                    trigger: firstBox,
+                    scrub: false,
+                    start: 'top bottom-=100',
+                    end: 'bottom top+=100',
+                }
             })
 
         };
