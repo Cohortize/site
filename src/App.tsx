@@ -7,6 +7,7 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<any>(null);
   const [canTriggerScroll, setCanTriggerScroll] = useState(true);
   const [lenisDisabled, setLenisDisabled] = useState(false);
+  const [hasTriggeredFirstScroll, setHasTriggeredFirstScroll] = useState(false);
 
   useEffect(() => {
     function update(time: number) {
@@ -21,29 +22,38 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const handleFirstScroll = (e: Event) => {
-      if (!canTriggerScroll || lenisDisabled) return;
+      if (!canTriggerScroll || lenisDisabled || hasTriggeredFirstScroll) return;
       e.preventDefault();
       e.stopPropagation();
       
       const lenis = lenisRef.current?.lenis;
       if (!lenis) return;
 
-
       setCanTriggerScroll(false);
       setLenisDisabled(true);
+      setHasTriggeredFirstScroll(true);
       lenis.stop();
 
       const pathSection = document.querySelector('.path-section');
       
       if (pathSection) {
-
         const rect = pathSection.getBoundingClientRect();
         const targetPosition = rect.top + window.scrollY;
 
         lenis.scrollTo(targetPosition, {
           duration: 2.5,
           easing: (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
-          force: true
+          force: true,
+          onComplete: () => {
+            // Re-enable scroll after animation completes
+            setTimeout(() => {
+              if (lenisRef.current?.lenis) {
+                lenisRef.current.lenis.start();
+                setLenisDisabled(false);
+                setCanTriggerScroll(true);
+              }
+            }, 500); // Small delay to ensure smooth transition
+          }
         });
       }
     };
@@ -52,7 +62,7 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
       if (lenisDisabled) {
         e.preventDefault();
         e.stopPropagation();
-      } else {
+      } else if (!hasTriggeredFirstScroll) {
         handleFirstScroll(e);
       }
     };
@@ -63,12 +73,11 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
         if (lenisDisabled) {
           e.preventDefault();
           e.stopPropagation();
-        } else {
+        } else if (!hasTriggeredFirstScroll) {
           handleFirstScroll(e);
         }
       }
     };
-
 
     const events = ['wheel', 'touchmove', 'touchstart'];
     events.forEach(eventName => {
@@ -85,58 +94,21 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
       });
       document.removeEventListener('keydown', handleKeydown, { capture: true });
     };
-  }, [canTriggerScroll, lenisDisabled]);
+  }, [canTriggerScroll, lenisDisabled, hasTriggeredFirstScroll]);
+
+  // Fallback timer in case onComplete doesn't fire
   useEffect(() => {
     if (!lenisDisabled) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-            const lenis = lenisRef.current?.lenis;
-            if (lenis) {
-              setTimeout(() => {
-                lenis.destroy();
-                setTimeout(() => {
-                  if (lenisRef.current) {
-                    lenisRef.current.lenis.start();
-                    setLenisDisabled(false);
-                    setCanTriggerScroll(true);
-                  }
-                }, 100);
-              }, 800); 
-            }
-          }
-        });
-      },
-      {
-        threshold: [0.3, 0.5, 0.7],
-        rootMargin: '-20px 0px -20px 0px'
-      }
-    );
-
-
     const fallbackTimer = setTimeout(() => {
-      const lenis = lenisRef.current?.lenis;
-      if (lenis && lenisDisabled) {
-        lenis.destroy();
-        setTimeout(() => {
-          if (lenisRef.current) {
-            lenisRef.current.lenis.start();
-            setLenisDisabled(false);
-            setCanTriggerScroll(true);
-          }
-        }, 100);
+      if (lenisDisabled && lenisRef.current?.lenis) {
+        lenisRef.current.lenis.start();
+        setLenisDisabled(false);
+        setCanTriggerScroll(true);
       }
-    }, 4000); 
-
-    const pathSection = document.querySelector('.path-section');
-    if (pathSection) {
-      observer.observe(pathSection);
-    }
+    }, 4000);
 
     return () => {
-      observer.disconnect();
       clearTimeout(fallbackTimer);
     };
   }, [lenisDisabled]);
