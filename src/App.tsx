@@ -1,51 +1,117 @@
 import Home from './pages/home'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ReactLenis } from 'lenis/react'
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 function LenisWrapper({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<any>(null);
+  const [canTriggerScroll, setCanTriggerScroll] = useState(true);
+  const [lenisDisabled, setLenisDisabled] = useState(false);
 
   useEffect(() => {
     function update(time: number) {
-      if (lenisRef.current?.lenis) {
+      if (lenisRef.current?.lenis && !lenisDisabled) {
         lenisRef.current.lenis.raf(time);
       }
       requestAnimationFrame(update);
     }
     const rafId = requestAnimationFrame(update);
     return () => cancelAnimationFrame(rafId);
-  }, []);
+  }, [lenisDisabled]);
 
   useEffect(() => {
+    const handleFirstScroll = (e: Event) => {
+      if (!canTriggerScroll || lenisDisabled) return;
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const lenis = lenisRef.current?.lenis;
+      if (!lenis) return;
+      setCanTriggerScroll(false);
+      setLenisDisabled(true);
+      lenis.stop();
+      const pathSection = document.querySelector('.path-section');
+      
+      if (pathSection) {
+        const rect = pathSection.getBoundingClientRect();
+        const targetPosition = rect.top + window.scrollY;
+        lenis.scrollTo(targetPosition, {
+          duration: 1.5,
+          easing: (t: number) => 1 - Math.pow(1 - t, 3),
+          force: true
+        });
+      }
+    };
+    const handleScrollEvents = (e: Event) => {
+      if (lenisDisabled) {
+        e.preventDefault();
+        e.stopPropagation();
+      } else {
+        handleFirstScroll(e);
+      }
+    };
+
+    const handleKeydown = (e: KeyboardEvent) => {
+      const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Space', 'Home', 'End'];
+      if (scrollKeys.includes(e.code)) {
+        if (lenisDisabled) {
+          e.preventDefault();
+          e.stopPropagation();
+        } else {
+          handleFirstScroll(e);
+        }
+      }
+    };
+    const events = ['wheel', 'touchmove', 'touchstart'];
+    events.forEach(eventName => {
+      document.addEventListener(eventName, handleScrollEvents, { 
+        passive: false, 
+        capture: true 
+      });
+    });
+    document.addEventListener('keydown', handleKeydown, { passive: false, capture: true });
+
+    return () => {
+      events.forEach(eventName => {
+        document.removeEventListener(eventName, handleScrollEvents, { capture: true });
+      });
+      document.removeEventListener('keydown', handleKeydown, { capture: true });
+    };
+  }, [canTriggerScroll, lenisDisabled]);
+
+  useEffect(() => {
+    if (!lenisDisabled) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio < 0.8) {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.7) {
             const lenis = lenisRef.current?.lenis;
-            if (lenis && Math.abs(lenis.velocity) > 1) {
-              lenis.scrollTo(entry.target, {
-                duration: 1,
-                easing: (t: number) => 1 - Math.pow(1 - t, 4)
-              });
+            if (lenis) {
+              setTimeout(() => {
+                lenis.start();
+                setLenisDisabled(false);
+                setCanTriggerScroll(true);
+              }, 200);
             }
           }
         });
       },
       {
-        threshold: [0.2, 0.8],
-        rootMargin: '-10% 0px -10% 0px'
+        threshold: [0.7],
+        rootMargin: '0px'
       }
     );
-    setTimeout(() => {
-      const pathSection = document.querySelector('.path-section');
-      if (pathSection) {
-        observer.observe(pathSection);
-      }
-    }, 100);
 
-    return () => observer.disconnect();
-  }, []);
+    const pathSection = document.querySelector('.path-section');
+    if (pathSection) {
+      observer.observe(pathSection);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [lenisDisabled]);
 
   return (
     <ReactLenis

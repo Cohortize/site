@@ -1,6 +1,7 @@
 import Navbar from "@/components/homepage/navbar";
 import Hero from "@/components/homepage/hero";
 import Path from "@/components/homepage/path";
+import Collaborate from "@/components/homepage/collaborate";
 const Home = () => {
   return (
     <div
@@ -13,6 +14,8 @@ const Home = () => {
       <Navbar />
       <Hero />
       <Path />
+      <Collaborate />
+      <Collaborate />
      </div>
   );
 };
