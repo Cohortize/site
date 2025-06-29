@@ -4,10 +4,15 @@ import { useGSAP } from "@gsap/react"
 import gsap from 'gsap'
 import { MotionPathPlugin } from "gsap/src/all";
 gsap.registerPlugin(useGSAP, ScrollTrigger, MotionPathPlugin)
-import Xarrow, { useXarrow, Xwrapper} from 'react-xarrows'
+import Xarrow, { Xwrapper} from 'react-xarrows'
 
 const Path = () => {
-    const main = useRef<HTMLDivElement>(null);
+    const main = useRef(null);
+    const [pathColors, setPathColors] = useState({
+        first: "rgba(255,255,255,0.3)",
+        second: "rgba(255,255,255,0.3)", 
+        third: "rgba(255,255,255,0.3)"
+    });
     
     useGSAP(() => {
         const timer = setTimeout(() => {
@@ -15,18 +20,12 @@ const Path = () => {
             const secondBox = document.getElementById('find')
             const thirdBox = document.getElementById('collaborate')
             const fourthBox = document.getElementById('magic')
-            const firstPath = document.getElementById('first-path')
-            const secondPath = document.getElementById('second-path')
-            const thirdPath = document.getElementById('third-path')
             
             console.log('Elements found:', {
                 firstBox: !!firstBox,
                 secondBox: !!secondBox,
                 thirdBox: !!thirdBox,
-                fourthBox: !!fourthBox,
-                firstPath: !!firstPath,
-                secondPath: !!secondPath,
-                thirdPath: !!thirdPath
+                fourthBox: !!fourthBox
             });
             
             if(!firstBox || !secondBox || !thirdBox || !fourthBox){
@@ -34,81 +33,100 @@ const Path = () => {
                 return
             }
 
-
+         
             gsap.to(firstBox, {
-                backgroundColor: '#dc2626', 
-                scale: 1.05,
+                border: '1px solid rgba(255,255,255, 0.8)', 
+                scale: 1,
                 duration: 0.5,
                 scrollTrigger: {
                     trigger: firstBox,
                     start: "top 80%",
                     end: "bottom 20%",
                     toggleActions: "play none none reverse",
-                    markers: true,
+                    markers: false,
                     onEnter: () => console.log('Ship animation triggered'),
                 }
             });
 
             gsap.to(secondBox, {
-                backgroundColor: '#1d4ed8', 
-                scale: 1.05,
+                border: '1px solid rgba(255,255,255, 0.8)', 
+                scale: 1,
                 duration: 0.5,
                 scrollTrigger: {
                     trigger: secondBox,
                     start: "top 80%",
                     end: "bottom 20%",
                     toggleActions: "play none none reverse",
-                    markers: true, 
+                    markers: false,
                     onEnter: () => console.log('Find animation triggered'),
                 }
             });
+
             gsap.to(thirdBox, {
-                backgroundColor: '#16a34a', 
-                scale: 1.05,
+                border: '1px solid rgba(255,255,255, 0.8)', 
+                scale: 1,
                 duration: 0.5,
                 scrollTrigger: {
                     trigger: thirdBox,
                     start: "top 80%",
                     end: "bottom 20%",
                     toggleActions: "play none none reverse",
-                    markers: true,
+                    markers: false,
                     onEnter: () => console.log('Collaborate animation triggered'),
                 }
             });
 
             gsap.to(fourthBox, {
-                backgroundColor: '#7c3aed',
-                scale: 1.05,
+                border: '1px solid rgba(255,255,255, 0.8)',
+                scale: 1,
                 duration: 0.5,
                 scrollTrigger: {
                     trigger: fourthBox,
                     start: "top 80%",
                     end: "bottom 20%",
                     toggleActions: "play none none reverse",
-                    markers: true, 
+                    markers: false,
                     onEnter: () => console.log('Magic animation triggered'),
                 }
             });
 
-            if (firstPath && secondPath && thirdPath) {
-                gsap.fromTo([firstPath, secondPath, thirdPath], 
-                    { opacity: 0 },
-                    { 
-                        opacity: 1, 
-                        duration: 1,
-                        stagger: 0.3,
-                        scrollTrigger: {
-                            trigger: thirdBox,
-                            start: "top 90%",
-                            toggleActions: "play none none reverse",
-                        }
+       
+            gsap.to({}, {
+                scrollTrigger: {
+                    trigger: thirdBox,
+                    start: "top 90%",
+                    toggleActions: "play none none reverse",
+                    scrub: false,
+                    onEnter: () => {
+                        console.log('Path animations triggered');
+                        
+             
+                        gsap.to({}, {
+                            duration: 1,
+                            onStart: () => {
+                                setPathColors({
+                                    first: "rgba(255,255,255,0.9)",
+                                    second: "rgba(255,255,255,0.9)",
+                                    third: "rgba(255,255,255,0.9)"
+                                });
+                            }
+                        });
+                    },
+                    onLeave: () => {
+                        setPathColors({
+                            first: "rgba(255,255,255,0.3)",
+                            second: "rgba(255,255,255,0.3)",
+                            third: "rgba(255,255,255,0.3)"
+                        });
                     }
-                );
-            }
+                }
+            });
         }, 100); 
 
         return () => clearTimeout(timer);
     }, { scope: main, dependencies: [] });
+
+
 
     return (
         <div ref={main} className="path-section min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
@@ -159,10 +177,11 @@ const Path = () => {
                     </div>
                 </div>
             </div>
+            
             <Xwrapper>
-                <Xarrow start={'ship'} end={'collaborate'} color="rgba(255,255,255,0.3)" strokeWidth={2} showHead={false} startAnchor={"bottom"} path="smooth" SVGcanvasProps={{id:"first-path"}}/>
-                <Xarrow start={'find'} end={'collaborate'} color="rgba(255, 255,255, 0.3)" strokeWidth={2} showHead={false} endAnchor={"top"} path="smooth" SVGcanvasProps={{id:"second-path"}}/>
-                <Xarrow start={'collaborate'} end={'magic'} color="rgba(255,255,255,0.3)" strokeWidth={1.5} showHead={false} startAnchor={"bottom"} path="smooth" SVGcanvasProps={{id:"third-path"}}/>
+                <Xarrow start={'ship'} end={'collaborate'} color={pathColors.first} strokeWidth={2} showHead={false} startAnchor={"bottom"} path="smooth" SVGcanvasProps={{id:"first-path"}}/>
+                <Xarrow start={'find'} end={'collaborate'} color={pathColors.second} strokeWidth={2} showHead={false} endAnchor={"top"} path="smooth" SVGcanvasProps={{id:"second-path"}}/>
+                <Xarrow start={'collaborate'} end={'magic'} color={pathColors.third} strokeWidth={1.5} showHead={false} startAnchor={"bottom"} path="smooth" SVGcanvasProps={{id:"third-path"}}/>
             </Xwrapper>
         </div>
     );
