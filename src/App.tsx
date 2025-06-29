@@ -17,6 +17,36 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
     return () => cancelAnimationFrame(rafId);
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio < 0.8) {
+            const lenis = lenisRef.current?.lenis;
+            if (lenis && Math.abs(lenis.velocity) > 1) {
+              lenis.scrollTo(entry.target, {
+                duration: 1,
+                easing: (t: number) => 1 - Math.pow(1 - t, 4)
+              });
+            }
+          }
+        });
+      },
+      {
+        threshold: [0.2, 0.8],
+        rootMargin: '-10% 0px -10% 0px'
+      }
+    );
+    setTimeout(() => {
+      const pathSection = document.querySelector('.path-section');
+      if (pathSection) {
+        observer.observe(pathSection);
+      }
+    }, 100);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <ReactLenis
       root
@@ -44,7 +74,6 @@ function App() {
             </LenisWrapper>
           }
         />
-        {/* Other routes without Lenis or wrapped separately */}
       </Routes>
     </BrowserRouter>
   )
