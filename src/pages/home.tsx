@@ -14,8 +14,6 @@ const Home = () => {
       <Navbar />
       <Hero />
       <Path />
-      <Collaborate />
-      <Collaborate />
      </div>
   );
 };
