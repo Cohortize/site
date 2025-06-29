@@ -13,7 +13,7 @@ const Home = () => {
       <Navbar />
       <Hero />
       <Path />
-    </div>
+     </div>
   );
 };
 

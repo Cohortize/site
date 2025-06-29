@@ -8,7 +8,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
 type DropdownKey = "ships" | "leaderboard" | "discussions";
 
 interface NavigationItem {
