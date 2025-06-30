@@ -8,8 +8,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useAuthDialogStore } from "@/stores/useAuthDialogStore";
 type DropdownKey = "ships" | "leaderboard" | "discussions";
-
 interface NavigationItem {
   title: string;
   key: DropdownKey;
@@ -54,6 +54,7 @@ const AnimatedMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () 
 };
 
 const Navbar = () => {
+  const open  = useAuthDialogStore((state) => state.open)
   const [activeDropdown, setActiveDropdown] = useState<DropdownKey | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -203,6 +204,7 @@ const Navbar = () => {
                 fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
                 fontVariationSettings: "wght 480",
               }}
+              onClick={() => open("login")}
             >
               Log in
             </Button>
@@ -220,6 +222,7 @@ const Navbar = () => {
               onMouseLeave={(e) => {
                 e.currentTarget.style.border = '0.5px solid rgba(255, 255, 255, 0.08)';
               }}
+              onClick={() => open("signup")}
             >
               Sign up
             </Button>
@@ -270,14 +273,14 @@ const Navbar = () => {
           <div className="flex gap-3 pb-4 border-b border-gray-800/50">
             <Button 
               className="flex-1 bg-white text-black hover:bg-[#e3e2e1] cursor-pointer transition-all duration-200 font-normal text-sm py-2 rounded-md"
-              onClick={closeMobileMenu}
+              onClick={() => open("login")}
             >
               Log in
             </Button>
             <Button
               variant="ghost" 
               className="flex-1 cursor-pointer text-gray-300 hover:text-white hover:bg-white/[0.03] transition-all duration-200 font-normal text-sm py-2 rounded-md border border-white/10"
-              onClick={closeMobileMenu}
+              onClick={() => open("signup")}
             >
               Sign up
             </Button>
