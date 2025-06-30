@@ -2,7 +2,7 @@ import Home from './pages/home'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ReactLenis } from 'lenis/react'
 import { useEffect, useRef, useState } from 'react';
-
+import { AuthDialog } from './components/global/authDialog';
 function LenisWrapper({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<any>(null);
   const [canTriggerScroll, setCanTriggerScroll] = useState(true);
@@ -45,14 +45,13 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
           easing: (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
           force: true,
           onComplete: () => {
-            // Re-enable scroll after animation completes
             setTimeout(() => {
               if (lenisRef.current?.lenis) {
                 lenisRef.current.lenis.start();
                 setLenisDisabled(false);
                 setCanTriggerScroll(true);
               }
-            }, 500); // Small delay to ensure smooth transition
+            }, 500); 
           }
         });
       }
@@ -96,7 +95,6 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
     };
   }, [canTriggerScroll, lenisDisabled, hasTriggeredFirstScroll]);
 
-  // Fallback timer in case onComplete doesn't fire
   useEffect(() => {
     if (!lenisDisabled) return;
 
@@ -141,6 +139,9 @@ function App() {
           }
         />
       </Routes>
+      <>
+      <AuthDialog />
+      </>
     </BrowserRouter>
   )
 }
