@@ -1,16 +1,10 @@
-import { Button } from "../ui/button";
 import {
     Dialog,
-    DialogClose,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
+
 } from "../ui/dialog"
+import { LoginForm } from "./login-form";
 import { useAuthDialogStore } from "@/stores/useAuthDialogStore";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label"
 import { useEffect } from "react";
 
 function useCleanScrollLock(isLocked: boolean) {
@@ -91,64 +85,7 @@ export function AuthDialog() {
     return (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>
-                        {mode === "signup" ? "Sign Up" : "Sign In"}
-                    </DialogTitle>
-                    <DialogDescription>
-                        {mode === "signup" 
-                            ? "Create your account to get started" 
-                            : "Welcome back! Please sign in to continue"
-                        }
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">
-                            Email
-                        </Label>
-                        <Input 
-                            id="email" 
-                            type="email"
-                            placeholder="Enter your email"
-                            autoComplete="email"
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">
-                            Password
-                        </Label>
-                        <Input 
-                            id="password" 
-                            type="password"
-                            placeholder={mode === "signup" ? "Create a password" : "Enter your password"}
-                            autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                        />
-                    </div>
-                    {mode === "signup" && (
-                        <div className="grid gap-2">
-                            <Label htmlFor="confirmPassword">
-                                Confirm Password
-                            </Label>
-                            <Input 
-                                id="confirmPassword" 
-                                type="password"
-                                placeholder="Confirm your password"
-                                autoComplete="new-password"
-                            />
-                        </div>
-                    )}
-                </div>
-                <DialogFooter>
-                    <DialogClose asChild>
-                        <Button type="button" variant="outline">
-                            Cancel
-                        </Button>
-                    </DialogClose>
-                    <Button type="submit" className="ml-2">
-                        {mode === "signup" ? "Create Account" : "Sign In"}
-                    </Button>
-                </DialogFooter>
+                <LoginForm />
             </DialogContent>
         </Dialog>
     );
