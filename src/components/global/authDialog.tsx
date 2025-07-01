@@ -11,12 +11,76 @@ import {
 import { useAuthDialogStore } from "@/stores/useAuthDialogStore";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-export function AuthDialog(){
-    const isOpen = useAuthDialogStore((state) => state.isOpen)
-    const close = useAuthDialogStore((state) => state.close)
-    const mode = useAuthDialogStore((state) => state.mode)
+function useCleanScrollLock(isLocked: boolean) {
+  useEffect(() => {
+    if (!isLocked) return;
+    const scrollY = window.scrollY;
+
+    const observer = new MutationObserver(() => {
+
+      document.body.style.paddingRight = '';
+      document.body.style.marginRight = '';
+
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['style'],
+    });
+
+
+    document.body.style.paddingRight = '';
+    document.body.style.marginRight = '';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+
+
+    const preventScroll = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    document.addEventListener('wheel', preventScroll, { passive: false });
+    document.addEventListener('touchmove', preventScroll, { passive: false });
+    document.addEventListener('scroll', preventScroll, { passive: false });
+    document.addEventListener('keydown', (e) => {
+      if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
+
+    return () => {
+      observer.disconnect();
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+      document.body.style.marginRight = '';
+
+      window.scrollTo(0, scrollY);
+
+      document.removeEventListener('wheel', preventScroll);
+      document.removeEventListener('touchmove', preventScroll);
+      document.removeEventListener('scroll', preventScroll);
+    };
+  }, [isLocked]);
+}
+
+export function AuthDialog() {
+    const isOpen = useAuthDialogStore((state) => state.isOpen);
+    const close = useAuthDialogStore((state) => state.close);
+    const mode = useAuthDialogStore((state) => state.mode);
+
+    useCleanScrollLock(isOpen);
     
     const handleOpenChange = (open: boolean) => {
         if (!open) {
@@ -24,70 +88,56 @@ export function AuthDialog(){
         }
     };
 
-    return(
+    return (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>
-                        {mode === "signup" ? "Signup" : "Login"}
+                        {mode === "signup" ? "Sign Up" : "Sign In"}
                     </DialogTitle>
                     <DialogDescription>
-                        Login dawg
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="flex items-center gap-2 py-4">
-                    <div className="grid flex-1 gap-2">
-                        <Label htmlFor="login-input">
-                            Login
-                        </Label>
-                        <Input id="login-input" defaultValue="hehehehehe" />
-                    </div>
-                </div>
-                <DialogFooter className="sm:justify-start">
-                    <DialogClose asChild>
-                        <Button type="button" variant="secondary">
-                            Close
-                        </Button>
-                    </DialogClose>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    )
-}
-
-export function AuthDialogAlternative(){
-    const isOpen = useAuthDialogStore((state) => state.isOpen)
-    const close = useAuthDialogStore((state) => state.close)
-    const mode = useAuthDialogStore((state) => state.mode)
-    const [internalOpen, setInternalOpen] = useState(false);
-    
-    useEffect(() => {
-        setInternalOpen(isOpen);
-    }, [isOpen]);
-    
-    const handleOpenChange = (open: boolean) => {
-        setInternalOpen(open);
-        if (!open) {
-            close();
-        }
-    };
-
-    return(
-        <Dialog open={internalOpen} onOpenChange={handleOpenChange}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>
-                        {mode === "signup" ? "Signup" : "Login"}
-                    </DialogTitle>
-                    <DialogDescription>
-                        Login dawg
+                        {mode === "signup" 
+                            ? "Create your account to get started" 
+                            : "Welcome back! Please sign in to continue"
+                        }
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <div className="grid gap-3">
-                        <Label htmlFor="login-input">Login</Label>
-                        <Input id="login-input" defaultValue="hehehehehe" />
+                    <div className="grid gap-2">
+                        <Label htmlFor="email">
+                            Email
+                        </Label>
+                        <Input 
+                            id="email" 
+                            type="email"
+                            placeholder="Enter your email"
+                            autoComplete="email"
+                        />
                     </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="password">
+                            Password
+                        </Label>
+                        <Input 
+                            id="password" 
+                            type="password"
+                            placeholder={mode === "signup" ? "Create a password" : "Enter your password"}
+                            autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                        />
+                    </div>
+                    {mode === "signup" && (
+                        <div className="grid gap-2">
+                            <Label htmlFor="confirmPassword">
+                                Confirm Password
+                            </Label>
+                            <Input 
+                                id="confirmPassword" 
+                                type="password"
+                                placeholder="Confirm your password"
+                                autoComplete="new-password"
+                            />
+                        </div>
+                    )}
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
@@ -95,9 +145,11 @@ export function AuthDialogAlternative(){
                             Cancel
                         </Button>
                     </DialogClose>
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" className="ml-2">
+                        {mode === "signup" ? "Create Account" : "Sign In"}
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    )
+    );
 }
