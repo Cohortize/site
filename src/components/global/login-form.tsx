@@ -10,33 +10,33 @@ export function LoginForm({
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Login to your account</h1>
+        <h1 className="text-2xl font-bold text-[#b6b4b4]">Login to your account</h1>
         <p className="text-muted-foreground text-sm text-balance">
           Enter your email below to login to your account
         </p>
       </div>
       <div className="grid gap-6">
         <div className="grid gap-3">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Label htmlFor="email" className="text-[#b6b4b4]">Email</Label>
+          <Input id="email" type="email" placeholder="m@example.com" className="border border-white/20" required />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password" className="text-[#b6b4b4]">Password</Label>
             <a
               href="#"
-              className="ml-auto text-sm underline-offset-4 hover:underline"
+              className="ml-auto text-sm underline-offset-4 hover:underline text-[#b6b4b4]"
             >
               Forgot your password?
             </a>
           </div>
-          <Input id="password" type="password" required />
+          <Input id="password" type="password" className="border border-white/20" required />
         </div>
         <Button type="submit" className="w-full">
           Login
         </Button>
-        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-          <span className="bg-background text-muted-foreground relative z-10 px-2">
+      <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t bg-black">
+          <span className="relative z-10 px-2 bg-black text-[#b6b4b4]">
             Or continue with
           </span>
         </div>
@@ -50,7 +50,7 @@ export function LoginForm({
           Login with GitHub
         </Button>
       </div>
-      <div className="text-center text-sm">
+      <div className="text-center text-sm text-[#b6b4b4]">
         Don&apos;t have an account?{" "}
         <a href="#" className="underline underline-offset-4">
           Sign up
