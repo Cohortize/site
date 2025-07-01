@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+"use client";
+import Link  from "next/link";
 import { Button } from "../ui/button";
 import { JSX, useState } from "react";
 import { ChevronDown, Ship, Trophy, MessageCircle, Users, Star, MessageSquare } from "lucide-react";
@@ -7,8 +8,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { useAuthDialogStore } from "@/stores/useAuthDialogStore";
+} from "../ui/accordion";
+import { useAuthDialogStore } from "../../stores/useAuthDialogStore";
 type DropdownKey = "ships" | "leaderboard" | "discussions";
 interface NavigationItem {
   title: string;
@@ -113,7 +114,7 @@ const Navbar = () => {
  
         <div className="hidden lg:flex items-center gap-8 w-full">
           <Link
-            to="/"
+            href="/"
             className="text-white text-xl font-medium transition-colors duration-200"
             style={{
               fontFamily:
@@ -165,7 +166,7 @@ const Navbar = () => {
                     {navItem.items.map((item, index) => (
                       <Link
                         key={index}
-                        to={item.href}
+                        href={item.href}
                         className="flex items-start gap-2.5 p-2.5 rounded-md hover:bg-white/[0.03] transition-all duration-150 group/item"
                         style={{
                           border: '0.5px solid transparent'
@@ -232,7 +233,7 @@ const Navbar = () => {
      
         <div className="lg:hidden flex items-center justify-between w-full">
           <Link
-            to="/"
+            href="/"
             className="text-white text-lg font-medium transition-colors duration-200"
             style={{
               fontFamily:
@@ -313,7 +314,7 @@ const Navbar = () => {
                     {navItem.items.map((item, index) => (
                       <Link
                         key={index}
-                        to={item.href}
+                        href={item.href}
                         onClick={closeMobileMenu}
                         className="flex items-start gap-3 p-3 rounded-md hover:bg-white/[0.03] transition-all duration-150 group"
                       >
