@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button"
 import { Ship, Users } from "lucide-react";
 
 const Hero = () => {
@@ -128,7 +128,7 @@ return(<>
                 minWidth: '140px',
                 height: '44px'
               }}>
-              <div className="flex items-center justify-center gap-2 text-sm sm:text-[1rem] xl:text-[1.1rem] font-black">
+              <div className="flex items-center justify-center gap-2 text-sm sm:text-[1rem] xl:text-[1.1rem]">
                 <Ship size={18} className="sm:w-5 sm:h-5 xl:w-6 xl:h-6"/>
                 <span>Ship project</span>
               </div>
@@ -144,7 +144,7 @@ return(<>
                 minWidth: '140px',
                 height: '44px'
               }}>
-              <div className="flex items-center justify-center gap-2 text-sm sm:text-[1rem] xl:text-[1.1rem] font-black">
+              <div className="flex items-center justify-center gap-2 text-sm sm:text-[1rem] xl:text-[1.1rem]">
                 <Users size={18} className="sm:w-5 sm:h-5 xl:w-6 xl:h-6"/>
                 <span>Explore</span>
               </div>
