@@ -61,7 +61,7 @@ export function AuthDialog() {
     return (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogOverlay className="backdrop-blur-sm bg-black/50" />
-            <DialogContent className="sm:max-w-[425px] bg-black border border-white/30">
+            <DialogContent className="sm:max-w-[425px] bg-black border border-white/30 text-white">
                 <LoginForm />
             </DialogContent>
         </Dialog>
