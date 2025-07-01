@@ -6,7 +6,7 @@ import {
 import { LoginForm } from "./login-form";
 import { useAuthDialogStore } from "@/stores/useAuthDialogStore";
 import { useEffect } from "react";
-
+import { SignupForm } from "./signup-form";
 function useScrollLock(isLocked: boolean) {
     useEffect(() => {
         if (!isLocked) return;
@@ -62,7 +62,7 @@ export function AuthDialog() {
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogOverlay className="backdrop-blur-sm bg-black/50" />
             <DialogContent className="sm:max-w-[425px] bg-black border border-white/30 text-white">
-                <LoginForm />
+                {mode == "login" ? <LoginForm /> : <SignupForm />}
             </DialogContent>
         </Dialog>
     );
