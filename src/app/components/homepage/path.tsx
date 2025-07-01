@@ -93,47 +93,44 @@ const Path: React.FC = () => {
         }
     }
     useEffect(() => {
-        let timeoutId: NodeJS.Timeout; 
-
-        const initializeAnimations = () => {
-            const firstBox = document.getElementById('ship') as HTMLElement | null;
-            const secondBox = document.getElementById('find') as HTMLElement | null;
-            const thirdBox = document.getElementById('collaborate') as HTMLElement | null;
-            const fourthBox = document.getElementById('magic') as HTMLElement | null;
-            
-            console.log('Elements found:', {
-                firstBox: !!firstBox,
-                secondBox: !!secondBox,
-                thirdBox: !!thirdBox,
-                fourthBox: !!fourthBox
-            });
-            
-            if(!firstBox || !secondBox || !thirdBox || !fourthBox){
-                console.log('Some elements not found, animation skipped');
-                return; 
+    const initializeAnimations = () => {
+        const firstBox = document.getElementById('ship') as HTMLElement | null;
+        const secondBox = document.getElementById('find') as HTMLElement | null;
+        const thirdBox = document.getElementById('collaborate') as HTMLElement | null;
+        const fourthBox = document.getElementById('magic') as HTMLElement | null;
+        
+        console.log('Elements found:', {
+            firstBox: !!firstBox,
+            secondBox: !!secondBox,
+            thirdBox: !!thirdBox,
+            fourthBox: !!fourthBox
+        });
+        
+        if(!firstBox || !secondBox || !thirdBox || !fourthBox){
+            console.log('Some elements not found, animation skipped');
+            return; 
+        }
+        gsap.to(firstBox, {
+            borderColor: 'rgba(255,255,255,1)',
+            duration: 0.5,
+            ease: 'power2.out',
+            onComplete: secondSectionLit,
+            scrollTrigger :{
+                trigger: firstBox,
+                scrub: false,
+                start: 'top bottom-=100',
+                end: 'bottom top+=100',
             }
-            gsap.to(firstBox, {
-                borderColor: 'rgba(255,255,255,1)',
-                duration: 0.5,
-                ease: 'power2.out',
-                onComplete: secondSectionLit,
-                scrollTrigger :{
-                    trigger: firstBox,
-                    scrub: false,
-                    start: 'top bottom-=100',
-                    end: 'bottom top+=100',
-                }
-            })
+        })
+    };
 
-        };
+    const timeoutId = setTimeout(initializeAnimations, 100); 
 
-        timeoutId = setTimeout(initializeAnimations, 100); 
-
-        return () => {
-            clearTimeout(timeoutId);
-            ScrollTrigger.getAll().forEach(st => st.kill()); 
-        };
-    }, []); 
+    return () => {
+        clearTimeout(timeoutId);
+        ScrollTrigger.getAll().forEach(st => st.kill()); 
+    };
+}, []);
 
 
     return (
