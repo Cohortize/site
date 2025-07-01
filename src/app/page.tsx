@@ -1,4 +1,3 @@
-// pages/index.tsx
 "use client";
 import Home from './pages/home'
 import { ReactLenis } from 'lenis/react'

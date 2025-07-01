@@ -9,7 +9,6 @@ import { LoginForm } from "./login-form";
 import { useAuthDialogStore } from "@/app/stores/useAuthDialogStore";
 import { useEffect } from "react";
 import { SignupForm } from "./signup-form";
-import { VisuallyHidden } from "radix-ui";
 function useScrollLock(isLocked: boolean) {
     useEffect(() => {
         if (!isLocked) return;

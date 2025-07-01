@@ -145,7 +145,7 @@ const Path: React.FC = () => {
                             Ship your <span className="text-[#fbcaca]">projects</span>
                         </h3>
                         <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-[0.9rem] leading-relaxed">
-                            Millions of developers make thousands of projects every day, so there is a high chance that your project gets ignored even after having the potential, <span className="text-red-400">don't</span> let it happen.
+                            Millions of developers make thousands of projects every day, so there is a high chance that your project gets ignored even after having the potential, <span className="text-red-400">don&apos;t</span> let it happen.
                         </p>    
                     </div>
                 </div>
