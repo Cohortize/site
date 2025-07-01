@@ -1,86 +1,56 @@
-import { Button } from "../ui/button";
 import {
     Dialog,
-    DialogClose,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
+    DialogOverlay,
 } from "../ui/dialog"
+import { LoginForm } from "./login-form";
 import { useAuthDialogStore } from "@/stores/useAuthDialogStore";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label"
 import { useEffect } from "react";
 
-function useCleanScrollLock(isLocked: boolean) {
-  useEffect(() => {
-    if (!isLocked) return;
-    const scrollY = window.scrollY;
-
-    const observer = new MutationObserver(() => {
-
-      document.body.style.paddingRight = '';
-      document.body.style.marginRight = '';
-
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden';
-    });
-
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ['style'],
-    });
-
-
-    document.body.style.paddingRight = '';
-    document.body.style.marginRight = '';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = '100%';
-    document.body.style.overflow = 'hidden';
-
-
-    const preventScroll = (e: Event) => {
-      e.preventDefault();
-      e.stopPropagation();
-    };
-
-    document.addEventListener('wheel', preventScroll, { passive: false });
-    document.addEventListener('touchmove', preventScroll, { passive: false });
-    document.addEventListener('scroll', preventScroll, { passive: false });
-    document.addEventListener('keydown', (e) => {
-      if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) {
-        e.preventDefault();
-      }
-    });
-
-    return () => {
-      observer.disconnect();
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-      document.body.style.marginRight = '';
-
-      window.scrollTo(0, scrollY);
-
-      document.removeEventListener('wheel', preventScroll);
-      document.removeEventListener('touchmove', preventScroll);
-      document.removeEventListener('scroll', preventScroll);
-    };
-  }, [isLocked]);
+function useScrollLock(isLocked: boolean) {
+    useEffect(() => {
+        if (!isLocked) return;
+        const scrollY = window.scrollY;
+        const body = document.body;
+        body.style.position = 'fixed';
+        body.style.top = `-${scrollY}px`;
+        body.style.left = '0';
+        body.style.right = '0';
+        body.style.overflow = 'hidden';
+        const preventScroll = (e: Event) => {
+            e.preventDefault();
+            e.stopPropagation();
+        };
+        document.addEventListener('wheel', preventScroll, { passive: false });
+        document.addEventListener('touchmove', preventScroll, { passive: false });
+        document.addEventListener('scroll', preventScroll, { passive: false });
+        
+        const preventScrollKeys = (e: KeyboardEvent) => {
+            if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        document.addEventListener('keydown', preventScrollKeys);
+        return () => {
+            document.removeEventListener('wheel', preventScroll);
+            document.removeEventListener('touchmove', preventScroll);
+            document.removeEventListener('scroll', preventScroll);
+            document.removeEventListener('keydown', preventScrollKeys);
+            body.style.position = '';
+            body.style.top = '';
+            body.style.left = '';
+            body.style.right = '';
+            body.style.overflow = '';
+            window.scrollTo(0, scrollY);
+        };
+    }, [isLocked]);
 }
 
 export function AuthDialog() {
     const isOpen = useAuthDialogStore((state) => state.isOpen);
     const close = useAuthDialogStore((state) => state.close);
     const mode = useAuthDialogStore((state) => state.mode);
-
-    useCleanScrollLock(isOpen);
+    useScrollLock(isOpen);
     
     const handleOpenChange = (open: boolean) => {
         if (!open) {
@@ -90,65 +60,9 @@ export function AuthDialog() {
 
     return (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>
-                        {mode === "signup" ? "Sign Up" : "Sign In"}
-                    </DialogTitle>
-                    <DialogDescription>
-                        {mode === "signup" 
-                            ? "Create your account to get started" 
-                            : "Welcome back! Please sign in to continue"
-                        }
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">
-                            Email
-                        </Label>
-                        <Input 
-                            id="email" 
-                            type="email"
-                            placeholder="Enter your email"
-                            autoComplete="email"
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">
-                            Password
-                        </Label>
-                        <Input 
-                            id="password" 
-                            type="password"
-                            placeholder={mode === "signup" ? "Create a password" : "Enter your password"}
-                            autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                        />
-                    </div>
-                    {mode === "signup" && (
-                        <div className="grid gap-2">
-                            <Label htmlFor="confirmPassword">
-                                Confirm Password
-                            </Label>
-                            <Input 
-                                id="confirmPassword" 
-                                type="password"
-                                placeholder="Confirm your password"
-                                autoComplete="new-password"
-                            />
-                        </div>
-                    )}
-                </div>
-                <DialogFooter>
-                    <DialogClose asChild>
-                        <Button type="button" variant="outline">
-                            Cancel
-                        </Button>
-                    </DialogClose>
-                    <Button type="submit" className="ml-2">
-                        {mode === "signup" ? "Create Account" : "Sign In"}
-                    </Button>
-                </DialogFooter>
+            <DialogOverlay className="backdrop-blur-sm bg-black/50" />
+            <DialogContent className="sm:max-w-[425px] bg-black border border-white/30 text-white">
+                <LoginForm />
             </DialogContent>
         </Dialog>
     );
