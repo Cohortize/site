@@ -2,18 +2,14 @@ import { cn } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
-import { useAuthDialogStore } from "@/app/stores/useAuthDialogStore"
-
-export function LoginForm({
+export function ForgotPassword({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const open = useAuthDialogStore((state) => state.open)
-  
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold text-[#b6b4b4]">Login to your account</h1>
+        <h1 className="text-2xl font-bold text-[#b6b4b4]">forgor</h1>
         <p className="text-muted-foreground text-sm text-balance">
           Enter your email below to login to your account
         </p>
@@ -26,20 +22,19 @@ export function LoginForm({
         <div className="grid gap-3">
           <div className="flex items-center">
             <Label htmlFor="password" className="text-[#b6b4b4]">Password</Label>
-            <button
-              type="button"
-              className="ml-auto text-sm underline-offset-4 hover:underline text-[#b6b4b4] cursor-pointer"
-              onClick={() => open("forgot-password")}
+            <a
+              href="#"
+              className="ml-auto text-sm underline-offset-4 hover:underline text-[#b6b4b4]"
             >
               Forgot your password?
-            </button>
+            </a>
           </div>
           <Input id="password" type="password" className="border border-white/20" required />
         </div>
         <Button type="submit" className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer">
           Login
         </Button>
-        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t bg-black">
+      <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t bg-black">
           <span className="relative z-10 px-2 bg-black text-[#b6b4b4]">
             Or continue with
           </span>
