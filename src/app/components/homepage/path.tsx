@@ -1,7 +1,8 @@
 "use client";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef, //useState,
-     useEffect } from "react"; 
+     useEffect, 
+     useState} from "react"; 
 import { useGSAP } from "@gsap/react";
 import gsap from 'gsap';
 import { MotionPathPlugin } from "gsap/src/all"; 
@@ -131,8 +132,6 @@ const Path: React.FC = () => {
         ScrollTrigger.getAll().forEach(st => st.kill()); 
     };
 }, []);
-
-
     return (
         <div ref={main} className="path-section min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
             <div className="w-screen mx-auto flex flex-col lg:flex-col gap-8 sm:gap-12 md:gap-8 lg:gap-0 xl:gap-0 justify-center items-center">

@@ -120,7 +120,7 @@ return(<>
           </div>
           <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 xl:gap-8 px-4 sm:px-0">
             <Button
-              className="group relative bg-white text-black hover:bg-[#d2d2d1] transition-all duration-300 font-medium text-sm px-4 sm:px-6 xl:px-8 py-3 xl:py-4 rounded-lg cursor-pointer overflow-hidden w-full sm:w-auto"
+              className="group relative bg-white text-black hover:bg-[#d2d2d1] transition-all duration-300 font-medium text-sm px-4 sm:px-6 xl:px-8 py-3 xl:py-4 rounded-[10px] cursor-pointer overflow-hidden w-full sm:w-auto tracking-normal"
               style={{
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
@@ -136,7 +136,7 @@ return(<>
             </Button>
             
             <Button
-              className="group relative bg-[#282828] backdrop-blur-sm text-white hover:bg-[#373737] transition-all duration-300 font-medium text-sm px-4 sm:px-6 xl:px-8 py-3 xl:py-4 rounded-lg cursor-pointer overflow-hidden w-full sm:w-auto"
+              className="group relative bg-[#282828] backdrop-blur-sm text-white hover:bg-[#373737] transition-all duration-300 font-medium text-sm px-4 sm:px-6 xl:px-8 py-3 xl:py-4 rounded-[10px] cursor-pointer overflow-hidden w-full sm:w-auto tracking-normal"
               style={{
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 fontFamily:'Geist, "Geist Fallback", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
