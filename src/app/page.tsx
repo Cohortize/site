@@ -1,11 +1,12 @@
 "use client";
-import Home from './pages/home'
+import Home from '../views/home';
 import { ReactLenis } from 'lenis/react'
 import { useEffect, useRef, useState } from 'react'
 import { AuthDialog } from './components/global/authDialog'
 
 function LenisWrapper({ children }: { children: React.ReactNode }) {
-  const lenisRef = useRef<{ lenis?: any } | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lenisRef = useRef<any>(null)
   const [canTriggerScroll, setCanTriggerScroll] = useState(true)
   const [lenisDisabled, setLenisDisabled] = useState(false)
   const [hasTriggeredFirstScroll, setHasTriggeredFirstScroll] = useState(false)
@@ -115,6 +116,7 @@ function LenisWrapper({ children }: { children: React.ReactNode }) {
   return (
     <ReactLenis
       root
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref={lenisRef as any}
       options={{
         duration: 1.2,
