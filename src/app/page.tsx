@@ -1,5 +1,5 @@
 "use client";
-import Home from '@/views/home';
+import Home from '../views/home';
 import { ReactLenis } from 'lenis/react'
 import { useEffect, useRef, useState } from 'react'
 import { AuthDialog } from './components/global/authDialog'
