@@ -3,6 +3,7 @@ import { Button } from "../ui/button"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { useState } from "react"
+import { toast } from "sonner"
 
 export function SignupForm({
   className,
@@ -12,6 +13,8 @@ export function SignupForm({
 
   const handleSignupSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    // Show toast when OTP is sent
+    toast("OTP sent to your email!")
     setOtpSent(true)
   }
 
@@ -63,9 +66,15 @@ export function SignupForm({
     );
   }
 
+  const handleOtpSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    // Handle OTP verification here
+    toast.success("Account created successfully!")
+  }
+
   function otpInput(){
     return(
-      <form className={cn("flex flex-col gap-6", className)} {...props}>
+      <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleOtpSubmit}>
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold text-[#b6b4b4]">Enter OTP</h1>
           <p className="text-muted-foreground text-sm text-balance">

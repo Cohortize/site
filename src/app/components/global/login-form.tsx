@@ -3,13 +3,14 @@ import { Button } from "../ui/button"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { useAuthDialogStore } from "@/app/stores/useAuthDialogStore"
-
+//import toast from "react-hot-toast"
+//import { useState } from "react"
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
   const open = useAuthDialogStore((state) => state.open)
-  
+  //const [otpSent, setOtpSent] = useState(false)
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">

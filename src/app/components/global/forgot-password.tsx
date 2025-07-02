@@ -8,7 +8,7 @@ import { InputOTP,
   InputOTPSeparator,
   InputOTPSlot,
  } from "../ui/input-otp"
-
+ import { toast } from 'sonner'
 export function ForgotPassword({
   className,
   ...props
@@ -39,7 +39,7 @@ export function ForgotPassword({
             <Label htmlFor="email" className="text-[#b6b4b4]">Email</Label>
             <Input id="email" type="email" placeholder="m@example.com" className="border border-white/20" required />
           </div>
-          <Button type="submit" className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer">
+          <Button type="submit" className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer" onClick={() => toast("hey")}>
             Send OTP
           </Button>
         </div>
