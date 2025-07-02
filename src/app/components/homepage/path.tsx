@@ -1,8 +1,7 @@
 "use client";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef, //useState,
-     useEffect, 
-     useState} from "react"; 
+     useEffect, } from "react"; 
 import { useGSAP } from "@gsap/react";
 import gsap from 'gsap';
 import { MotionPathPlugin } from "gsap/src/all"; 
