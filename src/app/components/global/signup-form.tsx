@@ -4,8 +4,10 @@ import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { useState } from "react"
 import { toast } from "sonner"
-import { signIn, signOut, useSession } from "next-auth/react"
-import { promises } from "dns"
+import { signIn, 
+  //signOut, 
+  useSession } from "next-auth/react"
+//import { promises } from "dns"
 export function SignupForm({
   className,
   ...props
@@ -19,7 +21,9 @@ export function SignupForm({
     })
     setOtpSent(true)
   }
-  const {data: session, status} = useSession()
+  const {data: session, 
+    //status
+  } = useSession()
   if(session){
     <div>
       Welcome! {session.user?.name}
