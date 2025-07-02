@@ -11,7 +11,7 @@ return(<>
           className="absolute inset-0 opacity-70"
           style={{
             background: `
-              conic-gradient(from 0deg at 50% 60%, 
+              conic-gradient(from 0deg at 50% 52%, 
                 #ff0040 0deg,
                 #ff4000 30deg,
                 #ff8000 60deg,
@@ -28,7 +28,7 @@ return(<>
               )
             `,
             maskImage: `
-              radial-gradient(circle 300px at 50% 60%, 
+              radial-gradient(circle 300px at 50% 52%, 
                 rgba(255,255,255,0.8) 0%, 
                 rgba(255,255,255,0.6) 30%, 
                 rgba(255,255,255,0.3) 60%,
@@ -37,7 +37,7 @@ return(<>
               )
             `,
             WebkitMaskImage: `
-              radial-gradient(circle 300px at 50% 60%, 
+              radial-gradient(circle 300px at 50% 52%, 
                 rgba(255,255,255,0.8) 0%, 
                 rgba(255,255,255,0.6) 30%, 
                 rgba(255,255,255,0.3) 60%,
@@ -53,7 +53,7 @@ return(<>
           className="absolute inset-0 opacity-50"
           style={{
             background: `
-              conic-gradient(from 45deg at 50% 60%, 
+              conic-gradient(from 45deg at 50% 52%, 
                 #ff006e 0deg,
                 #fb5607 45deg,
                 #ffbe0b 90deg,
@@ -66,7 +66,7 @@ return(<>
               )
             `,
             maskImage: `
-              radial-gradient(circle 200px at 50% 60%, 
+              radial-gradient(circle 200px at 50% 52%, 
                 rgba(255,255,255,0.9) 0%, 
                 rgba(255,255,255,0.5) 50%,
                 rgba(255,255,255,0.2) 80%,
@@ -74,7 +74,7 @@ return(<>
               )
             `,
             WebkitMaskImage: `
-              radial-gradient(circle 200px at 50% 60%, 
+              radial-gradient(circle 200px at 50% 52%, 
                 rgba(255,255,255,0.9) 0%, 
                 rgba(255,255,255,0.5) 50%,
                 rgba(255,255,255,0.2) 80%,
@@ -89,7 +89,7 @@ return(<>
           className="absolute inset-0 opacity-40"
           style={{
             background: `
-              radial-gradient(circle 150px at 50% 60%, 
+              radial-gradient(circle 150px at 50% 52%, 
                 rgba(255, 255, 255, 0.15) 0%,
                 rgba(147, 51, 234, 0.2) 30%,
                 rgba(59, 130, 246, 0.15) 60%,
