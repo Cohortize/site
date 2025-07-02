@@ -1,6 +1,6 @@
+"use client";
 import { Button } from "../ui/button"
 import { Ship, Users } from "lucide-react";
-
 const Hero = () => {
 return(<>
 <div className="relative flex flex-col-reverse gap-8 md:gap-16 justify-center items-center overflow-hidden bg-black px-4 md:px-6 xl:pt-20 2xl:pt-32 h-screen">
@@ -127,7 +127,8 @@ return(<>
                 fontVariationSettings: "wght 480",
                 minWidth: '140px',
                 height: '44px'
-              }}>
+              }}
+              >
               <div className="flex items-center justify-center gap-2 text-sm sm:text-[1rem] xl:text-[1.1rem]">
                 <Ship size={18} className="sm:w-5 sm:h-5 xl:w-6 xl:h-6"/>
                 <span>Ship project</span>

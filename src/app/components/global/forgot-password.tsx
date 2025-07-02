@@ -8,7 +8,7 @@ import { InputOTP,
   InputOTPSeparator,
   InputOTPSlot,
  } from "../ui/input-otp"
-
+ import { toast } from 'sonner'
 export function ForgotPassword({
   className,
   ...props
@@ -18,6 +18,9 @@ export function ForgotPassword({
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setOtpSent("otpSent")
+    toast("Email has been sent!", {
+  description: "An e-mail with the OTP has been sent to your e-mail address."
+})
   }
   
   const handleOtpSubmit = (e: React.FormEvent) => {
