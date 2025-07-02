@@ -64,7 +64,7 @@ export function SignupForm({
           </a>
         </div>
       </form>
-    );
+    ); 
   }
 
   const handleOtpSubmit = (e: React.FormEvent<HTMLFormElement>) => {
