@@ -18,6 +18,9 @@ export function ForgotPassword({
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setOtpSent("otpSent")
+    toast("Email has been sent!", {
+  description: "An e-mail with the OTP has been sent to your e-mail address."
+})
   }
   
   const handleOtpSubmit = (e: React.FormEvent) => {
@@ -39,7 +42,7 @@ export function ForgotPassword({
             <Label htmlFor="email" className="text-[#b6b4b4]">Email</Label>
             <Input id="email" type="email" placeholder="m@example.com" className="border border-white/20" required />
           </div>
-          <Button type="submit" className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer" onClick={() => toast("hey")}>
+          <Button type="submit" className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer">
             Send OTP
           </Button>
         </div>

@@ -13,8 +13,9 @@ export function SignupForm({
 
   const handleSignupSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Show toast when OTP is sent
-    toast("OTP sent to your email!")
+    toast("Email has been sent!", {
+    description: "An e-mail with the OTP has been sent to your e-mail address."
+    })
     setOtpSent(true)
   }
 
@@ -68,7 +69,6 @@ export function SignupForm({
 
   const handleOtpSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Handle OTP verification here
     toast.success("Account created successfully!")
   }
 
