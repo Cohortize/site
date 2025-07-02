@@ -12,7 +12,7 @@ const Ships = () => {
                     </p>
 
                     <p className="text-gray-400 text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl">
-                        There are millions of developers who make thousands of <span className="text-[#fbcaca]">projects</span> everyday, so there is a high chance that your <span className="text-[#fbcaca]">project</span> goes unnoticed even after having the potential. Don't let it happen.
+                        There are millions of developers who make thousands of <span className="text-[#fbcaca]">projects</span> everyday, so there is a high chance that your <span className="text-[#fbcaca]">project</span> goes unnoticed even after having the potential. Don&apos;t let it happen.
                     </p>
                 </div>
 

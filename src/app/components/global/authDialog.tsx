@@ -9,7 +9,7 @@ import { LoginForm } from "./login-form";
 import { useAuthDialogStore } from "@/app/stores/useAuthDialogStore";
 import { useEffect } from "react";
 import { SignupForm } from "./signup-form";
-import { VisuallyHidden } from "radix-ui";
+import { ForgotPassword } from "./forgot-password";
 function useScrollLock(isLocked: boolean) {
     useEffect(() => {
         if (!isLocked) return;
@@ -60,13 +60,22 @@ export function AuthDialog() {
             close();
         }
     };
-
+    const renderForm =() => {
+        switch(mode){
+            case "login":
+                return <LoginForm />
+            case "signup":
+                return <SignupForm />
+            case "forgot-password" :
+                return <ForgotPassword />
+        }
+    }
     return (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogTitle />
             <DialogOverlay className="backdrop-blur-sm bg-black/50" />
             <DialogContent className="sm:max-w-[425px] bg-black border border-white/30 text-white">
-                {mode == "login" ? <LoginForm /> : <SignupForm />}
+                {renderForm()}
             </DialogContent>
         </Dialog>
     );

@@ -1,7 +1,8 @@
 "use client";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef, //useState,
-     useEffect } from "react"; 
+     useEffect, 
+     useState} from "react"; 
 import { useGSAP } from "@gsap/react";
 import gsap from 'gsap';
 import { MotionPathPlugin } from "gsap/src/all"; 
@@ -93,49 +94,44 @@ const Path: React.FC = () => {
         }
     }
     useEffect(() => {
-        let timeoutId: NodeJS.Timeout; 
-
-        const initializeAnimations = () => {
-            const firstBox = document.getElementById('ship') as HTMLElement | null;
-            const secondBox = document.getElementById('find') as HTMLElement | null;
-            const thirdBox = document.getElementById('collaborate') as HTMLElement | null;
-            const fourthBox = document.getElementById('magic') as HTMLElement | null;
-            
-            console.log('Elements found:', {
-                firstBox: !!firstBox,
-                secondBox: !!secondBox,
-                thirdBox: !!thirdBox,
-                fourthBox: !!fourthBox
-            });
-            
-            if(!firstBox || !secondBox || !thirdBox || !fourthBox){
-                console.log('Some elements not found, animation skipped');
-                return; 
+    const initializeAnimations = () => {
+        const firstBox = document.getElementById('ship') as HTMLElement | null;
+        const secondBox = document.getElementById('find') as HTMLElement | null;
+        const thirdBox = document.getElementById('collaborate') as HTMLElement | null;
+        const fourthBox = document.getElementById('magic') as HTMLElement | null;
+        
+        console.log('Elements found:', {
+            firstBox: !!firstBox,
+            secondBox: !!secondBox,
+            thirdBox: !!thirdBox,
+            fourthBox: !!fourthBox
+        });
+        
+        if(!firstBox || !secondBox || !thirdBox || !fourthBox){
+            console.log('Some elements not found, animation skipped');
+            return; 
+        }
+        gsap.to(firstBox, {
+            borderColor: 'rgba(255,255,255,1)',
+            duration: 0.5,
+            ease: 'power2.out',
+            onComplete: secondSectionLit,
+            scrollTrigger :{
+                trigger: firstBox,
+                scrub: false,
+                start: 'top bottom-=100',
+                end: 'bottom top+=100',
             }
-            gsap.to(firstBox, {
-                borderColor: 'rgba(255,255,255,1)',
-                duration: 0.5,
-                ease: 'power2.out',
-                onComplete: secondSectionLit,
-                scrollTrigger :{
-                    trigger: firstBox,
-                    scrub: false,
-                    start: 'top bottom-=100',
-                    end: 'bottom top+=100',
-                }
-            })
+        })
+    };
 
-        };
+    const timeoutId = setTimeout(initializeAnimations, 100); 
 
-        timeoutId = setTimeout(initializeAnimations, 100); 
-
-        return () => {
-            clearTimeout(timeoutId);
-            ScrollTrigger.getAll().forEach(st => st.kill()); 
-        };
-    }, []); 
-
-
+    return () => {
+        clearTimeout(timeoutId);
+        ScrollTrigger.getAll().forEach(st => st.kill()); 
+    };
+}, []);
     return (
         <div ref={main} className="path-section min-h-screen w-full bg-black flex items-center px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-16">
             <div className="w-screen mx-auto flex flex-col lg:flex-col gap-8 sm:gap-12 md:gap-8 lg:gap-0 xl:gap-0 justify-center items-center">
@@ -145,7 +141,7 @@ const Path: React.FC = () => {
                             Ship your <span className="text-[#fbcaca]">projects</span>
                         </h3>
                         <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-[0.9rem] leading-relaxed">
-                            Millions of developers make thousands of projects every day, so there is a high chance that your project gets ignored even after having the potential, <span className="text-red-400">don't</span> let it happen.
+                            Millions of developers make thousands of projects every day, so there is a high chance that your project gets ignored even after having the potential, <span className="text-red-400">don&apos;t</span> let it happen.
                         </p>    
                     </div>
                 </div>
