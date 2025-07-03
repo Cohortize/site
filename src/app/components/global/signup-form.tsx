@@ -34,8 +34,9 @@ export function SignupForm({
         description: "An e-mail with the OTP has been sent to your e-mail address."
       })
       setOtpSent(true)
-    } catch (_error) {
+    } catch (error) {
       toast.error("Failed to send OTP. Please try again.")
+      console.log(error)
     } finally {
       setIsLoading(false)
     }
@@ -53,8 +54,9 @@ export function SignupForm({
       
       toast.success("Account created successfully!")
       router.push('/dashboard')
-    } catch (_error) {
+    } catch (error) {
       toast.error("Invalid OTP. Please try again.")
+      console.log(error)
     } finally {
       setIsLoading(false)
     }
