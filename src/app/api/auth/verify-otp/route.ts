@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-
 const users: { id: string; email: string; password: string; verified: boolean; createdAt: Date }[] = []
 const temporaryUsers: { email: string; password: string; otp: string; timestamp: number }[] = []
 
@@ -19,7 +18,6 @@ async function getTemporaryUser(email: string) {
     return tempUser
 }
 
-
 async function createUser(userData: { email: string; password: string }) {
     const newUser = {
         id: Date.now().toString(),
@@ -33,14 +31,12 @@ async function createUser(userData: { email: string; password: string }) {
     return newUser
 }
 
-
 async function deleteTemporaryUser(email: string) {
     const index = temporaryUsers.findIndex(user => user.email === email)
     if (index !== -1) {
         temporaryUsers.splice(index, 1)
     }
 }
-
 
 function validateVerifyInput(email: string, otp: string): string | null {
     if (!email || !otp) {
@@ -63,13 +59,11 @@ export async function POST(req: NextRequest) {
     try {
         const { email, otp } = await req.json()
         
-
         const validationError = validateVerifyInput(email, otp)
         if (validationError) {
             return NextResponse.json({ error: validationError }, { status: 400 })
         }
         
- 
         const tempUser = await getTemporaryUser(email)
         if (!tempUser) {
             return NextResponse.json({ 
@@ -77,18 +71,15 @@ export async function POST(req: NextRequest) {
             }, { status: 400 })
         }
         
-      
         if (tempUser.otp !== otp) {
             return NextResponse.json({ error: 'Invalid OTP' }, { status: 400 })
         }
         
-  
         const newUser = await createUser({
             email: tempUser.email,
             password: tempUser.password
         })
         
-
         await deleteTemporaryUser(email)
         
         return NextResponse.json({ 
@@ -105,5 +96,3 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Failed to verify OTP' }, { status: 500 })
     }
 }
-
-export { temporaryUsers, users }
