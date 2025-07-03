@@ -4,7 +4,9 @@ import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { useState } from "react"
 import { toast } from "sonner"
-import { signIn, useSession } from "next-auth/react"
+import { signIn, //useSession
+
+ } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
 export function SignupForm({
@@ -14,15 +16,15 @@ export function SignupForm({
   const [otpSent, setOtpSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { data: session } = useSession()
+  //const { data: session } = useSession()
 
   const handleSignupSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
     
     const formData = new FormData(e.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
+    //const email = formData.get('email') as string
+    //onst password = formData.get('password') as string
     
     try {
       //dummy api calls
@@ -32,7 +34,7 @@ export function SignupForm({
         description: "An e-mail with the OTP has been sent to your e-mail address."
       })
       setOtpSent(true)
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to send OTP. Please try again.")
     } finally {
       setIsLoading(false)
@@ -44,14 +46,14 @@ export function SignupForm({
     setIsLoading(true)
     
     const formData = new FormData(e.currentTarget)
-    const otp = formData.get('otp') as string
+    //const otp = formData.get('otp') as string
     
     try {
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       toast.success("Account created successfully!")
       router.push('/dashboard')
-    } catch (error) {
+    } catch (_error) {
       toast.error("Invalid OTP. Please try again.")
     } finally {
       setIsLoading(false)

@@ -1,5 +1,4 @@
 "use client";
-import { signOut } from "next-auth/react";
 import { Button } from "../ui/button"
 import { Ship, Users } from "lucide-react";
 const Hero = () => {
