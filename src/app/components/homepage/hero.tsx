@@ -135,7 +135,6 @@ return(<>
               </div>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-500" />
             </Button>
-            
             <Button
               className="group relative bg-[#282828] backdrop-blur-sm text-white hover:bg-[#373737] transition-all duration-300 font-medium text-sm px-4 sm:px-6 xl:px-8 py-3 xl:py-4 rounded-[10px] cursor-pointer overflow-hidden w-full sm:w-auto tracking-normal"
               style={{
