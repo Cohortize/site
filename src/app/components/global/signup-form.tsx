@@ -22,7 +22,7 @@ export function SignupForm({
     e.preventDefault()
     setIsLoading(true)
     
-    const formData = new FormData(e.currentTarget)
+    //const formData = new FormData(e.currentTarget)
     //const email = formData.get('email') as string
     //onst password = formData.get('password') as string
     
@@ -45,7 +45,7 @@ export function SignupForm({
     e.preventDefault()
     setIsLoading(true)
     
-    const formData = new FormData(e.currentTarget)
+    //const formData = new FormData(e.currentTarget)
     //const otp = formData.get('otp') as string
     
     try {
