@@ -64,7 +64,7 @@ export function SignupForm({
                 fill="currentColor"
               />
             </svg>
-            Signup with GitHub
+            Continue with GitHub
           </Button>
         </div>
         <div className="text-center text-sm text-[#b6b4b4]">

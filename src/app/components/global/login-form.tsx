@@ -52,7 +52,7 @@ export function LoginForm({
               fill="currentColor"
             />
           </svg>
-          Login with GitHub
+          Continue with GitHub
         </Button>
       </div>
       <div className="text-center text-sm text-[#b6b4b4]">
