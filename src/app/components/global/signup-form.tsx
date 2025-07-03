@@ -1,3 +1,4 @@
+"use client"
 import { cn } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { Label } from "../ui/label"
@@ -66,52 +67,57 @@ export function SignupForm({
     return (
       <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleSignupSubmit}>
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold text-[#b6b4b4]">Create an account</h1>
-          <p className="text-muted-foreground text-sm text-balance">
+          <h1 className="text-[1.8rem] font-bold text-[#b6b4b4]">Create an account</h1>
+          <p className="text-white text-sm text-balance">
             Enter your email below to create your account
           </p>
         </div>
         <div className="grid gap-6">
           <div className="grid gap-3">
-            <Label htmlFor="email" className="text-[#b6b4b4]">Email</Label>
+            <Label htmlFor="email" className="text-white">Email</Label>
             <Input 
               id="email" 
               name="email"
               type="email" 
               placeholder="m@example.com" 
-              className="border border-white/20" 
+              className="border border-white/20 bg-transparent text-white placeholder:text-gray-400 focus:border-white/40 focus:outline-none" 
               required 
               disabled={isLoading}
             />
           </div>
           <div className="grid gap-3">
             <div className="flex items-center">
-              <Label htmlFor="password" className="text-[#b6b4b4]">Password</Label>
+              <Label htmlFor="password" className="text-white">Password</Label>
             </div>
             <Input 
               id="password" 
               name="password"
               type="password" 
-              className="border border-white/20" 
+              className="border border-white/20 bg-transparent text-white placeholder:text-gray-400 focus:border-white/40 focus:outline-none" 
               required 
               disabled={isLoading}
             />
           </div>
           <Button 
             type="submit" 
-            className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer"
+            className="w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 cursor-pointer transition-colors"
             disabled={isLoading}
           >
             {isLoading ? "Sending..." : "Signup"}
           </Button>
-          <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t bg-black">
-            <span className="relative z-10 px-2 bg-black text-[#b6b4b4]">
-              Or continue with
-            </span>
+          <div className="relative text-center text-sm">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-gray-600" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-black px-2 text-gray-400">
+                Or continue with
+              </span>
+            </div>
           </div>
           <Button 
             variant="outline" 
-            className="w-full text-black bg-white hover:bg-[#edecec] cursor-pointer" 
+            className="w-full text-black bg-white hover:bg-gray-100 cursor-pointer transition-colors" 
             onClick={() => signIn('github', { callbackUrl: '/dashboard' })}
             disabled={isLoading}
           >
@@ -124,9 +130,9 @@ export function SignupForm({
             Continue with GitHub
           </Button>
         </div>
-        <div className="text-center text-sm text-[#b6b4b4]">
+        <div className="text-center text-sm text-gray-400">
           Already have an account?{" "}
-          <a href="/login" className="underline underline-offset-4">
+          <a href="/login" className="underline underline-offset-4 text-white hover:text-gray-300 transition-colors">
             Log in
           </a>
         </div>
@@ -138,27 +144,27 @@ export function SignupForm({
     return (
       <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleOtpSubmit}>
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold text-[#b6b4b4]">Enter OTP</h1>
-          <p className="text-muted-foreground text-sm text-balance">
+          <h1 className="text-[1.8rem] font-bold text-[#b6b4b4]">Enter OTP</h1>
+          <p className="text-white text-sm text-balance">
             Enter the OTP sent to your email
           </p>
         </div>
         <div className="grid gap-6">
           <div className="grid gap-3">
-            <Label htmlFor="otp" className="text-[#b6b4b4]">OTP</Label>
+            <Label htmlFor="otp" className="text-white">OTP</Label>
             <Input 
               id="otp" 
               name="otp"
               type="text" 
               placeholder="Enter OTP" 
-              className="border border-white/20" 
+              className="border border-white/20 bg-transparent text-white placeholder:text-gray-400 focus:border-white/40 focus:outline-none" 
               required 
               disabled={isLoading}
             />
           </div>
           <Button 
             type="submit" 
-            className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer"
+            className="w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 cursor-pointer transition-colors"
             disabled={isLoading}
           >
             {isLoading ? "Verifying..." : "Verify OTP"}
@@ -166,7 +172,7 @@ export function SignupForm({
           <Button 
             type="button" 
             variant="outline" 
-            className="w-full text-[#b6b4b4] bg-transparent border border-white/20 hover:bg-white/10 cursor-pointer"
+            className="w-full text-white bg-transparent border border-white/20 hover:bg-white/10 cursor-pointer transition-colors"
             onClick={() => setOtpSent(false)}
             disabled={isLoading}
           >
