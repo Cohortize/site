@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from 'bcrypt'
 
-
 const users: { email: string; password: string; verified: boolean }[] = []
 const temporaryUsers: { email: string; password: string; otp: string; timestamp: number }[] = []
 
@@ -10,7 +9,6 @@ function generateOTP(): string {
 }
 
 async function sendOTPEmail(email: string, otp: string): Promise<void> {
-
     console.log(`Sending OTP to ${email}: ${otp}`)
     await new Promise(resolve => setTimeout(resolve, 1000)) //dummy request
 }
@@ -81,4 +79,3 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Failed to process signup' }, { status: 500 })
     }
 }
-export { temporaryUsers, users }
