@@ -9,6 +9,22 @@ import { InputOTP,
   InputOTPSlot,
  } from "../ui/input-otp"
  import { toast } from 'sonner'
+ async function sendOtpEmail(email: string, password: string) {
+  const res = await fetch('/api/auth/forget-password', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  })
+
+  if (!res.ok) {
+    const errorData = await res.json()
+    throw new Error(errorData.error || 'Failed to send OTP')
+  }
+
+  return await res.json()
+}
 export function ForgotPassword({
   className,
   ...props
@@ -32,7 +48,7 @@ export function ForgotPassword({
     return(
       <form className={cn("flex flex-col gap-6", className)} onSubmit={handleEmailSubmit} {...props}>
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold text-[#b6b4b4]">forgor</h1>
+          <h1 className="text-2xl font-bold text-[#b6b4b4]">Forgot your password?</h1>
           <p className="text-muted-foreground text-sm text-balance">
             Enter your email below to reset your password
           </p>
