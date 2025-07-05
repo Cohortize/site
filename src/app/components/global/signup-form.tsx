@@ -6,9 +6,24 @@ import { Input } from "../ui/input"
 import { useState } from "react"
 import { toast } from "sonner"
 import { signIn, //useSession
-
  } from "next-auth/react"
 import { useRouter } from "next/navigation"
+async function sendOtpEmail(email: string, password: string) {
+  const res = await fetch('/api/auth/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  })
+
+  if (!res.ok) {
+    const errorData = await res.json()
+    throw new Error(errorData.error || 'Failed to send OTP')
+  }
+
+  return await res.json()
+}
 
 export function SignupForm({
   className,
@@ -23,13 +38,13 @@ export function SignupForm({
     e.preventDefault()
     setIsLoading(true)
     
-    //const formData = new FormData(e.currentTarget)
-    //const email = formData.get('email') as string
-    //onst password = formData.get('password') as string
+    const formData = new FormData(e.currentTarget)
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
     
     try {
       //dummy api calls
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await sendOtpEmail(email, password)
       
       toast("Email has been sent!", {
         description: "An e-mail with the OTP has been sent to your e-mail address."
