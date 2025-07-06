@@ -132,7 +132,7 @@ const handleOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               id="email" 
               name="email"
               type="email" 
-              placeholder="m@example.com" 
+              placeholder="manan@cohortize.xyz" 
               className="border border-white/20 bg-transparent text-white placeholder:text-gray-400 focus:border-white/40 focus:outline-none" 
               required 
               disabled={isLoading}
