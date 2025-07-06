@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from 'bcrypt'
 import { Resend } from 'resend'
-
+import { Redis } from '@upstash/redis'
 const resend = new Resend(process.env.EMAIL_API_KEY!)
-
-
+const redis = Redis.fromEnv()
+import crypto, { sign } from 'crypto'
 const users: { email: string; password: string; verified: boolean }[] = []
 const temporaryUsers: { email: string; password: string; otp: string; timestamp: number }[] = []
 
@@ -12,7 +12,7 @@ function generateOTP(): string {
     return Math.floor(100000 + Math.random() * 900000).toString()
 }
 
-async function sendOTPEmail(email: string, otp: string): Promise<void> {
+async function sendOTPEmail(email: string, otp: string): Promise<{token: string}> {
     console.log(`Sending OTP to ${email}: ${otp}`)
     try {
         await resend.emails.send({
@@ -31,10 +31,20 @@ async function sendOTPEmail(email: string, otp: string): Promise<void> {
         }
     )
     console.log("email sent")
+    const inputData= {
+    'category': 'signup',
+    'email': email,
+    'otp' : otp
+    }
+    const token = crypto.randomUUID().toString()
+    console.log(token)
+    await redis.setex(token, 600, JSON.stringify(inputData))
+    return {token}
     } catch (err) {
         console.error("Failed to send OTP email:", err)
         throw new Error("Failed to send OTP email")
     }
+
 }
 
 async function getUserByEmail(email: string) {
@@ -87,12 +97,11 @@ export async function POST(req: NextRequest) {
 
         const hashedPassword = await bcrypt.hash(password, 10)
         const otp = generateOTP()
-
         await storeTemporaryUser({ email, password: hashedPassword, otp })
-        await sendOTPEmail(email, otp)
-
+        const token = await sendOTPEmail(email, otp)
         return NextResponse.json({ 
             message: 'OTP sent successfully. Please check your email to verify your account.',
+            token,
             ...(process.env.NODE_ENV === 'development' && { developmentOTP: otp })
         })
         

@@ -5,14 +5,14 @@ import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { useState } from "react"
 import { toast } from "sonner"
-import { signIn, //useSession
- } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
  } from "../ui/input-otp"
 import { useRouter } from "next/navigation"
+
 async function sendOtpEmail(email: string, password: string) {
   const res = await fetch('/api/auth/signup', {
     method: 'POST',
@@ -36,8 +36,9 @@ export function SignupForm({
 }: React.ComponentProps<"form">) {
   const [otpSent, setOtpSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [otpToken, setOtpToken] = useState<string | null>(null)
+  const [otpValue, setOtpValue] = useState("")
   const router = useRouter()
-  //const { data: session } = useSession()
 
   const handleSignupSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -48,8 +49,11 @@ export function SignupForm({
     const password = formData.get('password') as string
     
     try {
-      await sendOtpEmail(email, password)
-      
+      const sendEmail = await sendOtpEmail(email, password)
+      setOtpToken(sendEmail.token)
+      console.log(sendEmail.token
+        
+      )
       toast("Email has been sent!", {
         description: "An e-mail with the OTP has been sent to your e-mail address."
       })
@@ -66,9 +70,6 @@ export function SignupForm({
     e.preventDefault()
     setIsLoading(true)
     
-    //const formData = new FormData(e.currentTarget)
-    //const otp = formData.get('otp') as string
-    
     try {
       await new Promise(resolve => setTimeout(resolve, 1000))
       
@@ -79,6 +80,15 @@ export function SignupForm({
       console.log(error)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleGithubSignIn = async () => {
+    try {
+      await signIn('github', { callbackUrl: '/dashboard' })
+    } catch (error) {
+      toast.error("Failed to sign in with GitHub")
+      console.log(error)
     }
   }
 
@@ -135,9 +145,10 @@ export function SignupForm({
             </div>
           </div>
           <Button 
+            type="button"
             variant="outline" 
             className="w-full text-black bg-white hover:bg-gray-100 cursor-pointer transition-colors" 
-            onClick={() => signIn('github', { callbackUrl: '/dashboard' })}
+            onClick={handleGithubSignIn}
             disabled={isLoading}
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5 mr-2">
@@ -161,15 +172,21 @@ export function SignupForm({
 
   function otpInput() {
     return (
-            <form className={cn("flex flex-col gap-6", className)} onSubmit={handleOtpSubmit} {...props}>
+      <form className={cn("flex flex-col gap-6", className)} onSubmit={handleOtpSubmit} {...props}>
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold text-[#b6b4b4]">Enter OTP</h1>
-          <p className="text-muted-foreground text-sm text-balance">
+          <p className="text-white text-sm text-balance">
             Enter the 6-digit code sent to your email
           </p>
         </div>
         <div className="grid gap-6 justify-center">
-          <InputOTP maxLength={6} inputMode="numeric" pattern="\d+">
+          <InputOTP 
+            maxLength={6} 
+            inputMode="numeric" 
+            pattern="\d+"
+            value={otpValue}
+            onChange={(value) => setOtpValue(value)}
+          >
             <InputOTPGroup>
               <InputOTPSlot index={0} />
               <InputOTPSlot index={1}/>
@@ -182,9 +199,12 @@ export function SignupForm({
               <InputOTPSlot index={5}/>
             </InputOTPGroup>
           </InputOTP>
-          <Button type="submit" className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer" //onClick={() => setOtpSent("otpGot")}
+          <Button 
+            type="submit" 
+            className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer"
+            disabled={isLoading || otpValue.length !== 6}
           >
-            Submit OTP
+            {isLoading ? "Verifying..." : "Submit OTP"}
           </Button>
         </div>
       </form>
