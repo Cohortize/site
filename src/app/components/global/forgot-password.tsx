@@ -9,13 +9,14 @@ import { InputOTP,
   InputOTPSlot,
  } from "../ui/input-otp"
  import { toast } from 'sonner'
- async function sendOtpEmail(email: string, password: string) {
+
+async function sendOtpEmail(email: string) {
   const res = await fetch('/api/auth/forget-password', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email }),
   })
 
   if (!res.ok) {
@@ -25,18 +26,30 @@ import { InputOTP,
 
   return await res.json()
 }
+
 export function ForgotPassword({
   className,
   ...props
 }: React.ComponentProps<"form">) {
   const [otpSent, setOtpSent] = useState("otpNotSent")
   
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setOtpSent("otpSent")
-    toast("Email has been sent!", {
-  description: "An e-mail with the OTP has been sent to your e-mail address."
-})
+    const formdata = new FormData(e.currentTarget as HTMLFormElement)
+    const email = formdata.get('email') as string
+    
+    try {
+      await sendOtpEmail(email)
+      
+      setOtpSent("otpSent")
+      toast("Email has been sent!", {
+        description: "An e-mail with the OTP has been sent to your e-mail address."
+      })
+    } catch (error) {
+      toast("Failed to send OTP", {
+        description: error instanceof Error ? error.message : "Please try again later"
+      })
+    }
   }
   
   const handleOtpSubmit = (e: React.FormEvent) => {
@@ -56,7 +69,14 @@ export function ForgotPassword({
         <div className="grid gap-6">
           <div className="grid gap-3">
             <Label htmlFor="email" className="text-[#b6b4b4]">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" className="border border-white/20" required />
+            <Input 
+              id="email" 
+              name="email"
+              type="email" 
+              placeholder="m@example.com" 
+              className="border border-white/20" 
+              required 
+            />
           </div>
           <Button type="submit" className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer">
             Send OTP
@@ -108,12 +128,12 @@ export function ForgotPassword({
       </div>
       <div className="grid gap-6">
         <div className="grid gap-3">
-          <Label htmlFor="email" className="text-[#b6b4b4]">Password</Label>
-          <Input id="password" className="border border-white/20" required />
+          <Label htmlFor="password" className="text-[#b6b4b4]">Password</Label>
+          <Input id="password" type="password" className="border border-white/20" required />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
-            <Label htmlFor="password" className="text-[#b6b4b4]">Confirm Password</Label>
+            <Label htmlFor="conPassword" className="text-[#b6b4b4]">Confirm Password</Label>
           </div>
           <Input id="conPassword" type="password" className="border border-white/20" required />
         </div>
