@@ -1,98 +1,99 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Redis } from "@upstash/redis";
 
-const users: { id: string; email: string; password: string; verified: boolean; createdAt: Date }[] = []
-const temporaryUsers: { email: string; password: string; otp: string; timestamp: number }[] = []
+const redis = Redis.fromEnv();
 
-async function getTemporaryUser(email: string) {
-    const tempUser = temporaryUsers.find(user => user.email === email)
-    if (!tempUser) return null
-    const tenMinutesAgo = Date.now() - (10 * 60 * 1000)
-    if (tempUser.timestamp < tenMinutesAgo) {
-        const index = temporaryUsers.findIndex(user => user.email === email)
-        if (index !== -1) {
-            temporaryUsers.splice(index, 1)
+interface UserData {
+    category?: 'signup' | 'reset_password';
+    email: string;
+    otp: number;
+}
+
+interface OTPRequest {
+    otp: number;
+    token: string;
+}
+
+async function verifyOTP(token: string, otp: number) {
+    try {
+        const userData = await redis.get(token) as UserData | null;
+        
+        if (!userData) {
+            return { success: false, message: "Invalid or expired token" };
         }
-        return null
-    }
-    
-    return tempUser
-}
 
-async function createUser(userData: { email: string; password: string }) {
-    const newUser = {
-        id: Date.now().toString(),
-        email: userData.email,
-        password: userData.password,
-        verified: true,
-        createdAt: new Date()
-    }
-    
-    users.push(newUser)
-    return newUser
-}
+        if (Number(userData.otp) !== otp) {
+            return { success: false, message: "Wrong OTP!" };
+        }
 
-async function deleteTemporaryUser(email: string) {
-    const index = temporaryUsers.findIndex(user => user.email === email)
-    if (index !== -1) {
-        temporaryUsers.splice(index, 1)
-    }
-}
 
-function validateVerifyInput(email: string, otp: string): string | null {
-    if (!email || !otp) {
-        return 'Email and OTP are required'
+        if (userData.category === "signup") {
+            //database query will go here
+            await redis.del(token);
+            return { success: true, message: "Account created successfully" };
+        } else if (userData.category === "reset_password") {
+            //database query will go here
+            await redis.del(token);
+            return { success: true, message: "Password reset successfully" };
+        } else {
+            return { success: false, message: "Invalid category" };
+        }
+    } catch (error) {
+        console.error('Redis error during OTP verification:', error);
+        return { success: false, message: "Internal server error" };
     }
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-        return 'Invalid email format'
-    }
-    
-    if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
-        return 'OTP must be 6 digits'
-    }
-    
-    return null
 }
 
 export async function POST(req: NextRequest) {
     try {
-        const { email, otp } = await req.json()
+        const body = await req.json();
+        const { otp, token }: OTPRequest = body;
         
-        const validationError = validateVerifyInput(email, otp)
-        if (validationError) {
-            return NextResponse.json({ error: validationError }, { status: 400 })
+    
+        
+        if (!otp || !token) {
+            console.log('Missing fields - OTP:', !otp, 'Token:', !token);
+            return NextResponse.json(
+                { error: 'Missing required fields: otp and token' },
+                { status: 400 }
+            );
         }
         
-        const tempUser = await getTemporaryUser(email)
-        if (!tempUser) {
-            return NextResponse.json({ 
-                error: 'No pending verification found or OTP expired' 
-            }, { status: 400 })
+        const otpNumber = typeof otp === 'string' ? parseInt(otp, 10) : otp;
+        if (typeof otpNumber !== 'number' || isNaN(otpNumber) || otpNumber < 100000 || otpNumber > 999999) {
+            console.log('Invalid OTP format - Value:', otpNumber, 'Type:', typeof otpNumber);
+            return NextResponse.json(
+                { error: 'Invalid OTP format' },
+                { status: 400 }
+            );
         }
         
-        if (tempUser.otp !== otp) {
-            return NextResponse.json({ error: 'Invalid OTP' }, { status: 400 })
+        const result = await verifyOTP(token, otpNumber);
+
+        if (result.success) {
+            return NextResponse.json(
+                { message: result.message },
+                { status: 200 }
+            );
+        } else {
+            return NextResponse.json(
+                { error: result.message },
+                { status: 400 }
+            );
         }
-        
-        const newUser = await createUser({
-            email: tempUser.email,
-            password: tempUser.password
-        })
-        
-        await deleteTemporaryUser(email)
-        
-        return NextResponse.json({ 
-            message: 'Account created successfully',
-            user: {
-                id: newUser.id,
-                email: newUser.email,
-                verified: newUser.verified
-            }
-        })
-        
+
     } catch (error) {
-        console.error('OTP verification error:', error)
-        return NextResponse.json({ error: 'Failed to verify OTP' }, { status: 500 })
+        console.error('OTP verification error:', error);
+        if (error instanceof SyntaxError) {
+            return NextResponse.json(
+                { error: 'Invalid JSON in request body' },
+                { status: 400 }
+            );
+        }
+
+        return NextResponse.json(
+            { error: 'Internal server error' },
+            { status: 500 }
+        );
     }
 }

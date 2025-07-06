@@ -30,6 +30,21 @@ async function sendOtpEmail(email: string, password: string) {
   return await res.json()
 }
 
+async function verifyOtp(token: string, otp: number) {
+  const res = await fetch('/api/auth/verify-otp',{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({token, otp})
+  })
+  if(!res.ok){
+    const errorData = await res.json()
+    throw new Error(errorData.error || 'OTP not verified')
+  }
+  return await res.json()
+}
+
 export function SignupForm({
   className,
   ...props
@@ -48,12 +63,16 @@ export function SignupForm({
     const email = formData.get('email') as string
     const password = formData.get('password') as string
     
+    if (password.length < 8) {
+      toast.error("Password must be at least 8 characters long")
+      setIsLoading(false)
+      return
+    }
+    
     try {
       const sendEmail = await sendOtpEmail(email, password)
       setOtpToken(sendEmail.token)
-      console.log(sendEmail.token
-        
-      )
+      console.log(sendEmail.token)
       toast("Email has been sent!", {
         description: "An e-mail with the OTP has been sent to your e-mail address."
       })
@@ -65,23 +84,28 @@ export function SignupForm({
       setIsLoading(false)
     }
   }
-
-  const handleOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsLoading(true)
-    
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      toast.success("Account created successfully!")
-      router.push('/dashboard')
-    } catch (error) {
-      toast.error("Invalid OTP. Please try again.")
-      console.log(error)
-    } finally {
-      setIsLoading(false)
+const handleOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault()
+  setIsLoading(true)
+  
+  try {
+    if (!otpToken) {
+      throw new Error("OTP token is missing")
     }
+    
+    const otpNumber = Number(otpValue)
+    
+    await verifyOtp(otpToken, otpNumber)
+
+    toast.success("Account created successfully!")
+    router.push('/dashboard')
+  } catch (error) {
+    toast.error("Wrong OTP. Please try again.")
+    console.log('Error:', error)
+  } finally {
+    setIsLoading(false)
   }
+}
 
   const handleGithubSignIn = async () => {
     try {
