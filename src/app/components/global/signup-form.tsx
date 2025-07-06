@@ -7,6 +7,11 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { signIn, //useSession
  } from "next-auth/react"
+import { InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+ } from "../ui/input-otp"
 import { useRouter } from "next/navigation"
 async function sendOtpEmail(email: string, password: string) {
   const res = await fetch('/api/auth/signup', {
@@ -43,7 +48,6 @@ export function SignupForm({
     const password = formData.get('password') as string
     
     try {
-      //dummy api calls
       await sendOtpEmail(email, password)
       
       toast("Email has been sent!", {
@@ -157,41 +161,30 @@ export function SignupForm({
 
   function otpInput() {
     return (
-      <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleOtpSubmit}>
+            <form className={cn("flex flex-col gap-6", className)} onSubmit={handleOtpSubmit} {...props}>
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-[1.8rem] font-bold text-[#b6b4b4]">Enter OTP</h1>
-          <p className="text-white text-sm text-balance">
-            Enter the OTP sent to your email
+          <h1 className="text-2xl font-bold text-[#b6b4b4]">Enter OTP</h1>
+          <p className="text-muted-foreground text-sm text-balance">
+            Enter the 6-digit code sent to your email
           </p>
         </div>
-        <div className="grid gap-6">
-          <div className="grid gap-3">
-            <Label htmlFor="otp" className="text-white">OTP</Label>
-            <Input 
-              id="otp" 
-              name="otp"
-              type="text" 
-              placeholder="Enter OTP" 
-              className="border border-white/20 bg-transparent text-white placeholder:text-gray-400 focus:border-white/40 focus:outline-none" 
-              required 
-              disabled={isLoading}
-            />
-          </div>
-          <Button 
-            type="submit" 
-            className="w-full bg-white/10 hover:bg-white/20 text-white border border-white/20 cursor-pointer transition-colors"
-            disabled={isLoading}
+        <div className="grid gap-6 justify-center">
+          <InputOTP maxLength={6} inputMode="numeric" pattern="\d+">
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1}/>
+              <InputOTPSlot index={2}/>
+            </InputOTPGroup>
+            <InputOTPSeparator />
+            <InputOTPGroup>
+              <InputOTPSlot index={3}/>
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5}/>
+            </InputOTPGroup>
+          </InputOTP>
+          <Button type="submit" className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer" //onClick={() => setOtpSent("otpGot")}
           >
-            {isLoading ? "Verifying..." : "Verify OTP"}
-          </Button>
-          <Button 
-            type="button" 
-            variant="outline" 
-            className="w-full text-white bg-transparent border border-white/20 hover:bg-white/10 cursor-pointer transition-colors"
-            onClick={() => setOtpSent(false)}
-            disabled={isLoading}
-          >
-            Back to Signup
+            Submit OTP
           </Button>
         </div>
       </form>
