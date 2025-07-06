@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { Redis } from "@upstash/redis";
 
-const resend = new Resend(process.env.EMAIL_API_KEY)
+const resend = new Resend(process.env.EMAIL_API_KEY);
+const redis = Redis.fromEnv();
 
-// Generate a random 6-digit OTP
 function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-async function sendOtpEmail(email: string, otp: string) {
-  console.log("sending password reset email")
+async function sendOtpEmail(email: string, otp: string): Promise<{token: string}> {
+  console.log("sending password reset email");
   try {
     await resend.emails.send({
-      from: "noreply@cohortize.xyz", // Make sure this domain is verified in Resend
+      from: "noreply@cohortize.xyz",
       to: email,
       subject: "OTP for Password Reset",
       html: `
@@ -26,16 +27,26 @@ async function sendOtpEmail(email: string, otp: string) {
           <p>If you didn't request this password reset, please ignore this email.</p>
         </div>
       `
-    })
-    console.log("email sent successfully")
+    });
+
+    console.log("email sent successfully");
+    
+    const userInput = {
+      'category': 'reset_password',
+      'email': email,
+      'otp': otp
+    };
+    
+    const token = crypto.randomUUID().toString();
+    await redis.setex(token, 600, JSON.stringify(userInput));
+
+    return { token };
+    
   } catch (err) {
-    console.log("failed to send otp", err)
-    throw new Error("Failed to send OTP")
+    console.log("failed to send otp", err);
+    throw new Error("Failed to send OTP");
   }
 }
-
-// Store OTPs temporarily (in production, use Redis or database)
-const otpStore = new Map<string, { otp: string; expires: number }>();
 
 export async function POST(request: NextRequest) {
   try {
@@ -49,7 +60,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -58,77 +68,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate OTP
     const otp = generateOTP();
     
-    // Store OTP with expiration (10 minutes)
-    const expires = Date.now() + 10 * 60 * 1000; // 10 minutes from now
-    otpStore.set(email, { otp, expires });
-
-    // Send OTP email
-    await sendOtpEmail(email, otp);
+    const { token } = await sendOtpEmail(email, otp);
 
     return NextResponse.json(
-      { message: "OTP sent successfully" },
+      { 
+        message: "OTP sent successfully",
+        token: token 
+      },
       { status: 200 }
     );
 
   } catch (error) {
     console.error("Error in forget-password API:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
-}
-
-// Optional: Add a method to verify OTP
-export async function PUT(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { email, otp } = body;
-
-    if (!email || !otp) {
-      return NextResponse.json(
-        { error: "Email and OTP are required" },
-        { status: 400 }
-      );
-    }
-
-    const storedData = otpStore.get(email);
-    
-    if (!storedData) {
-      return NextResponse.json(
-        { error: "OTP not found or expired" },
-        { status: 400 }
-      );
-    }
-
-    if (Date.now() > storedData.expires) {
-      otpStore.delete(email);
-      return NextResponse.json(
-        { error: "OTP has expired" },
-        { status: 400 }
-      );
-    }
-
-    if (storedData.otp !== otp) {
-      return NextResponse.json(
-        { error: "Invalid OTP" },
-        { status: 400 }
-      );
-    }
-
-    // OTP is valid, remove it from store
-    otpStore.delete(email);
-
-    return NextResponse.json(
-      { message: "OTP verified successfully" },
-      { status: 200 }
-    );
-
-  } catch (error) {
-    console.error("Error in OTP verification:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

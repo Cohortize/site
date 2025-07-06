@@ -10,6 +10,23 @@ import { InputOTP,
  } from "../ui/input-otp"
  import { toast } from 'sonner'
 
+async function verifyOtp(token: string, otp: number) {
+  const res = await fetch("/api/auth/verify-otp", {
+    method: 'POST',
+    headers: {
+      'Content-Type': "application/json"
+    },
+    body: JSON.stringify({ token, otp })
+  })
+  
+  if (!res.ok) {
+    const errorData = await res.json()
+    throw new Error(errorData.error || "failed to verify OTP")
+  }
+  
+  return res.json()
+}
+
 async function sendOtpEmail(email: string) {
   const res = await fetch('/api/auth/forget-password', {
     method: 'POST',
@@ -31,7 +48,9 @@ export function ForgotPassword({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const [otpSent, setOtpSent] = useState("otpNotSent")
+  const [otpSent, setOtpSent] = useState("emailNotEntered")
+  const [otpToken, setOtpToken] = useState("")
+  const [otpValue, setOtpValue] = useState<string>("")
   
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,9 +58,10 @@ export function ForgotPassword({
     const email = formdata.get('email') as string
     
     try {
-      await sendOtpEmail(email)
-      
+      const sendEmail = await sendOtpEmail(email)
       setOtpSent("otpSent")
+      console.log(sendEmail.token)
+      setOtpToken(sendEmail.token)
       toast("Email has been sent!", {
         description: "An e-mail with the OTP has been sent to your e-mail address."
       })
@@ -52,9 +72,21 @@ export function ForgotPassword({
     }
   }
   
-  const handleOtpSubmit = (e: React.FormEvent) => {
+  const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("OTP submitted")
+    const otpNumber = Number(otpValue)
+    
+    try {
+      const result = await verifyOtp(otpToken, otpNumber)
+      setOtpSent("otpGot")
+      toast("OTP verified successfully!", {
+        description: "You can now reset your password."
+      })
+    } catch (error) {
+      toast("Failed to verify OTP", {
+        description: error instanceof Error ? error.message : "Please try again"
+      })
+    }
   }
 
   const emailInput = () => {
@@ -73,7 +105,7 @@ export function ForgotPassword({
               id="email" 
               name="email"
               type="email" 
-              placeholder="m@example.com" 
+              placeholder="manan@cohortize.xyz" 
               className="border border-white/20" 
               required 
             />
@@ -96,7 +128,7 @@ export function ForgotPassword({
           </p>
         </div>
         <div className="grid gap-6 justify-center">
-          <InputOTP maxLength={6} inputMode="numeric" pattern="\d+">
+          <InputOTP maxLength={6} inputMode="numeric" pattern="\d+" value={otpValue} onChange={(value) => setOtpValue(value)}>
             <InputOTPGroup>
               <InputOTPSlot index={0} />
               <InputOTPSlot index={1}/>
@@ -109,7 +141,7 @@ export function ForgotPassword({
               <InputOTPSlot index={5}/>
             </InputOTPGroup>
           </InputOTP>
-          <Button type="submit" className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer" onClick={() => setOtpSent("otpGot")}>
+          <Button type="submit" className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer">
             Submit OTP
           </Button>
         </div>
@@ -146,7 +178,7 @@ export function ForgotPassword({
   }
   
   switch(otpSent){
-    case "otpNotSent":
+    case "emailNotEntered":
       return emailInput()
     case "otpSent":
       return otpInput()
