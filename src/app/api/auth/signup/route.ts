@@ -4,7 +4,7 @@ import { Resend } from 'resend'
 import { Redis } from '@upstash/redis'
 const resend = new Resend(process.env.EMAIL_API_KEY!)
 const redis = Redis.fromEnv()
-import crypto, { sign } from 'crypto'
+import crypto from 'crypto'
 const users: { email: string; password: string; verified: boolean }[] = []
 const temporaryUsers: { email: string; password: string; otp: string; timestamp: number }[] = []
 
@@ -98,10 +98,10 @@ export async function POST(req: NextRequest) {
         const hashedPassword = await bcrypt.hash(password, 10)
         const otp = generateOTP()
         await storeTemporaryUser({ email, password: hashedPassword, otp })
-        const token = await sendOTPEmail(email, otp)
+        const tokenResponse = await sendOTPEmail(email, otp)
         return NextResponse.json({ 
             message: 'OTP sent successfully. Please check your email to verify your account.',
-            token,
+            token: tokenResponse.token,
             ...(process.env.NODE_ENV === 'development' && { developmentOTP: otp })
         })
         
