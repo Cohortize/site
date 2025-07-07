@@ -12,6 +12,7 @@ import { InputOTP,
   InputOTPSlot,
  } from "../ui/input-otp"
 import { useRouter } from "next/navigation"
+import { UserAuth } from "@/app/context/AuthContext"
 
 async function sendOtpEmail(email: string, password: string) {
   const res = await fetch('/api/auth/signup', {
@@ -117,6 +118,8 @@ const handleOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   }
 
   function emailForm() {
+    const {session} = UserAuth()
+    console.log(session)
     return (
       <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleSignupSubmit}>
         <div className="flex flex-col items-center gap-2 text-center">
@@ -195,6 +198,7 @@ const handleOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   }
 
   function otpInput() {
+    
     return (
       <form className={cn("flex flex-col gap-6", className)} onSubmit={handleOtpSubmit} {...props}>
         <div className="flex flex-col items-center gap-2 text-center">
