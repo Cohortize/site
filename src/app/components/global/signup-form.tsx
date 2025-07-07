@@ -21,14 +21,20 @@ async function sendOtpEmail(email: string, password: string) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
-  })
+  });
 
-  if (!res.ok) {
-    const errorData = await res.json()
-    throw new Error(errorData.error || 'Failed to send OTP')
+  if (res.status === 409) {
+    const errorData = await res.json();
+    throw new Error(errorData.error || 'This email is already registered.', { cause: 'USER_EXISTS' });
   }
 
-  return await res.json()
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.error || 'Failed to send OTP. Unknown error.');
+  }
+
+  return await res.json();
 }
 
 async function verifyOtp(token: string, otp: number) {
@@ -75,14 +81,19 @@ export function SignupForm({
     try {
       const sendEmail = await sendOtpEmail(email, password)
       setOtpToken(sendEmail.token)
-      console.log(sendEmail.token)
+      // console.log(sendEmail.token) // Consider removing sensitive logging in production
       toast("Email has been sent!", {
         description: "An e-mail with the OTP has been sent to your e-mail address."
       })
       setOtpSent(true)
-    } catch (error) {
-      toast.error("Failed to send OTP. Please try again.")
-      console.log(error)
+    } catch (error: any) { // Use 'any' or define a more specific error type if preferred
+      // Check the 'cause' property if you set it, or check the error message directly
+      if (error.cause === 'USER_EXISTS' || error.message.includes('already registered')) {
+        toast.error(error.message); // Display the specific "Email already registered" message
+      } else {
+        toast.error("Failed to send OTP. Please try again.");
+      }
+      console.error("Signup submission error:", error); // Use console.error for errors
     } finally {
       setIsLoading(false)
     }
