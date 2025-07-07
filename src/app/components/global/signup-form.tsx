@@ -56,7 +56,6 @@ export function SignupForm({
   const [otpValue, setOtpValue] = useState("")
   const router = useRouter()
   const { session, signUpNewUser,
-  //  checkUserExists 
   } = UserAuth()
 
   const handleSignupSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -100,13 +99,8 @@ export function SignupForm({
       const otpNumber = Number(otpValue)
       
       const response = await verifyOtp(otpToken, otpNumber)
-      //const checkUser = await checkUserExists(response.userData.email)
-      //console.log(checkUser.exists)
-      /*if(checkUser.exists){
-        toast.error("Account exists. Account with this email already exists, login instead.")
-      }
-      else{}*/
       const result = await signUpNewUser(response.userData.email, response.userData.password)
+      console.log(response.data)
       if(result.success){
         toast.success("Account created successfully!")
         router.push('/dashboard')
