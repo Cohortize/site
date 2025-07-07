@@ -21,14 +21,20 @@ async function sendOtpEmail(email: string, password: string) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
-  })
+  });
 
-  if (!res.ok) {
-    const errorData = await res.json()
-    throw new Error(errorData.error || 'Failed to send OTP')
+  if (res.status === 409) {
+    const errorData = await res.json();
+    throw new Error(errorData.error || 'This email is already registered.', { cause: 'USER_EXISTS' });
   }
 
-  return await res.json()
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.error || 'Failed to send OTP. Unknown error.');
+  }
+
+  return await res.json();
 }
 
 async function verifyOtp(token: string, otp: number) {
@@ -55,7 +61,8 @@ export function SignupForm({
   const [otpToken, setOtpToken] = useState<string | null>(null)
   const [otpValue, setOtpValue] = useState("")
   const router = useRouter()
-  const { session, signUpNewUser } = UserAuth()
+  const { session, signUpNewUser,
+  } = UserAuth()
 
   const handleSignupSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -74,14 +81,19 @@ export function SignupForm({
     try {
       const sendEmail = await sendOtpEmail(email, password)
       setOtpToken(sendEmail.token)
-      console.log(sendEmail.token)
+      // console.log(sendEmail.token) // Consider removing sensitive logging in production
       toast("Email has been sent!", {
         description: "An e-mail with the OTP has been sent to your e-mail address."
       })
       setOtpSent(true)
-    } catch (error) {
-      toast.error("Failed to send OTP. Please try again.")
-      console.log(error)
+    } catch (error: any) { // Use 'any' or define a more specific error type if preferred
+      // Check the 'cause' property if you set it, or check the error message directly
+      if (error.cause === 'USER_EXISTS' || error.message.includes('already registered')) {
+        toast.error(error.message); // Display the specific "Email already registered" message
+      } else {
+        toast.error("Failed to send OTP. Please try again.");
+      }
+      console.error("Signup submission error:", error); // Use console.error for errors
     } finally {
       setIsLoading(false)
     }
@@ -90,9 +102,6 @@ export function SignupForm({
   const handleOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
-    
-    // ✅ REMOVED: const {session, signUpNewUser} = UserAuth() 
-    // Now using signUpNewUser from the top-level hook call
     try {
       if (!otpToken) {
         throw new Error("OTP token is missing")
@@ -102,7 +111,7 @@ export function SignupForm({
       
       const response = await verifyOtp(otpToken, otpNumber)
       const result = await signUpNewUser(response.userData.email, response.userData.password)
-      
+      console.log(response.data)
       if(result.success){
         toast.success("Account created successfully!")
         router.push('/dashboard')
