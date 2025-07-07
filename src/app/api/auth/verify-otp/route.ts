@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Redis } from "@upstash/redis";
-
+import { UserAuth } from "@/app/context/AuthContext";
 const redis = Redis.fromEnv();
 
 interface UserData {
     category?: 'signup' | 'reset_password';
     email: string;
+    password: string;
     otp: number;
 }
 
@@ -28,7 +29,6 @@ async function verifyOTP(token: string, otp: number) {
 
 
         if (userData.category === "signup") {
-            //database query will go here
             await redis.del(token);
             return { success: true, message: "Account created successfully" };
         } else if (userData.category === "reset_password") {
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const { otp, token }: OTPRequest = body;
-        
+
     
         
         if (!otp || !token) {
