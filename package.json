@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.50.3",
     "@upstash/redis": "^1.35.1",
     "bcrypt": "^6.0.0",
     "class-variance-authority": "^0.7.1",

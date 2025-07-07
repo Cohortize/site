@@ -6,6 +6,7 @@ const redis = Redis.fromEnv();
 interface UserData {
     category?: 'signup' | 'reset_password';
     email: string;
+    password: string;
     otp: number;
 }
 
@@ -26,13 +27,10 @@ async function verifyOTP(token: string, otp: number) {
             return { success: false, message: "Wrong OTP!" };
         }
 
-
         if (userData.category === "signup") {
-            //database query will go here
             await redis.del(token);
-            return { success: true, message: "Account created successfully" };
+            return { success: true, message: "OTP verified successfully", userData };
         } else if (userData.category === "reset_password") {
-            //database query will go here
             await redis.del(token);
             return { success: true, message: "Password reset successfully" };
         } else {
@@ -48,11 +46,8 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const { otp, token }: OTPRequest = body;
-        
-    
-        
+
         if (!otp || !token) {
-            console.log('Missing fields - OTP:', !otp, 'Token:', !token);
             return NextResponse.json(
                 { error: 'Missing required fields: otp and token' },
                 { status: 400 }
@@ -61,7 +56,6 @@ export async function POST(req: NextRequest) {
         
         const otpNumber = typeof otp === 'string' ? parseInt(otp, 10) : otp;
         if (typeof otpNumber !== 'number' || isNaN(otpNumber) || otpNumber < 100000 || otpNumber > 999999) {
-            console.log('Invalid OTP format - Value:', otpNumber, 'Type:', typeof otpNumber);
             return NextResponse.json(
                 { error: 'Invalid OTP format' },
                 { status: 400 }
@@ -72,7 +66,10 @@ export async function POST(req: NextRequest) {
 
         if (result.success) {
             return NextResponse.json(
-                { message: result.message },
+                { 
+                    message: result.message,
+                    userData: result.userData 
+                },
                 { status: 200 }
             );
         } else {

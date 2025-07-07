@@ -12,7 +12,7 @@ function generateOTP(): string {
     return Math.floor(100000 + Math.random() * 900000).toString()
 }
 
-async function sendOTPEmail(email: string, otp: string): Promise<{token: string}> {
+async function sendOTPEmail(email: string, otp: string, password: string): Promise<{token: string}> {
     console.log(`Sending OTP to ${email}: ${otp}`)
     try {
         await resend.emails.send({
@@ -34,6 +34,7 @@ async function sendOTPEmail(email: string, otp: string): Promise<{token: string}
     const inputData= {
     'category': 'signup',
     'email': email,
+    'password': password,
     'otp' : otp
     }
     const token = crypto.randomUUID().toString()
@@ -98,7 +99,7 @@ export async function POST(req: NextRequest) {
         const hashedPassword = await bcrypt.hash(password, 10)
         const otp = generateOTP()
         await storeTemporaryUser({ email, password: hashedPassword, otp })
-        const tokenResponse = await sendOTPEmail(email, otp)
+        const tokenResponse = await sendOTPEmail(email, otp, hashedPassword)
         return NextResponse.json({ 
             message: 'OTP sent successfully. Please check your email to verify your account.',
             token: tokenResponse.token,

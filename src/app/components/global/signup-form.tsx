@@ -12,6 +12,7 @@ import { InputOTP,
   InputOTPSlot,
  } from "../ui/input-otp"
 import { useRouter } from "next/navigation"
+import { UserAuth } from "@/app/context/AuthContext"
 
 async function sendOtpEmail(email: string, password: string) {
   const res = await fetch('/api/auth/signup', {
@@ -54,6 +55,7 @@ export function SignupForm({
   const [otpToken, setOtpToken] = useState<string | null>(null)
   const [otpValue, setOtpValue] = useState("")
   const router = useRouter()
+  const { session, signUpNewUser } = UserAuth()
 
   const handleSignupSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -84,28 +86,37 @@ export function SignupForm({
       setIsLoading(false)
     }
   }
-const handleOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault()
-  setIsLoading(true)
-  
-  try {
-    if (!otpToken) {
-      throw new Error("OTP token is missing")
-    }
-    
-    const otpNumber = Number(otpValue)
-    
-    await verifyOtp(otpToken, otpNumber)
 
-    toast.success("Account created successfully!")
-    router.push('/dashboard')
-  } catch (error) {
-    toast.error("Wrong OTP. Please try again.")
-    console.log('Error:', error)
-  } finally {
-    setIsLoading(false)
+  const handleOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsLoading(true)
+    
+    // ✅ REMOVED: const {session, signUpNewUser} = UserAuth() 
+    // Now using signUpNewUser from the top-level hook call
+    try {
+      if (!otpToken) {
+        throw new Error("OTP token is missing")
+      }
+      
+      const otpNumber = Number(otpValue)
+      
+      const response = await verifyOtp(otpToken, otpNumber)
+      const result = await signUpNewUser(response.userData.email, response.userData.password)
+      
+      if(result.success){
+        toast.success("Account created successfully!")
+        router.push('/dashboard')
+      } else {
+        toast.error("Account creation failed. Please try again.")
+        throw new Error((result as any).message || "account creation failed")
+      }
+    } catch (error) {
+      toast.error("Wrong OTP. Please try again.")
+      console.log('Error:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
-}
 
   const handleGithubSignIn = async () => {
     try {
