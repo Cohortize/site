@@ -9,6 +9,8 @@ interface AuthContextValue {
   signUpNewUser: (email: string, password: string) => Promise<{success: boolean, error?: any, data?: any}>;
   signInUser: (credentials: {email: string, password: string}) => Promise<{success: boolean, error?: string, data?: any}>;
   signOut: () => Promise<void>;
+  updatePassword: (email: string, newPassword: string) => Promise<{success: boolean, error?: string, message?: string}>;
+  updateCurrentUserPassword: (newPassword: string) => Promise<{success: boolean, error?: string, message?: string}>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -72,8 +74,78 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     }
   }
   
+  // forget password function (not exactly a function but a hook to the backend endpoint to update the password)
+const updatePassword = async (email: string, newPassword: string) => {
+  console.log('updatePassword called with:', { email, passwordLength: newPassword.length });
+  
+  try {
+    console.log('Making fetch request...');
+    
+    const response = await fetch('/api/update-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({email, newPassword})
+    });
+
+    console.log('Fetch response:', response.status, response.statusText);
+    
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      console.error('Non-JSON response:', text);
+      return {
+        success: false,
+        error: 'Server returned invalid response'
+      };
+    }
+
+    const result = await response.json();
+    console.log('Parsed result:', result);
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: result.error || 'Password reset failed'
+      };
+    }
+    
+    return { 
+      success: true,
+      message: result.message || 'Password reset successful'
+    };
+  } catch (error) {
+    console.error('password reset error', error);
+    return { 
+      success: false,
+      error: 'Network error occurred'
+    };
+  }
+}
+
+  const updateCurrentUserPassword = async (newPassword: string) => {
+    try{
+      const {error} = await supabase.auth.updateUser({
+        password: newPassword
+      })
+      if(error){
+        console.error('password update error occurred', error)
+        return{
+          success: false,
+          error: error.message
+        }
+      }
+      return {success: true, message: 'Password reset successful'}
+    }
+    catch(error){
+      console.error('Password update error: ', error)
+      return {success: false, error: 'An unexpected error occured'}
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ session, setSession, signUpNewUser, signInUser, signOut}}>
+    <AuthContext.Provider value={{ session, setSession, signUpNewUser, signInUser, signOut, updatePassword,updateCurrentUserPassword }}>
       {children}
     </AuthContext.Provider>
   );
