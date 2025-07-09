@@ -35,9 +35,26 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     return {success: true, data}
   }
   
-  //sign in function
+  //sign in function with account checking
   const signInUser = async ({email, password}: {email: string, password: string}) => {
     try {
+        const response = await fetch('/api/check-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email })
+        });
+
+        const userCheckResult = await response.json();
+
+        if (!response.ok || !userCheckResult.exists) {
+            return {
+                success: false, 
+                error: "Account not found. Please sign up first."
+            };
+        }
+
         const {data, error} = await supabase.auth.signInWithPassword({
             email: email,
             password: password,
@@ -53,6 +70,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         return {success: false, error: "An unexpected error occurred"}
     }
   }
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({data: {session}}) => {
@@ -145,7 +163,15 @@ const updatePassword = async (email: string, newPassword: string) => {
   }
 
   return (
-    <AuthContext.Provider value={{ session, setSession, signUpNewUser, signInUser, signOut, updatePassword,updateCurrentUserPassword }}>
+    <AuthContext.Provider value={{ 
+      session, 
+      setSession, 
+      signUpNewUser, 
+      signInUser, 
+      signOut, 
+      updatePassword,
+      updateCurrentUserPassword 
+    }}>
       {children}
     </AuthContext.Provider>
   );
