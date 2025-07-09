@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { Redis } from "@upstash/redis";
+import { createClient } from "@supabase/supabase-js";
+import crypto from "crypto";
 
 const resend = new Resend(process.env.EMAIL_API_KEY);
 const redis = Redis.fromEnv();
@@ -49,6 +51,11 @@ async function sendOtpEmail(email: string, otp: string): Promise<{token: string}
 }
 
 export async function POST(request: NextRequest) {
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
   try {
     const body = await request.json();
     const { email } = body;
@@ -68,14 +75,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if account exists before sending password reset OTP
+    const { data: users, error: userCheckError } = await supabaseAdmin.rpc('get_user_by_email', {
+      email_param: email
+    });
+
+    if (userCheckError) {
+      console.error("User check RPC error:", userCheckError);
+      return NextResponse.json({ error: 'An internal error occurred during user verification.' }, { status: 500 });
+    }
+
+    if (!users || users.length === 0) {
+      console.log(`Password reset attempt for non-existent user: ${email}`);
+      return NextResponse.json(
+        { error: 'Account not found. Please sign up first.' },
+        { status: 404 }
+      );
+    }
+
     const otp = generateOTP();
     
     const { token } = await sendOtpEmail(email, otp);
 
     return NextResponse.json(
       { 
-        message: "OTP sent successfully",
-        token: token 
+        message: "Password reset OTP sent successfully",
+        token: token,
+        ...(process.env.NODE_ENV === 'development' && { developmentOTP: otp })
       },
       { status: 200 }
     );

@@ -53,6 +53,7 @@ export function ForgotPassword({
   const [otpValue, setOtpValue] = useState<string>("")
   const {updatePassword} = useAuth()
   const [emailForgetPassword, setEmail] = useState("")
+  
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const formdata = new FormData(e.currentTarget as HTMLFormElement)
@@ -94,25 +95,49 @@ export function ForgotPassword({
     e.preventDefault()
     const formData = new FormData(e.currentTarget as HTMLFormElement)
     const password = formData.get('password') as string
+    const confirmPassword = formData.get('conPassword') as string
+    
+    // Password validation checks
+    if (password.length < 8) {
+      toast.error("Password too short", {
+        description: "Password must be at least 8 characters long"
+      })
+      return
+    }
+    
+    if (password !== confirmPassword) {
+      toast.error("Passwords don't match", {
+        description: "Please make sure both passwords are identical"
+      })
+      return
+    }
+    
     console.log(password)
     console.log(emailForgetPassword) 
     try{
-      console.log("callig password update")
+      console.log("calling password update")
       const response = await updatePassword(emailForgetPassword, password)
       console.log("password update response", response)
       if(!response.success){
-        toast('some error occurred')
+        toast.error('Password update failed', {
+          description: response.message || 'An error occurred while updating your password'
+        })
         return
       }
-      toast("password reset successful!")
+      toast.success("Password reset successful!", {
+        description: "Your password has been updated successfully"
+      })
       return 
     }
     catch(err){
       console.log('password update error occurred ', err)
-      toast('some error occurred')
+      toast.error('Password update failed', {
+        description: 'An unexpected error occurred. Please try again.'
+      })
       return
     }
   }
+  
   const emailInput = () => {
     return(
       <form className={cn("flex flex-col gap-6", className)} onSubmit={handleEmailSubmit} {...props}>
@@ -181,19 +206,33 @@ export function ForgotPassword({
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold text-[#b6b4b4]">Enter new password</h1>
         <p className="text-muted-foreground text-sm text-balance">
-          Enter new password for your account
+          Enter new password for your account (minimum 8 characters)
         </p>
       </div>
       <div className="grid gap-6">
         <div className="grid gap-3">
           <Label htmlFor="password" className="text-[#b6b4b4]">Password</Label>
-          <Input id="password" name="password" type="password" className="border border-white/20" required />
+          <Input 
+            id="password" 
+            name="password" 
+            type="password" 
+            className="border border-white/20" 
+            minLength={8}
+            required 
+          />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
             <Label htmlFor="conPassword" className="text-[#b6b4b4]">Confirm Password</Label>
           </div>
-          <Input id="conPassword" type="password" className="border border-white/20" required />
+          <Input 
+            id="conPassword" 
+            name="conPassword"
+            type="password" 
+            className="border border-white/20" 
+            minLength={8}
+            required 
+          />
         </div>
         <Button type="submit" className="w-full bg-[rgb(44,44,44)] hover:bg-[rgb(48,48,48)] cursor-pointer">
           Change Password
