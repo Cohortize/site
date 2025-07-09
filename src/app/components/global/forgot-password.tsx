@@ -94,9 +94,12 @@ export function ForgotPassword({
     e.preventDefault()
     const formData = new FormData(e.currentTarget as HTMLFormElement)
     const password = formData.get('password') as string
-
+    console.log(password)
+    console.log(emailForgetPassword) 
     try{
+      console.log("callig password update")
       const response = await updatePassword(emailForgetPassword, password)
+      console.log("password update response", response)
       if(!response.success){
         toast('some error occurred')
         return

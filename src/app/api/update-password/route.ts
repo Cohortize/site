@@ -1,60 +1,49 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { createClient } from "@supabase/supabase-js";
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-  console.log(process.env.NEXT_PUBLIC_SUPABASE_URL)
-  console.log(process.env.SUPABASE_SERVICE_ROLE_KEY)
-  const { email, newPassword } = req.body;
-  
-  if (!email || !newPassword) {
-    return res.status(400).json({ error: 'Missing email or password' });
-  }
-  if (newPassword.length < 8) {
-    return res.status(400).json({ error: 'Password must be at least 8 characters long' });
-  }
-
+export async function POST(request: NextRequest) {
   try {
-    //fetching from supabase
+    const { email, newPassword } = await request.json();
+    
+    if (!email || !newPassword) {
+      return NextResponse.json({ error: 'Missing email or password' }, { status: 400 });
+    }
+    
+    if (newPassword.length < 8) {
+      return NextResponse.json({ error: 'Password must be at least 8 characters long' }, { status: 400 });
+    }
+
     const { data: users, error } = await supabase.auth.admin.listUsers();
     
     if (error) {
       console.error('Error fetching users:', error);
-      throw new Error('Failed to fetch users');
+      return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
     }
 
-    //filtering out the user we want out of the data from supabase
     const user = users.users.find(u => u.email === email);
     
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const userId = user.id;
-    
-    //main update thing
-    const { error: updateError } = await supabase.auth.admin.updateUserById(userId, {
+    const { error: updateError } = await supabase.auth.admin.updateUserById(user.id, {
       password: newPassword
     });
     
     if (updateError) {
       console.error('Password update error:', updateError);
-      throw new Error('Failed to update password');
+      return NextResponse.json({ error: 'Failed to update password' }, { status: 500 });
     }
     
-    return res.status(200).json({ success: true, message: 'Password updated successfully' });
+    return NextResponse.json({ success: true, message: 'Password updated successfully' });
     
-  } catch (err) {
-    console.error('Password reset error:', err);
-    return res.status(500).json({ 
-      error: err instanceof Error ? err.message : 'Internal server error' 
-    });
+  } catch (error) {
+    console.error('API error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

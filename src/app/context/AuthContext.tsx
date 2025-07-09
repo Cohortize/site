@@ -75,37 +75,54 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   }
   
   // forget password function (not exactly a function but a hook to the backend endpoint to update the password)
-  const updatePassword = async (email:string, newPassword: string) => {
-    try{
-      const response = await fetch('/api/auth/update-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({email, newPassword})
-      });
+const updatePassword = async (email: string, newPassword: string) => {
+  console.log('updatePassword called with:', { email, passwordLength: newPassword.length });
+  
+  try {
+    console.log('Making fetch request...');
+    
+    const response = await fetch('/api/update-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({email, newPassword})
+    });
 
-      const result = await response.json()
-
-      if(!response.ok){
-        return{
-          success: false,
-          error: result.error || 'Password reset failed'
-        }
-      }
-      return{ 
-        success: true,
-        message: result.message || 'Password reset successful'
-      }
-    }
-    catch(error){
-      console.error('password reset error', error)
-      return{ 
+    console.log('Fetch response:', response.status, response.statusText);
+    
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      console.error('Non-JSON response:', text);
+      return {
         success: false,
-        error: 'Network error occurred'
-      }
+        error: 'Server returned invalid response'
+      };
     }
+
+    const result = await response.json();
+    console.log('Parsed result:', result);
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: result.error || 'Password reset failed'
+      };
+    }
+    
+    return { 
+      success: true,
+      message: result.message || 'Password reset successful'
+    };
+  } catch (error) {
+    console.error('password reset error', error);
+    return { 
+      success: false,
+      error: 'Network error occurred'
+    };
   }
+}
 
   const updateCurrentUserPassword = async (newPassword: string) => {
     try{
