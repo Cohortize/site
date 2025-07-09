@@ -2,14 +2,14 @@ import { cn } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
-import { useState } from "react"
+import React, { useState } from "react"
 import { InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
  } from "../ui/input-otp"
  import { toast } from 'sonner'
-
+import { useAuth } from "@/app/context/AuthContext"
 async function verifyOtp(token: string, otp: number) {
   const res = await fetch("/api/auth/verify-otp", {
     method: 'POST',
@@ -51,12 +51,13 @@ export function ForgotPassword({
   const [otpSent, setOtpSent] = useState("emailNotEntered")
   const [otpToken, setOtpToken] = useState("")
   const [otpValue, setOtpValue] = useState<string>("")
-  
+  const {updatePassword} = useAuth()
+  const [emailForgetPassword, setEmail] = useState("")
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const formdata = new FormData(e.currentTarget as HTMLFormElement)
     const email = formdata.get('email') as string
-    
+    setEmail(email)
     try {
       const sendEmail = await sendOtpEmail(email)
       setOtpSent("otpSent")
@@ -89,6 +90,26 @@ export function ForgotPassword({
     }
   }
 
+  const handlePasswordSubmit = async(e: React.FormEvent) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget as HTMLFormElement)
+    const password = formData.get('password') as string
+
+    try{
+      const response = await updatePassword(emailForgetPassword, password)
+      if(!response.success){
+        toast('some error occurred')
+        return
+      }
+      toast("password reset successful!")
+      return 
+    }
+    catch(err){
+      console.log('password update error occurred ', err)
+      toast('some error occurred')
+      return
+    }
+  }
   const emailInput = () => {
     return(
       <form className={cn("flex flex-col gap-6", className)} onSubmit={handleEmailSubmit} {...props}>
@@ -151,7 +172,9 @@ export function ForgotPassword({
   
   const ResetPassword = () => {
     return(
-          <form className={cn("flex flex-col gap-6", className)} {...props}>
+          <form className={cn("flex flex-col gap-6", className)} {...props} 
+          onSubmit={handlePasswordSubmit}
+          >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold text-[#b6b4b4]">Enter new password</h1>
         <p className="text-muted-foreground text-sm text-balance">
@@ -161,7 +184,7 @@ export function ForgotPassword({
       <div className="grid gap-6">
         <div className="grid gap-3">
           <Label htmlFor="password" className="text-[#b6b4b4]">Password</Label>
-          <Input id="password" type="password" className="border border-white/20" required />
+          <Input id="password" name="password" type="password" className="border border-white/20" required />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">

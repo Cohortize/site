@@ -4,15 +4,42 @@ import { Button } from "../ui/button"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { useAuthDialogStore } from "@/app/stores/useAuthDialogStore"
-  
+import { useAuth } from "@/app/context/AuthContext"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
   const open = useAuthDialogStore((state) => state.open)
-  
+  const {session, signInUser} = useAuth()
+  const router = useRouter()
+  const handleSignInSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+    if(password.length < 8){
+      toast.error("Password must be at least 8 characters long")
+      return
+    }
+    try{
+      const signIn = await signInUser({email, password})
+      if(!signIn.success){
+        toast("invalid creds")
+        return
+      }
+
+      toast("Log In successful!")
+      router.push("/dashboard")
+    }
+    catch(err)
+    {console.log(err)
+      toast.error("Login error occured")
+    }
+  }
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleSignInSubmit}>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-[1.8rem] font-bold text-[#b6b4b4]">Login to Cohortize</h1>
         <p className="text-white text-sm text-balance">
@@ -25,6 +52,7 @@ export function LoginForm({
           <Input 
             id="email" 
             type="email" 
+            name="email"
             placeholder="manan@cohortize.xyz" 
             className="border border-white/20 bg-transparent text-white placeholder:text-gray-400 focus:border-white/40 focus:outline-none" 
             required 
@@ -44,6 +72,7 @@ export function LoginForm({
           <Input 
             id="password" 
             type="password" 
+            name="password"
             className="border border-white/20 bg-transparent text-white placeholder:text-gray-400 focus:border-white/40 focus:outline-none" 
             required 
           />

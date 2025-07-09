@@ -81,19 +81,20 @@ export function SignupForm({
     try {
       const sendEmail = await sendOtpEmail(email, password)
       setOtpToken(sendEmail.token)
-      // console.log(sendEmail.token) // Consider removing sensitive logging in production
+      // console.log(sendEmail.token) 
       toast("Email has been sent!", {
         description: "An e-mail with the OTP has been sent to your e-mail address."
       })
       setOtpSent(true)
-    } catch (error: any) { // Use 'any' or define a more specific error type if preferred
-      // Check the 'cause' property if you set it, or check the error message directly
+    } catch (error: any) { 
       if (error.cause === 'USER_EXISTS' || error.message.includes('already registered')) {
-        toast.error(error.message); // Display the specific "Email already registered" message
+          toast.error("User already registered!", {
+        description: "A user already exists with this email address, login instead."
+      })
       } else {
         toast.error("Failed to send OTP. Please try again.");
       }
-      console.error("Signup submission error:", error); // Use console.error for errors
+      console.error("Signup submission error:", error); 
     } finally {
       setIsLoading(false)
     }
