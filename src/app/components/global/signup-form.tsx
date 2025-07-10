@@ -28,7 +28,6 @@ async function sendOtpEmail(email: string, password: string) {
     throw new Error(errorData.error || 'This email is already registered.', { cause: 'USER_EXISTS' });
   }
 
-
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.error || 'Failed to send OTP. Unknown error.');
@@ -88,21 +87,22 @@ export function SignupForm({
       })
       setOtpSent(true)
     } catch (error) {
-  if (error instanceof Error) {
-    if (error.cause === 'USER_EXISTS' || error.message.includes('already registered')) {
-      toast.error("User already registered!", {
-        description: "A user already exists with this email address, login instead."
-      })
-    } else {
-      toast.error("Failed to send OTP. Please try again.");
+      if (error instanceof Error) {
+        if (error.cause === 'USER_EXISTS' || error.message.includes('already registered')) {
+          toast.error("User already registered!", {
+            description: "A user already exists with this email address, login instead."
+          })
+        } else {
+          toast.error("Failed to send OTP. Please try again.");
+        }
+      } else {
+        toast.error("Failed to send OTP. Please try again.");
+      }
+      console.error("Signup submission error:", error);
+    } finally {
+      setIsLoading(false)
     }
-  } else {
-    toast.error("Failed to send OTP. Please try again.");
-  }
-  console.error("Signup submission error:", error);
-} finally {
-  setIsLoading(false)
-}
+  } 
 
   const handleOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -121,17 +121,17 @@ export function SignupForm({
         toast.success("Account created successfully!")
         router.push('/dashboard')
       } else {
-  toast.error("Account creation failed. Please try again.")
-  let errorMessage = "account creation failed";
-  if (typeof result === 'object' && result !== null && 'message' in result) {
-    const msg = (result as { message: unknown }).message;
-    if (typeof msg === 'string') {
-      errorMessage = msg;
-    }
-  }
-  
-  throw new Error(errorMessage);
-}
+        toast.error("Account creation failed. Please try again.")
+        let errorMessage = "account creation failed";
+        if (typeof result === 'object' && result !== null && 'message' in result) {
+          const msg = (result as { message: unknown }).message;
+          if (typeof msg === 'string') {
+            errorMessage = msg;
+          }
+        }
+        
+        throw new Error(errorMessage);
+      }
     } catch (error) {
       toast.error("Wrong OTP. Please try again.")
       console.log('Error:', error)
@@ -271,4 +271,4 @@ export function SignupForm({
   return (
     otpSent ? otpInput() : emailForm()
   )
-}}
+}
