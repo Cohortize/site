@@ -79,7 +79,7 @@ export function ForgotPassword({
     const otpNumber = Number(otpValue)
     
     try {
-      const result = await verifyOtp(otpToken, otpNumber)
+      await verifyOtp(otpToken, otpNumber)
       setOtpSent("otpGot")
       toast("OTP verified successfully!", {
         description: "You can now reset your password."

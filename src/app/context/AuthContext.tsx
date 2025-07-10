@@ -6,8 +6,8 @@ import { Session } from "@supabase/supabase-js";
 interface AuthContextValue {
   session: Session | null;
   setSession: (session: Session | null) => void;
-  signUpNewUser: (email: string, password: string) => Promise<{success: boolean, error?: any, data?: any}>;
-  signInUser: (credentials: {email: string, password: string}) => Promise<{success: boolean, error?: string, data?: any}>;
+  signUpNewUser: (email: string, password: string) => Promise<{success: boolean, error?: unknown, data?: unknown}>;
+  signInUser: (credentials: {email: string, password: string}) => Promise<{success: boolean, error?: string, data?: unknown}>;
   signOut: () => Promise<void>;
   updatePassword: (email: string, newPassword: string) => Promise<{success: boolean, error?: string, message?: string}>;
   updateCurrentUserPassword: (newPassword: string) => Promise<{success: boolean, error?: string, message?: string}>;
