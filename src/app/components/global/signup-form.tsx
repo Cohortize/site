@@ -61,7 +61,8 @@ export function SignupForm({
   const [otpToken, setOtpToken] = useState<string | null>(null)
   const [otpValue, setOtpValue] = useState("")
   const router = useRouter()
-  const { session, signUpNewUser,
+  const { //session, 
+  signUpNewUser
   } = UserAuth()
 
   const handleSignupSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

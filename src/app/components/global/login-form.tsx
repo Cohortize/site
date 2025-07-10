@@ -12,7 +12,8 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"form">) {
   const open = useAuthDialogStore((state) => state.open)
-  const {session, signInUser} = useAuth()
+  const {//session, 
+    signInUser} = useAuth()
   const router = useRouter()
   const handleSignInSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
