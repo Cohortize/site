@@ -7,7 +7,7 @@ import { useAuthDialogStore } from "@/app/stores/useAuthDialogStore"
 import { useAuth } from "@/app/context/AuthContext"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-
+import {signIn} from "next-auth/react"
 export function LoginForm({
   className,
   ...props
@@ -43,7 +43,13 @@ export function LoginForm({
   }
 
   const handleGitHubSignIn = async () => {
-    //github oauth here
+    try{
+      await signIn('github', {callbackUrl: '/dashboard'})
+    }
+    catch(error){
+      toast.error("Failed to sign in with github")
+      console.log(error)
+    }
     console.log("GitHub sign in clicked")
     
   }
