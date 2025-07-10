@@ -45,6 +45,7 @@ export function LoginForm({
   const handleGitHubSignIn = async () => {
     try{
       await signIn('github', {callbackUrl: '/dashboard'})
+      toast("Github log in successful!")
     }
     catch(error){
       toast.error("Failed to sign in with github")
