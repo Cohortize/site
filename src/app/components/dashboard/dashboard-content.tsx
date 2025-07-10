@@ -19,7 +19,7 @@ export function DashboardContent(
     {session}: {session: Session}
 ){
     return(
-        <div><p>duppity duppity dashboard!</p>
+        <div className="text-white"><p>duppity duppity dashboard!</p>
         <p>Welcome {session.user?.name || session.user?.email}
             </p></div>
     )
